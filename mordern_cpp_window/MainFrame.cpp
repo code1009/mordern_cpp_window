@@ -14,17 +14,29 @@
 //===========================================================================
 MainFrame::MainFrame()
 {
+	//-----------------------------------------------------------------------
 	print("MainFrame.ctor() - begin");
 
+
+	//-----------------------------------------------------------------------
 	registerWindowMessageHandler();
 
+
+	//-----------------------------------------------------------------------
 	initializeWindowClass();
 	registerWindowClass();
 	createWindow(0, getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
-	::ShowWindow(_hWnd, SW_SHOW);
-	::UpdateWindow(_hWnd);
 
 
+	//-----------------------------------------------------------------------
+
+
+	//-----------------------------------------------------------------------
+	::ShowWindow(_Handle, SW_SHOW);
+	::UpdateWindow(_Handle);
+
+
+	//-----------------------------------------------------------------------
 	print("MainFrame.ctor() - end");
 }
 
@@ -136,15 +148,15 @@ bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 void MainFrame::onPaint(HDC hDC)
 {
 	// 최초 실행시 UpdateWindow()에 의해서
-	// ctor()안에서 호출 되지만 createWindow()호출 이후라서 _hWnd 유효함
+	// ctor()안에서 호출 되지만 createWindow()호출 이후라서 _Handle 유효함
 
 	PAINTSTRUCT ps;
 	
 	
-	HDC hdc = BeginPaint(_hWnd, &ps);
-	RECT rect{ 0,0, 100, 100 };
+	HDC hdc = BeginPaint(_Handle, &ps);
+	RECT rect{ 0,0, 500, 500 };
 
 	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 
-	EndPaint(_hWnd, &ps);
+	EndPaint(_Handle, &ps);
 }

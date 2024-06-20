@@ -17,7 +17,7 @@ void print(const std::string& message);
 class WindowInstance
 {
 public:
-	HINSTANCE _hInstance{ nullptr };
+	HINSTANCE _Handle{ nullptr };
 
 public:
 	HINSTANCE getHandle(void);
@@ -87,8 +87,8 @@ public:
 	WNDCLASSEXW _WindowClass{ };
 
 public:
-	HWND                    _hWnd{ nullptr };
-	WNDPROC                 _attachedOldWindowProc{ nullptr };
+	HWND                    _Handle{ nullptr };
+	WNDPROC                 _ChainWindowProc{ nullptr };
 	WindowMessageHandlerMap _WindowMessageHandlerMap{ };
 
 public:
@@ -111,9 +111,9 @@ public:
 		HMENU hMenu = nullptr);
 	virtual void destroyWindow(void);
 	virtual WNDPROC attachWindow(HWND hwnd);
-	virtual WNDPROC detachWindow(WNDPROC wndproc = nullptr);
+	virtual WNDPROC detachWindow(WNDPROC windowProc = nullptr);
 	virtual void callDefWindowProc(WindowMessage& windowMessage);
-	virtual void callChainWindowProc(WindowMessage& windowMessage, WNDPROC wndproc = nullptr);
+	virtual void callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
 	virtual void callWindowProc(WindowMessage& windowMessage);
 	virtual void onWindowProc(WindowMessage& windowMessage);
 };

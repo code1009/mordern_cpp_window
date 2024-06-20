@@ -59,7 +59,7 @@ void reportError(LPCTSTR lpszFunction)
 //===========================================================================
 HINSTANCE WindowInstance::getHandle(void)
 {
-	return _hInstance;
+	return _Handle;
 }
 
 HINSTANCE WindowInstance::setHandle(HINSTANCE hInstance)
@@ -67,10 +67,10 @@ HINSTANCE WindowInstance::setHandle(HINSTANCE hInstance)
 	HINSTANCE old;
 
 
-	old = _hInstance;
-	_hInstance = hInstance;
+	old = _Handle;
+	_Handle = hInstance;
 
-	return _hInstance;
+	return _Handle;
 }
 
 std::wstring WindowInstance::loadString(int id)
@@ -182,11 +182,23 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 Window::Window()
 {
 	/*
+	//-----------------------------------------------------------------------
 	registerWindowMessageHandler();
 
+
+	//-----------------------------------------------------------------------
 	initializeWindowClass();
 	registerWindowClass();
 	createWindow();
+
+
+	//-----------------------------------------------------------------------
+	// child window
+
+
+	//-----------------------------------------------------------------------
+	::ShowWindow(_Handle, SW_SHOW);
+	::UpdateWindow(_Handle);
 	*/
 }
 
@@ -246,7 +258,7 @@ HWND Window::createWindow(
 	HMENU hMenu
 )
 {
-	_hWnd = CreateWindowExW(
+	_Handle = CreateWindowExW(
 		dwExStyle,
 		_WindowClass.lpszClassName,
 		lpWindowName,
@@ -261,17 +273,17 @@ HWND Window::createWindow(
 		this
 	);
 
-	return _hWnd;
+	return _Handle;
 }
 
 void Window::destroyWindow(void)
 {
-	if (_hWnd)
+	if (_Handle)
 	{
-		DestroyWindow(_hWnd);
+		DestroyWindow(_Handle);
 	}
 
-	_hWnd = nullptr;
+	_Handle = nullptr;
 }
 
 WNDPROC Window::attachWindow(HWND hwnd)
@@ -280,60 +292,65 @@ WNDPROC Window::attachWindow(HWND hwnd)
 	HWND old;
 
 
-	old = _hWnd;
+	old = _Handle;
 
 
 	//-----------------------------------------------------------------------
-	_hWnd = hwnd;
+	_Handle = hwnd;
 
 
 
 	//-----------------------------------------------------------------------
 	LONG_PTR rv;
-	WNDPROC oldWndProc;
+	WNDPROC oldWindowProc;
 
 
-	rv = ::SetWindowLongPtrW(_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-	rv = ::SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc));
-	oldWndProc = reinterpret_cast<WNDPROC>(rv);
+	rv = ::SetWindowLongPtrW(_Handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+	rv = ::SetWindowLongPtrW(_Handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc));
+	oldWindowProc = reinterpret_cast<WNDPROC>(rv);
 
-	_attachedOldWindowProc = oldWndProc;
 
-	return oldWndProc;
+	//-----------------------------------------------------------------------
+	_ChainWindowProc = oldWindowProc;
+
+
+	//-----------------------------------------------------------------------
+
+	return oldWindowProc;
 }
 
-WNDPROC Window::detachWindow(WNDPROC wndproc)
+WNDPROC Window::detachWindow(WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
 	HWND old;
 
 
-	old = _hWnd;
+	old = _Handle;
 
 
 	//-----------------------------------------------------------------------
-	if (nullptr==wndproc)
+	if (nullptr== windowProc)
 	{
-		wndproc = _attachedOldWindowProc;
+		windowProc = _ChainWindowProc;
 	}
 
 
 	//-----------------------------------------------------------------------
 	LONG_PTR rv;
-	WNDPROC oldWndProc;
+	WNDPROC oldWindowProc;
 
 
-	rv = ::SetWindowLongPtrW(_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
-	rv = ::SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(wndproc));
-	oldWndProc = reinterpret_cast<WNDPROC>(rv);
+	rv = ::SetWindowLongPtrW(_Handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
+	rv = ::SetWindowLongPtrW(_Handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(windowProc));
+	oldWindowProc = reinterpret_cast<WNDPROC>(rv);
 
 
 	//-----------------------------------------------------------------------
-	_hWnd = nullptr;
-	_attachedOldWindowProc = nullptr;
+	_Handle = nullptr;
+	_ChainWindowProc = nullptr;
 
 
-	return oldWndProc;
+	return oldWindowProc;
 }
 
 void Window::callDefWindowProc(WindowMessage& windowMessage)
@@ -346,19 +363,19 @@ void Window::callDefWindowProc(WindowMessage& windowMessage)
 			windowMessage.lParam);
 }
 
-void Window::callChainWindowProc(WindowMessage& windowMessage, WNDPROC wndproc)
+void Window::callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
-	if (nullptr == wndproc)
+	if (nullptr == windowProc)
 	{
-		wndproc = _attachedOldWindowProc;
+		windowProc = _ChainWindowProc;
 	}
 
 
 	//-----------------------------------------------------------------------
 	windowMessage.lResult =
 		::CallWindowProcW(
-			wndproc,
+			windowProc,
 			windowMessage.hWnd,
 			windowMessage.uMsg,
 			windowMessage.wParam,
@@ -367,9 +384,9 @@ void Window::callChainWindowProc(WindowMessage& windowMessage, WNDPROC wndproc)
 
 void Window::callWindowProc(WindowMessage& windowMessage)
 {
-	if (_attachedOldWindowProc)
+	if (_ChainWindowProc)
 	{
-		callChainWindowProc(windowMessage, _attachedOldWindowProc);
+		callChainWindowProc(windowMessage, _ChainWindowProc);
 	}
 	else
 	{

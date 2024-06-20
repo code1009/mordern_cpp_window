@@ -13,12 +13,18 @@ public:
 	{
 		print("OtherWindow.ctor() - begin");
 
+
 		registerWindowMessageHandler();
+
 
 		initializeWindowClass();
 		registerWindowClass();
 		createWindow();
-		::ShowWindow(_hWnd, SW_SHOW);
+
+
+		::ShowWindow(_Handle, SW_SHOW);
+		::UpdateWindow(_Handle);
+
 
 		print("OtherWindow.ctor() - end");
 	}
