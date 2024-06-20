@@ -20,7 +20,7 @@ MainFrame::MainFrame()
 
 	initializeWindowClass();
 	registerWindowClass();
-	createWindow(0, getWindowInstance()->loadStringW(IDS_APP_TITLE).c_str());
+	createWindow(0, getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
 	::ShowWindow(_hWnd, SW_SHOW);
 	::UpdateWindow(_hWnd);
 
@@ -80,10 +80,13 @@ void MainFrame::initializeWindowClass(void)
 	Window::initializeWindowClass();
 
 
-	_WindowClass.lpszClassName = getWindowInstance()->loadStringW(IDC_MORDERNCPPWINDOW).c_str();
-	_WindowClass.lpszMenuName = MAKEINTRESOURCEW(IDC_MORDERNCPPWINDOW);
-	_WindowClass.hIcon = LoadIcon(_WindowClass.hInstance, MAKEINTRESOURCE(IDI_MORDERNCPPWINDOW));
-	_WindowClass.hIconSm = LoadIcon(_WindowClass.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+	static std::wstring windowClassName = getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);
+
+
+	_WindowClass.lpszClassName = windowClassName.c_str();
+	_WindowClass.lpszMenuName  = getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
+	_WindowClass.hIcon         = getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
+	_WindowClass.hIconSm       = getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
 void MainFrame::onCreate(void)

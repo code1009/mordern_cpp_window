@@ -24,7 +24,14 @@ public:
 	HINSTANCE setHandle(HINSTANCE hInstance);
 
 public:
-	std::wstring loadStringW(int id);
+	std::wstring loadString(int id);
+	HCURSOR loadCursor(int id);
+	HICON loadIcon(int id);
+	HBITMAP loadBitmap(int id);
+	HCURSOR loadCursor(LPCWSTR id);	
+	HICON loadIcon(LPCWSTR id);
+	HBITMAP loadBitmap(LPCWSTR id);
+	LPCWSTR makeIntResource(int id);
 };
 
 
@@ -81,6 +88,7 @@ public:
 
 public:
 	HWND                    _hWnd{ nullptr };
+	WNDPROC                 _attachedOldWindowProc{ nullptr };
 	WindowMessageHandlerMap _WindowMessageHandlerMap{ };
 
 public:
@@ -91,7 +99,7 @@ public:
 	virtual void registerWindowMessageHandler(void);
 	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
-	virtual void createWindow(
+	virtual HWND createWindow(
 		DWORD dwExStyle = 0,
 		LPCWSTR lpWindowName = L"Window",
 		DWORD dwStyle = WS_OVERLAPPEDWINDOW,
@@ -102,7 +110,10 @@ public:
 		HWND hWndParent = nullptr,
 		HMENU hMenu = nullptr);
 	virtual void destroyWindow(void);
+	virtual WNDPROC attachWindow(HWND hwnd);
+	virtual WNDPROC detachWindow(WNDPROC wndproc = nullptr);
 	virtual void callDefaultWindowProc(WindowMessage& windowMessage);
+	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC wndproc = nullptr);
 	virtual void onWindowProc(WindowMessage& windowMessage);
 };
 

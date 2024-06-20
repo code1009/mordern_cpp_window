@@ -73,7 +73,7 @@ HINSTANCE WindowInstance::setHandle(HINSTANCE hInstance)
 	return _hInstance;
 }
 
-std::wstring WindowInstance::loadStringW(int id)
+std::wstring WindowInstance::loadString(int id)
 {
 	LPWSTR ptr;
 	LPWSTR* pptr;
@@ -82,7 +82,7 @@ std::wstring WindowInstance::loadStringW(int id)
 
 	ptr = nullptr;
 	pptr = &ptr;
-	rv = LoadStringW(getWindowInstance()->getHandle(),
+	rv = LoadStringW(getHandle(),
 		id,
 		(LPWSTR)pptr,
 		0
@@ -101,6 +101,41 @@ std::wstring WindowInstance::loadStringW(int id)
 	}
 
 	return s;
+}
+
+HCURSOR WindowInstance::loadCursor(int id)
+{
+	return loadCursor(makeIntResource(id));
+}
+
+HICON WindowInstance::loadIcon(int id)
+{
+	return loadIcon(makeIntResource(id));
+}
+
+HBITMAP WindowInstance::loadBitmap(int id)
+{
+	return loadBitmap(makeIntResource(id));
+}
+
+HCURSOR WindowInstance::loadCursor(LPCWSTR id)
+{
+	return ::LoadCursorW(getHandle(), id);
+}
+
+HICON WindowInstance::loadIcon(LPCWSTR id)
+{
+	return ::LoadIcon(getHandle(), id);
+}
+
+HBITMAP WindowInstance::loadBitmap(LPCWSTR id)
+{
+	return ::LoadBitmapW(getHandle(), id);
+}
+
+LPCWSTR WindowInstance::makeIntResource(int id)
+{
+	return MAKEINTRESOURCE(id);
 }
 
 //===========================================================================
@@ -177,7 +212,7 @@ void Window::initializeWindowClass(void)
 	_WindowClass.lpszClassName = L"TheWindowClass";
 	_WindowClass.lpszMenuName = nullptr;
 	_WindowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-	_WindowClass.hCursor = ::LoadCursorW(_WindowClass.hInstance, IDC_ARROW);
+	_WindowClass.hCursor = getWindowInstance()->loadCursor(IDC_ARROW);
 	_WindowClass.hIcon = nullptr;
 	_WindowClass.hIconSm = nullptr;
 }
@@ -199,7 +234,7 @@ void Window::registerWindowClass(void)
 	}
 }
 
-void Window::createWindow(
+HWND Window::createWindow(
 	DWORD dwExStyle,
 	LPCWSTR lpWindowName,
 	DWORD dwStyle,
@@ -225,6 +260,8 @@ void Window::createWindow(
 		_WindowClass.hInstance,
 		this
 	);
+
+	return _hWnd;
 }
 
 void Window::destroyWindow(void)
@@ -237,10 +274,91 @@ void Window::destroyWindow(void)
 	_hWnd = nullptr;
 }
 
+WNDPROC Window::attachWindow(HWND hwnd)
+{
+	//-----------------------------------------------------------------------
+	HWND old;
+
+
+	old = _hWnd;
+
+
+	//-----------------------------------------------------------------------
+	_hWnd = hwnd;
+
+
+
+	//-----------------------------------------------------------------------
+	LONG_PTR rv;
+	WNDPROC oldWndProc;
+
+
+	rv = ::SetWindowLongPtrW(_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+	rv = ::SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc));
+	oldWndProc = reinterpret_cast<WNDPROC>(rv);
+
+	_attachedOldWindowProc = oldWndProc;
+
+	return oldWndProc;
+}
+
+WNDPROC Window::detachWindow(WNDPROC wndproc)
+{
+	//-----------------------------------------------------------------------
+	HWND old;
+
+
+	old = _hWnd;
+
+
+	//-----------------------------------------------------------------------
+	if (nullptr==wndproc)
+	{
+		wndproc = _attachedOldWindowProc;
+	}
+
+
+	//-----------------------------------------------------------------------
+	LONG_PTR rv;
+	WNDPROC oldWndProc;
+
+
+	rv = ::SetWindowLongPtrW(_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
+	rv = ::SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(wndproc));
+	oldWndProc = reinterpret_cast<WNDPROC>(rv);
+
+
+	//-----------------------------------------------------------------------
+	_hWnd = nullptr;
+	_attachedOldWindowProc = nullptr;
+
+
+	return oldWndProc;
+}
+
 void Window::callDefaultWindowProc(WindowMessage& windowMessage)
 {
 	windowMessage.lResult =
 		::DefWindowProcW(
+			windowMessage.hWnd,
+			windowMessage.uMsg,
+			windowMessage.wParam,
+			windowMessage.lParam);
+}
+
+void Window::callWindowProc(WindowMessage& windowMessage, WNDPROC wndproc)
+{
+	//-----------------------------------------------------------------------
+	if (nullptr == wndproc)
+	{
+		wndproc = _attachedOldWindowProc;
+	}
+
+
+	//-----------------------------------------------------------------------
+	windowMessage.lResult =
+		::CallWindowProc(
+			wndproc,
 			windowMessage.hWnd,
 			windowMessage.uMsg,
 			windowMessage.wParam,
