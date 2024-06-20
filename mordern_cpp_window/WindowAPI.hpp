@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 
@@ -22,6 +22,9 @@ public:
 public:
 	HINSTANCE getHandle(void);
 	HINSTANCE setHandle(HINSTANCE hInstance);
+
+public:
+	std::wstring loadStringW(int id);
 };
 
 

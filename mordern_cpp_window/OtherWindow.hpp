@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 
@@ -36,9 +36,9 @@ public:
 	{
 		_WindowMessageHandlerMap[WM_CREATE] = [this](WindowMessage& windowMessage)
 		{
-			// _Wnd´Â ¾ÆÁ÷ CreateWindowExW()ÇÔ¼ö°¡ ³¡³ªÁö ¾ÊÀº »óÅÂ ÀÌ¹Ç·Î,
-			// _Wnd´Â nullptrÀÌ´Ù.
-			// ¶ÇÇÑ, »ı¼ºÀÚ¿¡¼­ ÀÌ ¿µ¿ªÀ» È£Ãâ ÁßÀÌ´Ù.
+			// _WndëŠ” ì•„ì§ CreateWindowExW()í•¨ìˆ˜ê°€ ëë‚˜ì§€ ì•Šì€ ìƒíƒœ ì´ë¯€ë¡œ,
+			// _WndëŠ” nullptrì´ë‹¤.
+			// ë˜í•œ, ìƒì„±ìì—ì„œ ì´ ì˜ì—­ì„ í˜¸ì¶œ ì¤‘ì´ë‹¤.
 			SetWindowTextW(windowMessage.hWnd, L"OtherWindow");
 			callDefaultWindowProc(windowMessage);
 		}

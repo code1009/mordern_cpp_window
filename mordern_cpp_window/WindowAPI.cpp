@@ -73,6 +73,37 @@ HINSTANCE WindowInstance::setHandle(HINSTANCE hInstance)
 	return _hInstance;
 }
 
+std::wstring WindowInstance::loadStringW(int id)
+{
+	LPWSTR ptr;
+	LPWSTR* pptr;
+	int rv;
+
+
+	ptr = nullptr;
+	pptr = &ptr;
+	rv = LoadStringW(getWindowInstance()->getHandle(),
+		id,
+		(LPWSTR)pptr,
+		0
+	);
+
+
+	std::wstring s;
+
+
+	if (rv)
+	{
+		if (ptr)
+		{
+			s = ptr;
+		}
+	}
+
+	return s;
+}
+
+//===========================================================================
 WindowInstance* getWindowInstance(void)
 {
 	static WindowInstance instance;

@@ -20,7 +20,7 @@ MainFrame::MainFrame()
 
 	initializeWindowClass();
 	registerWindowClass();
-	createWindow(0, L"MainFrame");
+	createWindow(0, getWindowInstance()->loadStringW(IDS_APP_TITLE).c_str());
 	::ShowWindow(_hWnd, SW_SHOW);
 	::UpdateWindow(_hWnd);
 
@@ -79,6 +79,8 @@ void MainFrame::initializeWindowClass(void)
 {
 	Window::initializeWindowClass();
 
+
+	_WindowClass.lpszClassName = getWindowInstance()->loadStringW(IDC_MORDERNCPPWINDOW).c_str();
 	_WindowClass.lpszMenuName = MAKEINTRESOURCEW(IDC_MORDERNCPPWINDOW);
 	_WindowClass.hIcon = LoadIcon(_WindowClass.hInstance, MAKEINTRESOURCE(IDI_MORDERNCPPWINDOW));
 	_WindowClass.hIconSm = LoadIcon(_WindowClass.hInstance, MAKEINTRESOURCE(IDI_SMALL));
