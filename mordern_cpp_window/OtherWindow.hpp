@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class OtherWindow : public Window
+class OtherWindow : public BaseWindow
 {
 public:
 	OtherWindow()

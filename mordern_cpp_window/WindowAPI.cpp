@@ -176,30 +176,10 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 
 
 
-
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
 Window::Window()
 {
-	/*
-	//-----------------------------------------------------------------------
-	registerWindowMessageHandler();
-
-
-	//-----------------------------------------------------------------------
-	initializeWindowClass();
-	registerWindowClass();
-	createWindow();
-
-
-	//-----------------------------------------------------------------------
-	// child window
-
-
-	//-----------------------------------------------------------------------
-	::ShowWindow(_Handle, SW_SHOW);
-	::UpdateWindow(_Handle);
-	*/
 }
 
 Window::~Window()
@@ -211,7 +191,47 @@ void Window::registerWindowMessageHandler(void)
 {
 }
 
-void Window::initializeWindowClass(void)
+void Window::callDefWindowProc(WindowMessage& windowMessage)
+{
+	windowMessage.lResult =
+		::DefWindowProcW(
+			windowMessage.hWnd,
+			windowMessage.uMsg,
+			windowMessage.wParam,
+			windowMessage.lParam);
+}
+
+void Window::callWindowProc(WindowMessage& windowMessage)
+{
+	callDefWindowProc(windowMessage);
+}
+
+void Window::onWindowMessage(WindowMessage& windowMessage)
+{
+	auto found = _WindowMessageHandlerMap.find(windowMessage.uMsg);
+
+
+	if (found != _WindowMessageHandlerMap.end())
+	{
+		auto handler = (*found).second;
+		if (handler)
+		{
+			handler(windowMessage);
+			return;
+		}
+	}
+
+
+	callWindowProc(windowMessage);
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+void BaseWindow::initializeWindowClass(void)
 {
 	memset(&_WindowClass, 0, sizeof(_WindowClass));
 
@@ -221,7 +241,7 @@ void Window::initializeWindowClass(void)
 	_WindowClass.cbWndExtra = 0;
 	_WindowClass.hInstance = getWindowInstance()->getHandle();
 	_WindowClass.lpfnWndProc = WindowProc;
-	_WindowClass.lpszClassName = L"TheWindowClass";
+	_WindowClass.lpszClassName = L"TheBaseWindowClass";
 	_WindowClass.lpszMenuName = nullptr;
 	_WindowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
 	_WindowClass.hCursor = getWindowInstance()->loadCursor(IDC_ARROW);
@@ -229,7 +249,7 @@ void Window::initializeWindowClass(void)
 	_WindowClass.hIconSm = nullptr;
 }
 
-void Window::registerWindowClass(void)
+void BaseWindow::registerWindowClass(void)
 {
 	WNDCLASSEXW wndClass;
 	BOOL rv;
@@ -246,7 +266,7 @@ void Window::registerWindowClass(void)
 	}
 }
 
-HWND Window::createWindow(
+HWND BaseWindow::createWindow(
 	DWORD dwExStyle,
 	LPCWSTR lpWindowName,
 	DWORD dwStyle,
@@ -276,7 +296,7 @@ HWND Window::createWindow(
 	return _Handle;
 }
 
-void Window::destroyWindow(void)
+void BaseWindow::destroyWindow(void)
 {
 	if (_Handle)
 	{
@@ -286,7 +306,13 @@ void Window::destroyWindow(void)
 	_Handle = nullptr;
 }
 
-WNDPROC Window::attachWindow(HWND hwnd)
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+WNDPROC SubclassWindow::attachWindow(HWND hwnd)
 {
 	//-----------------------------------------------------------------------
 	HWND old;
@@ -319,7 +345,7 @@ WNDPROC Window::attachWindow(HWND hwnd)
 	return oldWindowProc;
 }
 
-WNDPROC Window::detachWindow(WNDPROC windowProc)
+WNDPROC SubclassWindow::detachWindow(WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
 	HWND old;
@@ -353,17 +379,7 @@ WNDPROC Window::detachWindow(WNDPROC windowProc)
 	return oldWindowProc;
 }
 
-void Window::callDefWindowProc(WindowMessage& windowMessage)
-{
-	windowMessage.lResult =
-		::DefWindowProcW(
-			windowMessage.hWnd,
-			windowMessage.uMsg,
-			windowMessage.wParam,
-			windowMessage.lParam);
-}
-
-void Window::callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc)
+void SubclassWindow::callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
 	if (nullptr == windowProc)
@@ -382,7 +398,7 @@ void Window::callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowPro
 			windowMessage.lParam);
 }
 
-void Window::callWindowProc(WindowMessage& windowMessage)
+void SubclassWindow::callWindowProc(WindowMessage& windowMessage)
 {
 	if (_ChainWindowProc)
 	{
@@ -392,25 +408,6 @@ void Window::callWindowProc(WindowMessage& windowMessage)
 	{
 		callDefWindowProc(windowMessage);
 	}
-}
-
-void Window::onWindowProc(WindowMessage& windowMessage)
-{
-	auto found = _WindowMessageHandlerMap.find(windowMessage.uMsg);
-
-
-	if (found != _WindowMessageHandlerMap.end())
-	{
-		auto handler = (*found).second;
-		if (handler)
-		{
-			handler(windowMessage);
-			return;
-		}
-	}
-
-
-	callWindowProc(windowMessage);
 }
 
 
@@ -425,6 +422,8 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 	{
 		auto userData = reinterpret_cast<CREATESTRUCTW*>(lParam)->lpCreateParams;
 		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
+
+		(reinterpret_cast<Window*>(userData))->_Handle = hwnd;
 	}
 
 
@@ -434,7 +433,7 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 		WindowMessage windowMessage{ hwnd, message, wParam, lParam };
 
 
-		windowPtr->onWindowProc(windowMessage);
+		windowPtr->onWindowMessage(windowMessage);
 
 		return windowMessage.lResult;
 	}

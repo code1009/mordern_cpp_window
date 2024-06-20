@@ -84,11 +84,7 @@ using WindowMessageHandlerMap = std::map<std::uint32_t, WindowMessageHandler>;
 class Window
 {
 public:
-	WNDCLASSEXW _WindowClass{ };
-
-public:
 	HWND                    _Handle{ nullptr };
-	WNDPROC                 _ChainWindowProc{ nullptr };
 	WindowMessageHandlerMap _WindowMessageHandlerMap{ };
 
 public:
@@ -97,6 +93,26 @@ public:
 
 public:
 	virtual void registerWindowMessageHandler(void);
+
+	// 윈도우 프로시저 안에서 호출
+public:
+	virtual void callDefWindowProc(WindowMessage& windowMessage);
+	virtual void callWindowProc(WindowMessage& windowMessage);
+	virtual void onWindowMessage(WindowMessage& windowMessage);
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+class BaseWindow : public Window
+{
+public:
+	WNDCLASSEXW _WindowClass{ };
+
+public:
 	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
 	virtual HWND createWindow(
@@ -110,12 +126,26 @@ public:
 		HWND hWndParent = nullptr,
 		HMENU hMenu = nullptr);
 	virtual void destroyWindow(void);
+};
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+class SubclassWindow : public Window
+{
+public:
+	WNDPROC _ChainWindowProc{ nullptr };
+
+public:
 	virtual WNDPROC attachWindow(HWND hwnd);
 	virtual WNDPROC detachWindow(WNDPROC windowProc = nullptr);
-	virtual void callDefWindowProc(WindowMessage& windowMessage);
+
+	// 윈도우 프로시저 안에서 호출
+public:
 	virtual void callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
 	virtual void callWindowProc(WindowMessage& windowMessage);
-	virtual void onWindowProc(WindowMessage& windowMessage);
 };
 
 
