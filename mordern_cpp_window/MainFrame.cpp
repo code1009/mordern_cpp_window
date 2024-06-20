@@ -130,8 +130,8 @@ bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void MainFrame::onPaint(HDC hDC)
 {
-	// 최초실행시 UpdateWindow()에 의해서
-	// ctor()안에서 호출 되지만 createWindow()호출 이 후라서 _hWnd 유효함
+	// 최초 실행시 UpdateWindow()에 의해서
+	// ctor()안에서 호출 되지만 createWindow()호출 이후라서 _hWnd 유효함
 
 	PAINTSTRUCT ps;
 	
