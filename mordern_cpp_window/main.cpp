@@ -3,7 +3,7 @@
 #include "main.hpp"
 
 #include "WindowAPI.hpp"
-#include "MainWindow.hpp"
+#include "MainFrame.hpp"
 #include "OtherWindow.hpp"
 
 
@@ -17,8 +17,7 @@ void window0Thread(void)
 	WindowMessageLoop windowMessageLoop;
 
 
-	MainWindow mainWindow;
-	OtherWindow otherWindow;
+	MainFrame mainFrame;
 
 	print("windowMessageLoop.runLoop() - begin");
 	windowMessageLoop.runLoop();
@@ -30,7 +29,8 @@ void window1thread(void)
 	WindowMessageLoop windowMessageLoop;
 
 
-	MainWindow mainWindow;
+	MainFrame mainFrame;
+	OtherWindow otherWindow;
 
 
 	windowMessageLoop.runLoop();
@@ -41,7 +41,7 @@ void window2thread(void)
 	WindowMessageLoop windowMessageLoop;
 
 
-	MainWindow mainWindow;
+	MainFrame mainFrame;
 
 
 	windowMessageLoop.runLoop();
@@ -62,14 +62,15 @@ int APIENTRY wWinMain(
 
 
 
-	std::thread thread1(window1thread);
-	std::thread thread2(window2thread);
+	//std::thread thread1(window1thread);
+	//std::thread thread2(window2thread);
 
 
 	window0Thread();
 
-	thread1.join();
-	thread2.join();
+
+	//thread1.join();
+	//thread2.join();
 
 	return 0;
 }

@@ -27,7 +27,7 @@
     <ClInclude Include="main.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow.hpp">
+    <ClInclude Include="MainFrame.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OtherWindow.hpp">
@@ -41,7 +41,7 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
+    <ClCompile Include="MainFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="WindowAPI.cpp">

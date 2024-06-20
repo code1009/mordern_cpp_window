@@ -15,6 +15,7 @@ public:
 
 		registerWindowMessageHandler();
 
+		initializeWindowClass();
 		registerWindowClass();
 		createWindow();
 		::ShowWindow(_hWnd, SW_SHOW);

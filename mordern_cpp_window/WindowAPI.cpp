@@ -118,7 +118,7 @@ Window::Window()
 	/*
 	registerWindowMessageHandler();
 
-
+	initializeWindowClass();
 	registerWindowClass();
 	createWindow();
 	*/
@@ -133,19 +133,26 @@ void Window::registerWindowMessageHandler(void)
 {
 }
 
-void Window::registerWindowClass(void)
+void Window::initializeWindowClass(void)
 {
 	memset(&_WindowClass, 0, sizeof(_WindowClass));
 
 	_WindowClass.cbSize = sizeof(_WindowClass);
 	_WindowClass.style = CS_HREDRAW | CS_VREDRAW;
+	_WindowClass.cbClsExtra = 0;
+	_WindowClass.cbWndExtra = 0;
 	_WindowClass.hInstance = getWindowInstance()->getHandle();
 	_WindowClass.lpfnWndProc = WindowProc;
 	_WindowClass.lpszClassName = L"TheWindowClass";
+	_WindowClass.lpszMenuName = nullptr;
 	_WindowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-	_WindowClass.hCursor = ::LoadCursorW(nullptr, IDC_ARROW);
+	_WindowClass.hCursor = ::LoadCursorW(_WindowClass.hInstance, IDC_ARROW);
+	_WindowClass.hIcon = nullptr;
+	_WindowClass.hIconSm = nullptr;
+}
 
-
+void Window::registerWindowClass(void)
+{
 	WNDCLASSEXW wndClass;
 	BOOL rv;
 
@@ -161,26 +168,25 @@ void Window::registerWindowClass(void)
 	}
 }
 
-void Window::createWindow(void)
+void Window::createWindow(
+	DWORD dwExStyle,
+	LPCWSTR lpWindowName,
+	DWORD dwStyle,
+	int X,
+	int Y,
+	int nWidth,
+	int nHeight,
+	HWND hWndParent,
+	HMENU hMenu
+)
 {
-	DWORD   dwExStyle = 0;
-	LPCWSTR lpWindowName = L"Here is the title of the Window, will only show on the taskbar.";
-	DWORD   dwStyle = WS_POPUP | WS_CAPTION | WS_BORDER | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
-	int     X = CW_USEDEFAULT;
-	int     Y = CW_USEDEFAULT;
-	int     nWidth = 500;
-	int     nHeight = 500;
-	HWND    hWndParent = nullptr;
-	HMENU   hMenu = nullptr;
-
-
 	_hWnd = CreateWindowExW(
 		dwExStyle,
 		_WindowClass.lpszClassName,
 		lpWindowName,
 		dwStyle,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
+		X,
+		Y,
 		nWidth,
 		nHeight,
 		hWndParent,

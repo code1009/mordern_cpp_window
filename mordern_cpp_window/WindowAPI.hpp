@@ -86,8 +86,18 @@ public:
 
 public:
 	virtual void registerWindowMessageHandler(void);
+	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
-	virtual void createWindow(void);
+	virtual void createWindow(
+		DWORD dwExStyle = 0,
+		LPCWSTR lpWindowName = L"Window",
+		DWORD dwStyle = WS_OVERLAPPEDWINDOW,
+		int X = CW_USEDEFAULT,
+		int Y = CW_USEDEFAULT,
+		int nWidth = 500,
+		int nHeight = 500,
+		HWND hWndParent = nullptr,
+		HMENU hMenu = nullptr);
 	virtual void destroyWindow(void);
 	virtual void callDefaultWindowProc(WindowMessage& windowMessage);
 	virtual void onWindowProc(WindowMessage& windowMessage);
