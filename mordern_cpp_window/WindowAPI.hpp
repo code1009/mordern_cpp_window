@@ -112,8 +112,9 @@ public:
 	virtual void destroyWindow(void);
 	virtual WNDPROC attachWindow(HWND hwnd);
 	virtual WNDPROC detachWindow(WNDPROC wndproc = nullptr);
-	virtual void callDefaultWindowProc(WindowMessage& windowMessage);
-	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC wndproc = nullptr);
+	virtual void callDefWindowProc(WindowMessage& windowMessage);
+	virtual void callChainWindowProc(WindowMessage& windowMessage, WNDPROC wndproc = nullptr);
+	virtual void callWindowProc(WindowMessage& windowMessage);
 	virtual void onWindowProc(WindowMessage& windowMessage);
 };
 

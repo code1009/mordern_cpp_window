@@ -82,7 +82,7 @@ std::wstring WindowInstance::loadString(int id)
 
 	ptr = nullptr;
 	pptr = &ptr;
-	rv = LoadStringW(getHandle(),
+	rv = ::LoadStringW(getHandle(),
 		id,
 		(LPWSTR)pptr,
 		0
@@ -336,7 +336,7 @@ WNDPROC Window::detachWindow(WNDPROC wndproc)
 	return oldWndProc;
 }
 
-void Window::callDefaultWindowProc(WindowMessage& windowMessage)
+void Window::callDefWindowProc(WindowMessage& windowMessage)
 {
 	windowMessage.lResult =
 		::DefWindowProcW(
@@ -346,7 +346,7 @@ void Window::callDefaultWindowProc(WindowMessage& windowMessage)
 			windowMessage.lParam);
 }
 
-void Window::callWindowProc(WindowMessage& windowMessage, WNDPROC wndproc)
+void Window::callChainWindowProc(WindowMessage& windowMessage, WNDPROC wndproc)
 {
 	//-----------------------------------------------------------------------
 	if (nullptr == wndproc)
@@ -357,12 +357,24 @@ void Window::callWindowProc(WindowMessage& windowMessage, WNDPROC wndproc)
 
 	//-----------------------------------------------------------------------
 	windowMessage.lResult =
-		::CallWindowProc(
+		::CallWindowProcW(
 			wndproc,
 			windowMessage.hWnd,
 			windowMessage.uMsg,
 			windowMessage.wParam,
 			windowMessage.lParam);
+}
+
+void Window::callWindowProc(WindowMessage& windowMessage)
+{
+	if (_attachedOldWindowProc)
+	{
+		callChainWindowProc(windowMessage, _attachedOldWindowProc);
+	}
+	else
+	{
+		callDefWindowProc(windowMessage);
+	}
 }
 
 void Window::onWindowProc(WindowMessage& windowMessage)
@@ -381,7 +393,7 @@ void Window::onWindowProc(WindowMessage& windowMessage)
 	}
 
 
-	callDefaultWindowProc(windowMessage);
+	callWindowProc(windowMessage);
 }
 
 

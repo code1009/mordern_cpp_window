@@ -40,7 +40,7 @@ public:
 			// _Wnd는 nullptr이다.
 			// 또한, 생성자에서 이 영역을 호출 중이다.
 			SetWindowTextW(windowMessage.hWnd, L"OtherWindow");
-			callDefaultWindowProc(windowMessage);
+			callDefWindowProc(windowMessage);
 		}
 		;
 

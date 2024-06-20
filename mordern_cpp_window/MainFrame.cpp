@@ -38,7 +38,7 @@ void MainFrame::registerWindowMessageHandler(void)
 	_WindowMessageHandlerMap[WM_CREATE] = [this](WindowMessage& windowMessage)
 	{
 		onCreate();
-		callDefaultWindowProc(windowMessage);
+		callDefWindowProc(windowMessage);
 	}
 	;
 
@@ -61,7 +61,7 @@ void MainFrame::registerWindowMessageHandler(void)
 		bool rv = onCommand((UINT)HIWORD(windowMessage.wParam), (int)LOWORD(windowMessage.wParam), (HWND)windowMessage.lParam);
 		if (!rv)
 		{
-			callDefaultWindowProc(windowMessage);
+			callDefWindowProc(windowMessage);
 		}
 	}
 	;
