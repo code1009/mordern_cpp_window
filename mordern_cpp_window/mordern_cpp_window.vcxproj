@@ -153,6 +153,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="WindowUI.cpp" />
+    <ClCompile Include="WindowUI_WindowMessageManipulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mordern_cpp_window.rc" />

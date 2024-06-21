@@ -195,31 +195,6 @@ WindowMessage::WindowMessage(
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-WindowMessageManipulator::WindowMessageManipulator(WindowMessage* windowMessage) :
-	_windowMessage{ windowMessage }
-{
-}
-
-WindowMessageManipulator::~WindowMessageManipulator()
-{
-}
-
-WindowMessage* WindowMessageManipulator::getWindowMessage(void)
-{
-	return _windowMessage;
-}
-
-void WindowMessageManipulator::Result(void)
-{
-	_windowMessage->lResult = 0;
-}
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
 LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM lParam);
 
 

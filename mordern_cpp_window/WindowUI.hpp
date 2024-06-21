@@ -72,28 +72,6 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class WindowMessageManipulator
-{
-private:
-	WindowMessage* _windowMessage{ nullptr };
-
-public:
-	explicit WindowMessageManipulator(WindowMessage* windowMessage);
-	virtual ~WindowMessageManipulator();
-
-public:
-	WindowMessage* getWindowMessage(void);
-
-public:
-	void Result(void);
-};
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
 using WindowMessageHandler = std::function<void(WindowMessage& windowMessage)>;
 using WindowMessageHandlerMap = std::map<std::uint32_t, WindowMessageHandler>;
 

@@ -56,6 +56,9 @@
     <ClCompile Include="MainFrame.cpp">
       <Filter>WindowUI_Example</Filter>
     </ClCompile>
+    <ClCompile Include="WindowUI_WindowMessageManipulator.cpp">
+      <Filter>WindowUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mordern_cpp_window.rc">
