@@ -88,6 +88,11 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+/*
+int OnCreate(LPCREATESTRUCT lpCreateStruct)
+WM_CREATE
+lResult = (LRESULT)func((LPCREATESTRUCT)lParam);
+*/
 class WM_CREATE_WindowMessageManipulator : public WindowMessageManipulator
 {
 public:
@@ -113,5 +118,36 @@ public:
 	}	
 };
 
-using WM_NCCREATE_WindowMessageManipulator = WM_CREATE_WindowMessageManipulator;
+//===========================================================================
+/*
+// BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct)
+// WM_NCCREATE
+// lResult = (LRESULT)func((LPCREATESTRUCT)lParam);
+*/
+class WM_NCCREATE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_NCCREATE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	LPCREATESTRUCT lpCreateStruct(void)
+	{
+		LPARAM lParam;
+
+
+		lParam = getWindowMessage()->lParam;
+		return (LPCREATESTRUCT)(lParam);
+	}
+
+public:
+	void Result(bool rv)
+	{
+		getWindowMessage()->lResult = (LRESULT) rv ? 1 : 0;
+	}
+};
+
+//using WM_NCCREATE_WindowMessageManipulator = WM_CREATE_WindowMessageManipulator;
 

@@ -51,8 +51,13 @@ void MainFrame::registerWindowMessageHandler(void)
 {
 	getWindowMessageHandler(WM_NCCREATE) = [this](WindowMessage& windowMessage)
 	{ 
-		onNcCreate(); 
-		defaultWindowMessageHandler(windowMessage);
+		WM_NCCREATE_WindowMessageManipulator manipulator(&windowMessage);
+
+
+		onNcCreate();
+		//defaultWindowMessageHandler(windowMessage);
+		
+		manipulator.Result(true);
 	};
 
 	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowMessage& windowMessage) 
