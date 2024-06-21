@@ -471,6 +471,14 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 
 		windowPtr->onWindowMessage(windowMessage);
 
+
+		if (WM_NCDESTROY == message)
+		{
+			::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
+			windowPtr->setHandle(nullptr);
+		}
+
+
 		return windowMessage.lResult;
 	}
 

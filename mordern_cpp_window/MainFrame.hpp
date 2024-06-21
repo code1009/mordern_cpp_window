@@ -17,6 +17,9 @@ public:
 	virtual void initializeWindowClass(void) override;
 
 public:
+	void onNcCreate(void);
+	void onNcDestory(void);
+
 	void onCreate(void);
 	void onDestory(void);
 	void onClose(void);

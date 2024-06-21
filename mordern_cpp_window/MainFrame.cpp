@@ -47,6 +47,18 @@ MainFrame::~MainFrame()
 
 void MainFrame::registerWindowMessageHandler(void)
 {
+	getWindowMessageHandler(WM_NCCREATE) = [this](WindowMessage& windowMessage)
+	{ 
+		onNcCreate(); 
+		defaultWindowMessageHandler(windowMessage);
+	};
+
+	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowMessage& windowMessage) 
+	{ 
+		onNcDestory(); 
+		defaultWindowMessageHandler(windowMessage);
+	};
+
 	getWindowMessageHandler(WM_CREATE) = [this](WindowMessage& windowMessage)
 	{
 		onCreate();
@@ -100,6 +112,16 @@ void MainFrame::initializeWindowClass(void)
 	getWindowClass().lpszMenuName  = getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
 	getWindowClass().hIcon         = getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
 	getWindowClass().hIconSm       = getWindowInstance()->loadIcon(IDI_SMALL);
+}
+
+void MainFrame::onNcCreate(void)
+{
+	debugPrintln(L"MainFrame.onNcCreate()");
+}
+
+void MainFrame::onNcDestory(void)
+{
+	debugPrintln(L"MainFrame.onNcDestory()");
 }
 
 void MainFrame::onCreate(void)

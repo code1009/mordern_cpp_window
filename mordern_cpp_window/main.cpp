@@ -25,22 +25,26 @@ void window0Thread(void)
 	debugPrintln(L"windowMessageLoop.runLoop() - end");
 
 	/*
-	MainFrame.ctor() - begin
-	MainFrame.onCreate()
-	MainFrame.ctor() - end
 
+MainFrame.ctor() - begin
+MainFrame.onNcCreate()
+MainFrame.onCreate()
+MainFrame.ctor() - end
 
-	windowMessageLoop.runLoop() - begin
+windowMessageLoop.runLoop() - begin
 
-	MainFrame.onClose() - begin
-	MainFrame.onDestory() - begin
-	MainFrame.onDestory() - end
-	MainFrame.onClose() - end
+MainFrame.onClose() - begin
 
-	windowMessageLoop.runLoop() - end
+MainFrame.onDestory() - begin
+MainFrame.onDestory() - end
+MainFrame.onNcDestory()
 
+MainFrame.onClose() - end
 
-	MainFrame.dtor()
+windowMessageLoop.runLoop() - end
+
+MainFrame.dtor()
+
 	*/
 }
 
