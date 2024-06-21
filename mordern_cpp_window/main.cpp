@@ -2,7 +2,7 @@
 //===========================================================================
 #include "main.hpp"
 
-#include "WindowAPI.hpp"
+#include "WindowUI.hpp"
 #include "MainFrame.hpp"
 #include "OtherWindow.hpp"
 

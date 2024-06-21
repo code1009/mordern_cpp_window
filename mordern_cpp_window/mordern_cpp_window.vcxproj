@@ -146,12 +146,13 @@
     <ClInclude Include="OtherWindow.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WindowAPI.hpp" />
+    <ClInclude Include="WindowUI.hpp" />
+    <ClInclude Include="WindowUI_WindowMessageManipulator.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="WindowAPI.cpp" />
+    <ClCompile Include="WindowUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mordern_cpp_window.rc" />

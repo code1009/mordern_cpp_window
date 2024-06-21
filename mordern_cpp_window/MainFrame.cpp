@@ -3,7 +3,9 @@
 #include "framework.h"
 #include "resource.h"
 
-#include "WindowAPI.hpp"
+#include "WindowUI.hpp"
+#include "WindowUI_WindowMessageManipulator.hpp"
+
 #include "MainFrame.hpp"
 
 
@@ -61,23 +63,24 @@ void MainFrame::registerWindowMessageHandler(void)
 
 	getWindowMessageHandler(WM_CREATE) = [this](WindowMessage& windowMessage)
 	{
+		WM_CREATE_WindowMessageManipulator manipulator(&windowMessage);
+
+		manipulator.lpCreateStruct();
 		onCreate();
+		manipulator.Result(0);
 
 		defaultWindowMessageHandler(windowMessage);
-	}
-	;
+	};
 
 	getWindowMessageHandler(WM_DESTROY) = [this](WindowMessage& windowMessage)
 	{
 		onDestory();
-	}
-	;
+	};
 
 	getWindowMessageHandler(WM_CLOSE) = [this](WindowMessage& windowMessage)
 	{
 		onClose();
-	}
-	;
+	};
 
 	getWindowMessageHandler(WM_COMMAND) = [this](WindowMessage& windowMessage)
 	{
@@ -88,16 +91,14 @@ void MainFrame::registerWindowMessageHandler(void)
 		{
 			defaultWindowMessageHandler(windowMessage);
 		}
-	}
-	;
+	};
 
 	getWindowMessageHandler(WM_PAINT) = [this](WindowMessage& windowMessage)
 	{
 		// void OnPaint(CDCHandle dc)
 		// func((HDC)wParam);
 		onPaint((HDC)windowMessage.wParam);
-	}
-	;
+	};
 }
 
 void MainFrame::initializeWindowClass(void)

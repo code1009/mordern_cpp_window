@@ -2,7 +2,7 @@
 //===========================================================================
 #include "framework.h"
 
-#include "WindowAPI.hpp"
+#include "WindowUI.hpp"
 
 
 
@@ -188,6 +188,32 @@ WindowMessage::WindowMessage(
 	lResult{ 0 }
 {
 }
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+WindowMessageManipulator::WindowMessageManipulator(WindowMessage* windowMessage) :
+	_windowMessage{ windowMessage }
+{
+}
+
+WindowMessageManipulator::~WindowMessageManipulator()
+{
+}
+
+WindowMessage* WindowMessageManipulator::getWindowMessage(void)
+{
+	return _windowMessage;
+}
+
+void WindowMessageManipulator::Result(void)
+{
+	_windowMessage->lResult = 0;
+}
+
 
 
 
@@ -452,6 +478,28 @@ void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+void WindowMessageLoop::runLoop(void)
+{
+	MSG msg;
+	BOOL rv;
+
+
+	do
+	{
+		rv = ::PeekMessageW(&msg, HWND{}, 0, 0, PM_REMOVE);
+		if (rv != 0)
+		{
+			::TranslateMessage(&msg);
+			::DispatchMessageW(&msg);
+		}
+	} while (msg.message != WM_QUIT);
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM lParam)
 {
 	if (WM_NCCREATE == message)
@@ -486,28 +534,6 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 	return ::DefWindowProcW(hwnd, message, wParam, lParam);
 }
 
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-void WindowMessageLoop::runLoop(void)
-{
-	MSG msg;
-	BOOL rv;
-
-
-	do
-	{
-		rv = ::PeekMessageW(&msg, HWND{}, 0, 0, PM_REMOVE);
-		if (rv != 0)
-		{
-			::TranslateMessage(&msg);
-			::DispatchMessageW(&msg);
-		}
-	} while (msg.message != WM_QUIT);
-}
 
 
 

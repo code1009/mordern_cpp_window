@@ -72,75 +72,22 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-#if 0
-// atlcrack.h
-
-int OnCreate(LPCREATESTRUCT lpCreateStruct)
-WM_CREATE
-lResult = (LRESULT)func((LPCREATESTRUCT)lParam);
-
-BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
-WM_INITDIALOG
-lResult = (LRESULT)func((HWND)wParam, lParam);
-
-BOOL OnCopyData(CWindow wnd, PCOPYDATASTRUCT pCopyDataStruct)
-WM_COPYDATA
-lResult = (LRESULT)func((HWND)wParam, (PCOPYDATASTRUCT)lParam);
-
-void OnDestroy()
-WM_DESTROY
-func();
-lResult = 0;
-
-void OnMove(CPoint ptPos)
-WM_MOVE
-func(_WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
-lResult = 0;
-
-#endif
-
-class WindowMessageProcess_WM_CREATE
+class WindowMessageManipulator
 {
-public:
-	using Handler = std::function<int(LPCREATESTRUCT lpCreateStruct)>;
+private:
+	WindowMessage* _windowMessage{ nullptr };
 
 public:
-	int _Return;
-	Handler _Function;
+	explicit WindowMessageManipulator(WindowMessage* windowMessage);
+	virtual ~WindowMessageManipulator();
 
 public:
-	void invoke(WindowMessage* _windowMessage)
-	{
-		_Return = _Function(
-			(LPCREATESTRUCT)_windowMessage->lParam
-		);
-		_windowMessage->lResult = (LRESULT)_Return;
-	}
+	WindowMessage* getWindowMessage(void);
+
+public:
+	void Result(void);
 };
 
-// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
-// func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
-class WindowMessage_WM_COMMAND : public WindowMessage
-{
-public:
-	UINT uNotifyCode(void) const { return (UINT)HIWORD(wParam); }
-	int  nID(void) const { return (int)LOWORD(wParam); }
-	HWND wndCtl(void) const { return (HWND)lParam; }
-	void Return(void)
-	{
-		lResult = 0;
-	}
-};
-
-class WindowMessage_WM_CREATE : public WindowMessage
-{
-public:
-	LPCREATESTRUCT lpCreateStruct(void) const { return (LPCREATESTRUCT)lParam; }
-	void Return(int rv)
-	{
-		lResult = (LRESULT)rv;
-	}
-};
 
 
 
