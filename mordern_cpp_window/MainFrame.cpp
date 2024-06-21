@@ -63,7 +63,7 @@ void MainFrame::registerWindowMessageHandler(void)
 	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowMessage& windowMessage) 
 	{ 
 		onNcDestory(); 
-		defaultWindowMessageHandler(windowMessage);
+		//defaultWindowMessageHandler(windowMessage);
 	};
 
 	getWindowMessageHandler(WM_CREATE) = [this](WindowMessage& windowMessage)
@@ -72,9 +72,9 @@ void MainFrame::registerWindowMessageHandler(void)
 
 		windowMessageManipulator.lpCreateStruct();
 		onCreate();
-		windowMessageManipulator.Result(0);
+		//windowMessageManipulator.Result(0);
 
-		defaultWindowMessageHandler(windowMessage);
+		//defaultWindowMessageHandler(windowMessage);
 	};
 
 	getWindowMessageHandler(WM_DESTROY) = [this](WindowMessage& windowMessage)
