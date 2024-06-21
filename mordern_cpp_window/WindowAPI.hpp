@@ -118,43 +118,18 @@ public:
 	}
 };
 
-class WindowMessageProcess_WM_CREATE
-{
-public:
-	using Handler = std::function<int(LPCREATESTRUCT lpCreateStruct)>;
-
-public:
-	int _Return;
-	Handler _Function;
-
-public:
-	void invoke(WindowMessage* _windowMessage)
-	{
-		_Return = _Function(
-			(LPCREATESTRUCT)_windowMessage->lParam
-		);
-		_windowMessage->lResult = (LRESULT)_Return;
-	}
-};
-
 // void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
 // func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
-
-class WindowMessageParam_WM_COMMAND
+class WindowMessage_WM_COMMAND : public WindowMessage
 {
-private:
-	WindowMessage* _WindowMessage{ nullptr };
-
 public:
-	WindowMessageParam_WM_COMMAND(WindowMessage* windowMessage) :
-		_WindowMessage(windowMessage)
+	UINT uNotifyCode(void) const { return (UINT)HIWORD(wParam); }
+	int  nID(void) const { return (int)LOWORD(wParam); }
+	HWND wndCtl(void) const { return (HWND)lParam; }
+	void Return(void)
 	{
+		lResult = 0;
 	}
-
-public:
-	UINT uNotifyCode(void) { return (UINT)HIWORD(_WindowMessage->wParam); }
-	int  nID(void) { return (int)LOWORD(_WindowMessage->wParam); }
-	HWND wndCtl(void) { return (HWND)_WindowMessage->lParam; }
 };
 
 
