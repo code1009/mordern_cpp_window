@@ -32,8 +32,8 @@ MainFrame::MainFrame()
 
 
 	//-----------------------------------------------------------------------
-	::ShowWindow(_Handle, SW_SHOW);
-	::UpdateWindow(_Handle);
+	::ShowWindow(getHandle(), SW_SHOW);
+	::UpdateWindow(getHandle());
 
 
 	//-----------------------------------------------------------------------
@@ -47,7 +47,7 @@ MainFrame::~MainFrame()
 
 void MainFrame::registerWindowMessageHandler(void)
 {
-	_WindowMessageHandlerMap[WM_CREATE] = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_CREATE) = [this](WindowMessage& windowMessage)
 	{
 		onCreate();
 
@@ -55,19 +55,19 @@ void MainFrame::registerWindowMessageHandler(void)
 	}
 	;
 
-	_WindowMessageHandlerMap[WM_DESTROY] = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_DESTROY) = [this](WindowMessage& windowMessage)
 	{
 		onDestory();
 	}
 	;
 
-	_WindowMessageHandlerMap[WM_CLOSE] = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_CLOSE) = [this](WindowMessage& windowMessage)
 	{
 		onClose();
 	}
 	;
 
-	_WindowMessageHandlerMap[WM_COMMAND] = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_COMMAND) = [this](WindowMessage& windowMessage)
 	{
 		// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
 		// func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
@@ -79,7 +79,7 @@ void MainFrame::registerWindowMessageHandler(void)
 	}
 	;
 
-	_WindowMessageHandlerMap[WM_PAINT] = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_PAINT) = [this](WindowMessage& windowMessage)
 	{
 		// void OnPaint(CDCHandle dc)
 		// func((HDC)wParam);
@@ -96,10 +96,10 @@ void MainFrame::initializeWindowClass(void)
 	static std::wstring windowClassName = getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);
 
 
-	_WindowClass.lpszClassName = windowClassName.c_str();
-	_WindowClass.lpszMenuName  = getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
-	_WindowClass.hIcon         = getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
-	_WindowClass.hIconSm       = getWindowInstance()->loadIcon(IDI_SMALL);
+	getWindowClass().lpszClassName = windowClassName.c_str();
+	getWindowClass().lpszMenuName  = getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
+	getWindowClass().hIcon         = getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
+	getWindowClass().hIconSm       = getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
 void MainFrame::onCreate(void)
@@ -149,15 +149,15 @@ bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 void MainFrame::onPaint(HDC hDC)
 {
 	// 최초 실행시 UpdateWindow()에 의해서
-	// ctor()안에서 호출 되지만 createWindow()호출 이후라서 _Handle 유효함
+	// ctor()안에서 호출 되지만 createWindow()호출 이후라서 getHandle() 유효함
 
 	PAINTSTRUCT ps;
 	
 	
-	HDC hdc = BeginPaint(_Handle, &ps);
+	HDC hdc = BeginPaint(getHandle(), &ps);
 	RECT rect{ 0,0, 500, 500 };
 
 	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 
-	EndPaint(_Handle, &ps);
+	EndPaint(getHandle(), &ps);
 }

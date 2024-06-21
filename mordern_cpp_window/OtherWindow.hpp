@@ -22,8 +22,8 @@ public:
 		createWindow();
 
 
-		::ShowWindow(_Handle, SW_SHOW);
-		::UpdateWindow(_Handle);
+		::ShowWindow(getHandle(), SW_SHOW);
+		::UpdateWindow(getHandle());
 
 
 		debugPrintln(L"OtherWindow.ctor() - end");
@@ -40,18 +40,16 @@ public:
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		_WindowMessageHandlerMap[WM_CREATE] = [this](WindowMessage& windowMessage)
+		getWindowMessageHandler(WM_CREATE) = [this](WindowMessage& windowMessage)
 		{
-			// _Wnd는 아직 CreateWindowExW()함수가 끝나지 않은 상태 이므로,
-			// _Wnd는 nullptr이다.
-			// 또한, 생성자에서 이 영역을 호출 중이다.
+			// 생성자에서 이 영역을 호출 중이다.
 			SetWindowTextW(windowMessage.hWnd, L"OtherWindow");
-			callDefWindowProc(windowMessage);
+			defaultWindowMessageHandler(windowMessage);
 		}
 		;
 
-		_WindowMessageHandlerMap[WM_CLOSE] = [this](WindowMessage& windowMessage) { onClose(); };
-		_WindowMessageHandlerMap[WM_DESTROY] = [this](WindowMessage& windowMessage) { onDestory(); };
+		getWindowMessageHandler(WM_CLOSE) = [this](WindowMessage& windowMessage) { onClose(); };
+		getWindowMessageHandler(WM_DESTROY) = [this](WindowMessage& windowMessage) { onDestory(); };
 	}
 
 	void onClose(void)

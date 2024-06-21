@@ -85,13 +85,13 @@ HINSTANCE WindowInstance::getHandle(void)
 	return _Handle;
 }
 
-HINSTANCE WindowInstance::setHandle(HINSTANCE hInstance)
+HINSTANCE WindowInstance::setHandle(HINSTANCE handle)
 {
 	HINSTANCE old;
 
 
 	old = _Handle;
-	_Handle = hInstance;
+	_Handle = handle;
 
 	return _Handle;
 }
@@ -209,6 +209,27 @@ Window::~Window()
 {
 }
 
+HWND Window::getHandle(void)
+{
+	return _Handle;
+}
+
+HWND Window::setHandle(HWND handle)
+{
+	HWND old;
+
+
+	old = _Handle;
+	_Handle = handle;
+
+	return _Handle;
+}
+
+WindowMessageHandler& Window::getWindowMessageHandler(std::uint32_t umsg)
+{
+	return _WindowMessageHandlerMap[umsg];
+}
+
 void Window::callDefWindowProc(WindowMessage& windowMessage)
 {
 	windowMessage.lResult =
@@ -249,6 +270,11 @@ void Window::onWindowMessage(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+WNDCLASSEXW& BaseWindow::getWindowClass(void)
+{
+	return _WindowClass;
+}
+
 void BaseWindow::initializeWindowClass(void)
 {
 	memset(&_WindowClass, 0, sizeof(_WindowClass));
@@ -296,7 +322,10 @@ HWND BaseWindow::createWindow(
 	HMENU hMenu
 )
 {
-	_Handle = CreateWindowExW(
+	HWND handle;
+
+
+	handle = CreateWindowExW(
 		dwExStyle,
 		_WindowClass.lpszClassName,
 		lpWindowName,
@@ -311,17 +340,21 @@ HWND BaseWindow::createWindow(
 		this
 	);
 
-	return _Handle;
+	return handle;
 }
 
 void BaseWindow::destroyWindow(void)
 {
-	if (_Handle)
+	HWND handle;
+
+
+	handle = getHandle();
+	if (handle)
 	{
-		DestroyWindow(_Handle);
+		DestroyWindow(handle);
 	}
 
-	_Handle = nullptr;
+	setHandle(nullptr);
 }
 
 
@@ -333,15 +366,7 @@ void BaseWindow::destroyWindow(void)
 WNDPROC SubclassWindow::subclassWindow(HWND hwnd)
 {
 	//-----------------------------------------------------------------------
-	HWND old;
-
-
-	old = _Handle;
-
-
-	//-----------------------------------------------------------------------
-	_Handle = hwnd;
-
+	setHandle(hwnd);
 
 
 	//-----------------------------------------------------------------------
@@ -349,8 +374,8 @@ WNDPROC SubclassWindow::subclassWindow(HWND hwnd)
 	WNDPROC oldWindowProc;
 
 
-	rv = ::SetWindowLongPtrW(_Handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-	rv = ::SetWindowLongPtrW(_Handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc));
+	rv = ::SetWindowLongPtrW(getHandle(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+	rv = ::SetWindowLongPtrW(getHandle(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProc));
 	oldWindowProc = reinterpret_cast<WNDPROC>(rv);
 
 
@@ -366,13 +391,6 @@ WNDPROC SubclassWindow::subclassWindow(HWND hwnd)
 WNDPROC SubclassWindow::unsubclassWindow(WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
-	HWND old;
-
-
-	old = _Handle;
-
-
-	//-----------------------------------------------------------------------
 	if (nullptr== windowProc)
 	{
 		windowProc = _ChainWindowProc;
@@ -384,13 +402,13 @@ WNDPROC SubclassWindow::unsubclassWindow(WNDPROC windowProc)
 	WNDPROC oldWindowProc;
 
 
-	rv = ::SetWindowLongPtrW(_Handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
-	rv = ::SetWindowLongPtrW(_Handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(windowProc));
+	rv = ::SetWindowLongPtrW(getHandle(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
+	rv = ::SetWindowLongPtrW(getHandle(), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(windowProc));
 	oldWindowProc = reinterpret_cast<WNDPROC>(rv);
 
 
 	//-----------------------------------------------------------------------
-	_Handle = nullptr;
+	setHandle(nullptr);
 	_ChainWindowProc = nullptr;
 
 
@@ -441,7 +459,7 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 		auto userData = reinterpret_cast<CREATESTRUCTW*>(lParam)->lpCreateParams;
 		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
 
-		(reinterpret_cast<Window*>(userData))->_Handle = hwnd;
+		(reinterpret_cast<Window*>(userData))->setHandle(hwnd);
 	}
 
 

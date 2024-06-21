@@ -19,9 +19,29 @@ void window0Thread(void)
 
 	MainFrame mainFrame;
 
+
 	debugPrintln(L"windowMessageLoop.runLoop() - begin");
 	windowMessageLoop.runLoop();
 	debugPrintln(L"windowMessageLoop.runLoop() - end");
+
+	/*
+	MainFrame.ctor() - begin
+	MainFrame.onCreate()
+	MainFrame.ctor() - end
+
+
+	windowMessageLoop.runLoop() - begin
+
+	MainFrame.onClose() - begin
+	MainFrame.onDestory() - begin
+	MainFrame.onDestory() - end
+	MainFrame.onClose() - end
+
+	windowMessageLoop.runLoop() - end
+
+
+	MainFrame.dtor()
+	*/
 }
 
 void window1thread(void)

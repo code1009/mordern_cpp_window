@@ -16,12 +16,12 @@ void debugPrintln(const std::wstring& message);
 //===========================================================================
 class WindowInstance
 {
-public:
+private:
 	HINSTANCE _Handle{ nullptr };
 
 public:
 	HINSTANCE getHandle(void);
-	HINSTANCE setHandle(HINSTANCE hInstance);
+	HINSTANCE setHandle(HINSTANCE handle);
 
 public:
 	std::wstring loadString(int id);
@@ -72,6 +72,75 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+#if 0
+// atlcrack.h
+
+int OnCreate(LPCREATESTRUCT lpCreateStruct)
+WM_CREATE
+lResult = (LRESULT)func((LPCREATESTRUCT)lParam);
+
+BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
+WM_INITDIALOG
+lResult = (LRESULT)func((HWND)wParam, lParam);
+
+BOOL OnCopyData(CWindow wnd, PCOPYDATASTRUCT pCopyDataStruct)
+WM_COPYDATA
+lResult = (LRESULT)func((HWND)wParam, (PCOPYDATASTRUCT)lParam);
+
+void OnDestroy()
+WM_DESTROY
+func();
+lResult = 0;
+
+void OnMove(CPoint ptPos)
+WM_MOVE
+func(_WTYPES_NS::CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
+lResult = 0;
+
+#endif
+
+class WindowMessageProcess
+{
+private:
+	WindowMessage* _windowMessage{ nullptr };
+
+public:
+	explicit WindowMessageProcess(WindowMessage* windowMessage) :
+		_windowMessage{ windowMessage }
+	{
+	}
+
+public:
+	WindowMessage* getWindowMessage(void)
+	{
+		return _windowMessage;
+	}
+};
+
+class WindowMessageProcess_WM_CREATE : public WindowMessageProcess
+{
+public:
+	using Handler = std::function<int(LPCREATESTRUCT lpCreateStruct)>;
+
+public:
+	int _Return;
+	Handler _Function;
+
+public:
+	void invoke(void)
+	{
+		_Return = _Function(
+			(LPCREATESTRUCT)getWindowMessage()->lParam
+		);
+		getWindowMessage()->lResult = (LRESULT)_Return;
+	}
+};
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 using WindowMessageHandler = std::function<void(WindowMessage& windowMessage)>;
 using WindowMessageHandlerMap = std::map<std::uint32_t, WindowMessageHandler>;
 
@@ -83,8 +152,8 @@ using WindowMessageHandlerMap = std::map<std::uint32_t, WindowMessageHandler>;
 //===========================================================================
 class Window
 {
-public:
-	HWND                    _Handle{ nullptr };
+private:
+	HWND _Handle{ nullptr };
 	WindowMessageHandlerMap _WindowMessageHandlerMap{ };
 
 public:
@@ -92,6 +161,11 @@ public:
 	virtual ~Window();
 
 public:
+	virtual HWND getHandle(void);
+	virtual HWND setHandle(HWND handle);
+
+public:
+	virtual WindowMessageHandler& getWindowMessageHandler(std::uint32_t umsg);
 	virtual void registerWindowMessageHandler(void) = 0;
 
 	// 윈도우 프로시저 안에서 호출
@@ -109,10 +183,11 @@ public:
 //===========================================================================
 class BaseWindow : public Window
 {
-public:
+private:
 	WNDCLASSEXW _WindowClass{ };
 
 public:
+	virtual WNDCLASSEXW& getWindowClass(void);
 	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
 	virtual HWND createWindow(
