@@ -15,7 +15,7 @@
 MainFrame::MainFrame()
 {
 	//-----------------------------------------------------------------------
-	print("MainFrame.ctor() - begin");
+	print(L"MainFrame.ctor() - begin");
 
 
 	//-----------------------------------------------------------------------
@@ -25,7 +25,7 @@ MainFrame::MainFrame()
 	//-----------------------------------------------------------------------
 	initializeWindowClass();
 	registerWindowClass();
-	createWindow(0, getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
+	createWindow(getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
 
 
 	//-----------------------------------------------------------------------
@@ -37,12 +37,12 @@ MainFrame::MainFrame()
 
 
 	//-----------------------------------------------------------------------
-	print("MainFrame.ctor() - end");
+	print(L"MainFrame.ctor() - end");
 }
 
 MainFrame::~MainFrame()
 {
-	print("MainFrame.dtor()");
+	print(L"MainFrame.dtor()");
 }
 
 void MainFrame::registerWindowMessageHandler(void)
@@ -50,7 +50,8 @@ void MainFrame::registerWindowMessageHandler(void)
 	_WindowMessageHandlerMap[WM_CREATE] = [this](WindowMessage& windowMessage)
 	{
 		onCreate();
-		callDefWindowProc(windowMessage);
+
+		defaultWindowMessageHandler(windowMessage);
 	}
 	;
 
@@ -73,7 +74,7 @@ void MainFrame::registerWindowMessageHandler(void)
 		bool rv = onCommand((UINT)HIWORD(windowMessage.wParam), (int)LOWORD(windowMessage.wParam), (HWND)windowMessage.lParam);
 		if (!rv)
 		{
-			callDefWindowProc(windowMessage);
+			defaultWindowMessageHandler(windowMessage);
 		}
 	}
 	;
@@ -103,25 +104,25 @@ void MainFrame::initializeWindowClass(void)
 
 void MainFrame::onCreate(void)
 {
-	print("MainFrame.onCreate()");
+	print(L"MainFrame.onCreate()");
 }
 
 void MainFrame::onDestory(void)
 {
-	print("MainFrame.onDestory() - begin");
+	print(L"MainFrame.onDestory() - begin");
 
 	::PostQuitMessage(0);
 
-	print("MainFrame.onDestory() - end");
+	print(L"MainFrame.onDestory() - end");
 }
 
 void MainFrame::onClose(void)
 {
-	print("MainFrame.onClose() - begin");
+	print(L"MainFrame.onClose() - begin");
 
 	destroyWindow();
 
-	print("MainFrame.onClose() - end");
+	print(L"MainFrame.onClose() - end");
 }
 
 bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)

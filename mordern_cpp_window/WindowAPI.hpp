@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-void print(const std::string& message);
+void print(const std::wstring& message);
 
 
 
@@ -92,12 +92,12 @@ public:
 	virtual ~Window();
 
 public:
-	virtual void registerWindowMessageHandler(void);
+	virtual void registerWindowMessageHandler(void) = 0;
 
 	// 윈도우 프로시저 안에서 호출
 public:
 	virtual void callDefWindowProc(WindowMessage& windowMessage);
-	virtual void callWindowProc(WindowMessage& windowMessage);
+	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage);
 	virtual void onWindowMessage(WindowMessage& windowMessage);
 };
 
@@ -116,9 +116,9 @@ public:
 	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
 	virtual HWND createWindow(
-		DWORD dwExStyle = 0,
 		LPCWSTR lpWindowName = L"Window",
 		DWORD dwStyle = WS_OVERLAPPEDWINDOW,
+		DWORD dwExStyle = 0,
 		int X = CW_USEDEFAULT,
 		int Y = CW_USEDEFAULT,
 		int nWidth = 500,
@@ -131,6 +131,7 @@ public:
 
 
 
+
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
 class SubclassWindow : public Window
@@ -139,13 +140,15 @@ public:
 	WNDPROC _ChainWindowProc{ nullptr };
 
 public:
-	virtual WNDPROC attachWindow(HWND hwnd);
-	virtual WNDPROC detachWindow(WNDPROC windowProc = nullptr);
+	virtual WNDPROC subclassWindow(HWND hwnd);
+	virtual WNDPROC unsubclassWindow(WNDPROC windowProc = nullptr);
 
 	// 윈도우 프로시저 안에서 호출
 public:
-	virtual void callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
-	virtual void callWindowProc(WindowMessage& windowMessage);
+	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage) override;
+
+public:
+	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
 };
 
 

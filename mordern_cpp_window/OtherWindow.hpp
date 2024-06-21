@@ -11,7 +11,7 @@ class OtherWindow : public BaseWindow
 public:
 	OtherWindow()
 	{
-		print("OtherWindow.ctor() - begin");
+		print(L"OtherWindow.ctor() - begin");
 
 
 		registerWindowMessageHandler();
@@ -26,16 +26,16 @@ public:
 		::UpdateWindow(_Handle);
 
 
-		print("OtherWindow.ctor() - end");
+		print(L"OtherWindow.ctor() - end");
 	}
 
 	~OtherWindow()
 	{
-		print("OtherWindow.dtor() - begin");
+		print(L"OtherWindow.dtor() - begin");
 
 		destroyWindow();
 
-		print("OtherWindow.dtor() - end");
+		print(L"OtherWindow.dtor() - end");
 	}
 
 	virtual void registerWindowMessageHandler(void) override
@@ -56,15 +56,15 @@ public:
 
 	void onClose(void)
 	{
-		print("OtherWindow.onClose() - begin");
+		print(L"OtherWindow.onClose() - begin");
 
 		destroyWindow();
 
-		print("OtherWindow.onClose() - end");
+		print(L"OtherWindow.onClose() - end");
 	}
 
 	void onDestory(void)
 	{
-		print("OtherWindow.onDestory()");
+		print(L"OtherWindow.onDestory()");
 	}
 };

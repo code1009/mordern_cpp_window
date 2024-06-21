@@ -10,45 +10,67 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-void print(const std::string& message)
+void print(const std::wstring& message)
 {
-	//OutputDebugStringA("//===========================================================================\r\n");
-	OutputDebugStringA(message.c_str());
-	OutputDebugStringA("\r\n");
-	//OutputDebugStringA("//===========================================================================\r\n");
+	OutputDebugStringW(message.c_str());
+	OutputDebugStringW(L"\r\n");
 }
 
-void reportError(LPCTSTR lpszFunction)
+void reportError(const std::wstring& message)
 {
-	// Retrieve the system error message for the last-error code
+	//-----------------------------------------------------------------------
+	DWORD dwLastErrorCode;
+	DWORD dwSystemLocale;
+	DWORD dwFlags;
+	HLOCAL hLocal;
+	DWORD dwLength;
 
-	LPVOID lpMsgBuf;
-	LPVOID lpDisplayBuf;
-	DWORD dw = GetLastError();
 
-	FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER |
-		FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL,
-		dw,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPTSTR)&lpMsgBuf,
-		0, NULL);
+	dwLastErrorCode = GetLastError();
+	dwSystemLocale = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
+	dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+	hLocal = NULL;
+	dwLength = FormatMessageW(dwFlags, NULL, dwLastErrorCode, dwSystemLocale, (LPWSTR)&hLocal, 0, NULL);
 
-	// Display the error message and exit the process
 
-	lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
-		(lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
-	StringCchPrintf((LPTSTR)lpDisplayBuf,
-		LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-		TEXT("%s failed with error %d: %s"),
-		lpszFunction, dw, lpMsgBuf);
-	MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+	//-----------------------------------------------------------------------
+	if (!dwLength)
+	{
+		ExitProcess(dwLastErrorCode);
+		return;
+	}
 
-	LocalFree(lpMsgBuf);
-	LocalFree(lpDisplayBuf);
-	ExitProcess(dw);
+
+	//-----------------------------------------------------------------------
+	std::wstring errorString = ((const WCHAR*)hLocal);
+
+
+	//-----------------------------------------------------------------------
+	WCHAR* errorMessageString;
+	std::size_t errorMessageStringLength;
+
+
+	errorMessageStringLength = message.size() + errorString.size() + 40;
+	errorMessageString = new WCHAR[errorMessageStringLength];
+
+	StringCchPrintfW(errorMessageString,
+		errorMessageStringLength,
+		L"%s failed with error %d: %s",
+		message.c_str(),
+		dwLastErrorCode,
+		errorString.c_str()
+	);
+	MessageBoxW(NULL, errorMessageString, L"Error", MB_ICONEXCLAMATION|MB_OK);
+
+	delete[] errorMessageString;
+	
+
+	//-----------------------------------------------------------------------
+	LocalFree(hLocal);
+
+
+	//-----------------------------------------------------------------------
+	ExitProcess(dwLastErrorCode);
 }
 
 
@@ -184,11 +206,6 @@ Window::Window()
 
 Window::~Window()
 {
-
-}
-
-void Window::registerWindowMessageHandler(void)
-{
 }
 
 void Window::callDefWindowProc(WindowMessage& windowMessage)
@@ -201,7 +218,7 @@ void Window::callDefWindowProc(WindowMessage& windowMessage)
 			windowMessage.lParam);
 }
 
-void Window::callWindowProc(WindowMessage& windowMessage)
+void Window::defaultWindowMessageHandler(WindowMessage& windowMessage)
 {
 	callDefWindowProc(windowMessage);
 }
@@ -222,7 +239,7 @@ void Window::onWindowMessage(WindowMessage& windowMessage)
 	}
 
 
-	callWindowProc(windowMessage);
+	defaultWindowMessageHandler(windowMessage);
 }
 
 
@@ -267,9 +284,9 @@ void BaseWindow::registerWindowClass(void)
 }
 
 HWND BaseWindow::createWindow(
-	DWORD dwExStyle,
 	LPCWSTR lpWindowName,
 	DWORD dwStyle,
+	DWORD dwExStyle,
 	int X,
 	int Y,
 	int nWidth,
@@ -312,7 +329,7 @@ void BaseWindow::destroyWindow(void)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-WNDPROC SubclassWindow::attachWindow(HWND hwnd)
+WNDPROC SubclassWindow::subclassWindow(HWND hwnd)
 {
 	//-----------------------------------------------------------------------
 	HWND old;
@@ -345,7 +362,7 @@ WNDPROC SubclassWindow::attachWindow(HWND hwnd)
 	return oldWindowProc;
 }
 
-WNDPROC SubclassWindow::detachWindow(WNDPROC windowProc)
+WNDPROC SubclassWindow::unsubclassWindow(WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
 	HWND old;
@@ -379,7 +396,7 @@ WNDPROC SubclassWindow::detachWindow(WNDPROC windowProc)
 	return oldWindowProc;
 }
 
-void SubclassWindow::callChainWindowProc(WindowMessage& windowMessage, WNDPROC windowProc)
+void SubclassWindow::callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
 	if (nullptr == windowProc)
@@ -398,11 +415,11 @@ void SubclassWindow::callChainWindowProc(WindowMessage& windowMessage, WNDPROC w
 			windowMessage.lParam);
 }
 
-void SubclassWindow::callWindowProc(WindowMessage& windowMessage)
+void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 {
 	if (_ChainWindowProc)
 	{
-		callChainWindowProc(windowMessage, _ChainWindowProc);
+		callWindowProc(windowMessage, _ChainWindowProc);
 	}
 	else
 	{
