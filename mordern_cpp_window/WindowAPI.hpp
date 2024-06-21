@@ -132,6 +132,15 @@ public:
 	}
 };
 
+class WindowMessage_WM_CREATE : public WindowMessage
+{
+public:
+	LPCREATESTRUCT lpCreateStruct(void) const { return (LPCREATESTRUCT)lParam; }
+	void Return(int rv)
+	{
+		lResult = (LRESULT)rv;
+	}
+};
 
 
 
