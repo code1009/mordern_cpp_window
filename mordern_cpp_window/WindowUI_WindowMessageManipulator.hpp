@@ -112,3 +112,6 @@ public:
 		getWindowMessage()->lResult = (LRESULT)rv;
 	}	
 };
+
+using WM_NCCREATE_WindowMessageManipulator = WM_CREATE_WindowMessageManipulator;
+
