@@ -19,9 +19,9 @@ void window0Thread(void)
 
 	MainFrame mainFrame;
 
-	print(L"windowMessageLoop.runLoop() - begin");
+	debugPrintln(L"windowMessageLoop.runLoop() - begin");
 	windowMessageLoop.runLoop();
-	print(L"windowMessageLoop.runLoop() - end");
+	debugPrintln(L"windowMessageLoop.runLoop() - end");
 }
 
 void window1thread(void)

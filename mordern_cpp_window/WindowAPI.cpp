@@ -10,7 +10,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-void print(const std::wstring& message)
+void debugPrintln(const std::wstring& message)
 {
 	OutputDebugStringW(message.c_str());
 	OutputDebugStringW(L"\r\n");
@@ -60,6 +60,7 @@ void reportError(const std::wstring& message)
 		dwLastErrorCode,
 		errorString.c_str()
 	);
+	debugPrintln(errorMessageString);
 	MessageBoxW(NULL, errorMessageString, L"Error", MB_ICONEXCLAMATION|MB_OK);
 
 	delete[] errorMessageString;

@@ -15,7 +15,7 @@
 MainFrame::MainFrame()
 {
 	//-----------------------------------------------------------------------
-	print(L"MainFrame.ctor() - begin");
+	debugPrintln(L"MainFrame.ctor() - begin");
 
 
 	//-----------------------------------------------------------------------
@@ -37,12 +37,12 @@ MainFrame::MainFrame()
 
 
 	//-----------------------------------------------------------------------
-	print(L"MainFrame.ctor() - end");
+	debugPrintln(L"MainFrame.ctor() - end");
 }
 
 MainFrame::~MainFrame()
 {
-	print(L"MainFrame.dtor()");
+	debugPrintln(L"MainFrame.dtor()");
 }
 
 void MainFrame::registerWindowMessageHandler(void)
@@ -104,25 +104,25 @@ void MainFrame::initializeWindowClass(void)
 
 void MainFrame::onCreate(void)
 {
-	print(L"MainFrame.onCreate()");
+	debugPrintln(L"MainFrame.onCreate()");
 }
 
 void MainFrame::onDestory(void)
 {
-	print(L"MainFrame.onDestory() - begin");
+	debugPrintln(L"MainFrame.onDestory() - begin");
 
 	::PostQuitMessage(0);
 
-	print(L"MainFrame.onDestory() - end");
+	debugPrintln(L"MainFrame.onDestory() - end");
 }
 
 void MainFrame::onClose(void)
 {
-	print(L"MainFrame.onClose() - begin");
+	debugPrintln(L"MainFrame.onClose() - begin");
 
 	destroyWindow();
 
-	print(L"MainFrame.onClose() - end");
+	debugPrintln(L"MainFrame.onClose() - end");
 }
 
 bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
