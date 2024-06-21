@@ -99,25 +99,7 @@ lResult = 0;
 
 #endif
 
-class WindowMessageProcess
-{
-private:
-	WindowMessage* _windowMessage{ nullptr };
-
-public:
-	explicit WindowMessageProcess(WindowMessage* windowMessage) :
-		_windowMessage{ windowMessage }
-	{
-	}
-
-public:
-	WindowMessage* getWindowMessage(void)
-	{
-		return _windowMessage;
-	}
-};
-
-class WindowMessageProcess_WM_CREATE : public WindowMessageProcess
+class WindowMessageProcess_WM_CREATE
 {
 public:
 	using Handler = std::function<int(LPCREATESTRUCT lpCreateStruct)>;
@@ -127,14 +109,54 @@ public:
 	Handler _Function;
 
 public:
-	void invoke(void)
+	void invoke(WindowMessage* _windowMessage)
 	{
 		_Return = _Function(
-			(LPCREATESTRUCT)getWindowMessage()->lParam
+			(LPCREATESTRUCT)_windowMessage->lParam
 		);
-		getWindowMessage()->lResult = (LRESULT)_Return;
+		_windowMessage->lResult = (LRESULT)_Return;
 	}
 };
+
+class WindowMessageProcess_WM_CREATE
+{
+public:
+	using Handler = std::function<int(LPCREATESTRUCT lpCreateStruct)>;
+
+public:
+	int _Return;
+	Handler _Function;
+
+public:
+	void invoke(WindowMessage* _windowMessage)
+	{
+		_Return = _Function(
+			(LPCREATESTRUCT)_windowMessage->lParam
+		);
+		_windowMessage->lResult = (LRESULT)_Return;
+	}
+};
+
+// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
+// func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
+
+class WindowMessageParam_WM_COMMAND
+{
+private:
+	WindowMessage* _WindowMessage{ nullptr };
+
+public:
+	WindowMessageParam_WM_COMMAND(WindowMessage* windowMessage) :
+		_WindowMessage(windowMessage)
+	{
+	}
+
+public:
+	UINT uNotifyCode(void) { return (UINT)HIWORD(_WindowMessage->wParam); }
+	int  nID(void) { return (int)LOWORD(_WindowMessage->wParam); }
+	HWND wndCtl(void) { return (HWND)_WindowMessage->lParam; }
+};
+
 
 
 
