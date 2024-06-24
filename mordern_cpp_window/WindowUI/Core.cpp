@@ -269,6 +269,8 @@ WindowMessage& WindowMessage::operator=(WindowMessage&& other) noexcept
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
 LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM lParam);
+INT_PTR __stdcall DialogProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM lParam);
+
 
 
 
@@ -547,6 +549,40 @@ void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+BaseDialog::BaseDialog()
+{
+}
+
+BaseDialog::~BaseDialog()
+{
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+ModalDialog::ModalDialog()
+{
+}
+
+ModalDialog::~ModalDialog()
+{
+}
+
+int ModalDialog::doModal(HWND hwndParent)
+{
+	return 0;
+}
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 WindowMessageLoop::WindowMessageLoop()
 {
 }
@@ -611,6 +647,40 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 	return ::DefWindowProcW(hwnd, message, wParam, lParam);
 }
 
+//===========================================================================
+INT_PTR __stdcall DialogProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM lParam)
+{
+	if (WM_INITDIALOG == message)
+	{
+		auto userData = reinterpret_cast<BaseDialog*>(lParam);
+		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
+
+		(reinterpret_cast<BaseDialog*>(userData))->setHandle(hwnd);
+	}
+
+
+	auto dialogPtr = reinterpret_cast<BaseDialog*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+	if (dialogPtr)
+	{
+		WindowMessage windowMessage{ hwnd, message, wParam, lParam };
+
+
+		dialogPtr->onWindowMessage(windowMessage);
+
+
+		if (WM_NCDESTROY == message)
+		{
+			::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
+			dialogPtr->setHandle(nullptr);
+		}
+
+
+		return windowMessage.lResult;
+	}
+
+
+	return ::DefWindowProcW(hwnd, message, wParam, lParam);
+}
 
 
 

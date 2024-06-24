@@ -21,9 +21,6 @@
     <ClInclude Include="main.hpp">
       <Filter>main</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>res</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>framework</Filter>
     </ClInclude>
@@ -42,6 +39,9 @@
     <ClInclude Include="WindowUI_Example1\OtherWindow.hpp">
       <Filter>WindowUI_Example1</Filter>
     </ClInclude>
+    <ClInclude Include="Res\Resource.h">
+      <Filter>res</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -58,15 +58,15 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="mordern_cpp_window.ico">
+    <Image Include="Res\small.ico">
       <Filter>res</Filter>
     </Image>
-    <Image Include="small.ico">
+    <Image Include="Res\mordern_cpp_window.ico">
       <Filter>res</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="mordern_cpp_window.rc">
+    <ResourceCompile Include="Res\mordern_cpp_window.rc">
       <Filter>res</Filter>
     </ResourceCompile>
   </ItemGroup>

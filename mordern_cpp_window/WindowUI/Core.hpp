@@ -221,6 +221,49 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+class BaseDialog : public SubclassWindow
+{
+public:
+	BaseDialog();
+	virtual ~BaseDialog();
+
+public:
+	BaseDialog(const BaseDialog&) = delete;
+	BaseDialog& operator=(const BaseDialog&) = delete;
+
+	BaseDialog(const BaseDialog&&) = delete;
+	BaseDialog& operator=(const BaseDialog&&) = delete;
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+class ModalDialog : public BaseDialog
+{
+public:
+	ModalDialog();
+	virtual ~ModalDialog();
+
+public:
+	ModalDialog(const ModalDialog&) = delete;
+	ModalDialog& operator=(const ModalDialog&) = delete;
+
+	ModalDialog(const ModalDialog&&) = delete;
+	ModalDialog& operator=(const ModalDialog&&) = delete;
+
+public:
+	virtual int doModal(HWND hwndParent);
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 class WindowMessageLoop
 {
 public:

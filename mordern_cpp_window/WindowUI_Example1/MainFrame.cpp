@@ -1,7 +1,7 @@
 ﻿/////////////////////////////////////////////////////////////////////////////
 //===========================================================================
 #include "../framework.h"
-#include "../resource.h"
+#include "../res/resource.h"
 
 #include "../WindowUI/Core.hpp"
 #include "../WindowUI/WindowMessageManipulator.hpp"
