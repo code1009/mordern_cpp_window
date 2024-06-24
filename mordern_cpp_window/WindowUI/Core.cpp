@@ -548,21 +548,21 @@ void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-BaseDialog::BaseDialog(std::int32_t templateNameId):
+Dialog::Dialog(std::int32_t templateNameId):
 	_TemplateNameId{ templateNameId }
 {
 }
 
-BaseDialog::~BaseDialog()
+Dialog::~Dialog()
 {
 }
 
-std::int32_t BaseDialog::getTemplateNameId(void)
+std::int32_t Dialog::getTemplateNameId(void)
 {
 	return _TemplateNameId;
 }
 
-int BaseDialog::doModal(HWND hwndParent)
+int Dialog::doModal(HWND hwndParent)
 {
 	DialogBoxParamW(
 		getWindowInstance()->getHandle(),
@@ -575,7 +575,7 @@ int BaseDialog::doModal(HWND hwndParent)
 	return 0;
 }
 
-int BaseDialog::createDialog(HWND hwndParent)
+int Dialog::createDialog(HWND hwndParent)
 {
 	CreateDialogParamW(
 		getWindowInstance()->getHandle(), 
@@ -664,14 +664,14 @@ INT_PTR __stdcall DialogProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 {
 	if (WM_INITDIALOG == message)
 	{
-		auto userData = reinterpret_cast<BaseDialog*>(lParam);
+		auto userData = reinterpret_cast<Dialog*>(lParam);
 		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
 
-		(reinterpret_cast<BaseDialog*>(userData))->setHandle(hwnd);
+		(reinterpret_cast<Dialog*>(userData))->setHandle(hwnd);
 	}
 
 
-	auto dialogPtr = reinterpret_cast<BaseDialog*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+	auto dialogPtr = reinterpret_cast<Dialog*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
 	if (dialogPtr)
 	{
 		WindowMessage windowMessage{ hwnd, message, wParam, lParam };

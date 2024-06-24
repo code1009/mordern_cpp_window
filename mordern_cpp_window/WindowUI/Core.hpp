@@ -221,21 +221,21 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class BaseDialog : public Window
+class Dialog : public Window
 {
 private:
 	std::int32_t _TemplateNameId{ -1 };
 
 public:
-	explicit BaseDialog(std::int32_t templateNameId);
-	virtual ~BaseDialog();
+	explicit Dialog(std::int32_t templateNameId);
+	virtual ~Dialog();
 
 public:
-	BaseDialog(const BaseDialog&) = delete;
-	BaseDialog& operator=(const BaseDialog&) = delete;
+	Dialog(const Dialog&) = delete;
+	Dialog& operator=(const Dialog&) = delete;
 
-	BaseDialog(const BaseDialog&&) = delete;
-	BaseDialog& operator=(const BaseDialog&&) = delete;
+	Dialog(const Dialog&&) = delete;
+	Dialog& operator=(const Dialog&&) = delete;
 
 public:
 	virtual std::int32_t getTemplateNameId(void);
