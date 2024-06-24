@@ -239,49 +239,9 @@ public:
 
 public:
 	virtual std::int32_t getTemplateNameId(void);
-};
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-class ModalDialog : public BaseDialog
-{
-public:
-	ModalDialog(std::int32_t templateNameId);
-	virtual ~ModalDialog();
-
-public:
-	ModalDialog(const ModalDialog&) = delete;
-	ModalDialog& operator=(const ModalDialog&) = delete;
-
-	ModalDialog(const ModalDialog&&) = delete;
-	ModalDialog& operator=(const ModalDialog&&) = delete;
 
 public:
 	virtual int doModal(HWND hwndParent);
-};
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-class ModelessDialog: public BaseDialog
-{
-public:
-	ModelessDialog(std::int32_t templateNameId);
-	virtual ~ModelessDialog();
-
-public:
-	ModelessDialog(const ModelessDialog&) = delete;
-	ModelessDialog& operator=(const ModelessDialog&) = delete;
-
-	ModelessDialog(const ModelessDialog&&) = delete;
-	ModelessDialog& operator=(const ModelessDialog&&) = delete;
 
 public:
 	virtual int createDialog(HWND hwndParent);

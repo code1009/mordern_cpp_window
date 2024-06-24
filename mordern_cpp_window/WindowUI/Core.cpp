@@ -563,24 +563,8 @@ std::int32_t BaseDialog::getTemplateNameId(void)
 	return _TemplateNameId;
 }
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-ModalDialog::ModalDialog(std::int32_t templateNameId):
-	BaseDialog{ templateNameId }
+int BaseDialog::doModal(HWND hwndParent)
 {
-}
-
-ModalDialog::~ModalDialog()
-{
-}
-
-int ModalDialog::doModal(HWND hwndParent)
-{
-
-
 	DialogBoxParamW(
 		getWindowInstance()->getHandle(),
 		getWindowInstance()->makeIntResource(getTemplateNameId()),
@@ -592,22 +576,7 @@ int ModalDialog::doModal(HWND hwndParent)
 	return 0;
 }
 
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-ModelessDialog::ModelessDialog(std::int32_t templateNameId) :
-	BaseDialog{ templateNameId }
-{
-}
-
-ModelessDialog::~ModelessDialog()
-{
-}
-
-int ModelessDialog::createDialog(HWND hwndParent)
+int BaseDialog::createDialog(HWND hwndParent)
 {
 	CreateDialogParamW(
 		getWindowInstance()->getHandle(), 
