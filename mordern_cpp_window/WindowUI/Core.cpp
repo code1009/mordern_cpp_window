@@ -92,7 +92,6 @@ void reportError(const std::wstring& message)
 WindowInstance::WindowInstance():
 	_Handle{ nullptr }
 {
-
 }
 
 HINSTANCE WindowInstance::getHandle(void)

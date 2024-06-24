@@ -221,7 +221,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class BaseDialog : public SubclassWindow
+class BaseDialog : public Window
 {
 private:
 	std::int32_t _TemplateNameId{ -1 };
