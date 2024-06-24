@@ -223,8 +223,11 @@ public:
 //===========================================================================
 class BaseDialog : public SubclassWindow
 {
+private:
+	std::int32_t _TemplateNameId{ -1 };
+
 public:
-	BaseDialog();
+	explicit BaseDialog(std::int32_t templateNameId);
 	virtual ~BaseDialog();
 
 public:
@@ -233,6 +236,9 @@ public:
 
 	BaseDialog(const BaseDialog&&) = delete;
 	BaseDialog& operator=(const BaseDialog&&) = delete;
+
+public:
+	virtual std::int32_t getTemplateNameId(void);
 };
 
 
@@ -244,7 +250,7 @@ public:
 class ModalDialog : public BaseDialog
 {
 public:
-	ModalDialog();
+	ModalDialog(std::int32_t templateNameId);
 	virtual ~ModalDialog();
 
 public:
@@ -256,6 +262,29 @@ public:
 
 public:
 	virtual int doModal(HWND hwndParent);
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+class ModelessDialog: public BaseDialog
+{
+public:
+	ModelessDialog(std::int32_t templateNameId);
+	virtual ~ModelessDialog();
+
+public:
+	ModelessDialog(const ModelessDialog&) = delete;
+	ModelessDialog& operator=(const ModelessDialog&) = delete;
+
+	ModelessDialog(const ModelessDialog&&) = delete;
+	ModelessDialog& operator=(const ModelessDialog&&) = delete;
+
+public:
+	virtual int createDialog(HWND hwndParent);
 };
 
 

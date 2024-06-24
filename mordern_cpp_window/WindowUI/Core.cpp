@@ -549,7 +549,8 @@ void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-BaseDialog::BaseDialog()
+BaseDialog::BaseDialog(std::int32_t templateNameId):
+	_TemplateNameId{ templateNameId }
 {
 }
 
@@ -557,13 +558,18 @@ BaseDialog::~BaseDialog()
 {
 }
 
+std::int32_t BaseDialog::getTemplateNameId(void)
+{
+	return _TemplateNameId;
+}
 
 
 
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-ModalDialog::ModalDialog()
+ModalDialog::ModalDialog(std::int32_t templateNameId):
+	BaseDialog{ templateNameId }
 {
 }
 
@@ -573,9 +579,47 @@ ModalDialog::~ModalDialog()
 
 int ModalDialog::doModal(HWND hwndParent)
 {
+
+
+	DialogBoxParamW(
+		getWindowInstance()->getHandle(),
+		getWindowInstance()->makeIntResource(getTemplateNameId()),
+		hwndParent,
+		DialogProc, 
+		reinterpret_cast<LPARAM>(this)
+	);
+
 	return 0;
 }
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+ModelessDialog::ModelessDialog(std::int32_t templateNameId) :
+	BaseDialog{ templateNameId }
+{
+}
+
+ModelessDialog::~ModelessDialog()
+{
+}
+
+int ModelessDialog::createDialog(HWND hwndParent)
+{
+	CreateDialogParamW(
+		getWindowInstance()->getHandle(), 
+		getWindowInstance()->makeIntResource(getTemplateNameId()),
+		hwndParent,
+		DialogProc, 
+		reinterpret_cast<LPARAM>(this)
+	);
+
+
+	return 0;
+}
 
 
 
