@@ -2,9 +2,9 @@
 //===========================================================================
 #include "main.hpp"
 
-#include "WindowUI.hpp"
-#include "MainFrame.hpp"
-#include "OtherWindow.hpp"
+#include "WindowUI/Core.hpp"
+#include "WindowUI_Example1/MainFrame.hpp"
+#include "WindowUI_Example1/OtherWindow.hpp"
 
 
 
@@ -12,17 +12,17 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-void window0Thread(void)
+void WindowUI_Example1_Thread0(void)
 {
-	WindowMessageLoop windowMessageLoop;
+	WindowUI::WindowMessageLoop windowMessageLoop;
 
 
-	MainFrame mainFrame;
+	WindowUI_Example1::MainFrame mainFrame;
 
 
-	debugPrintln(L"windowMessageLoop.runLoop() - begin");
+	WindowUI::debugPrintln(L"windowMessageLoop.runLoop() - begin");
 	windowMessageLoop.runLoop();
-	debugPrintln(L"windowMessageLoop.runLoop() - end");
+	WindowUI::debugPrintln(L"windowMessageLoop.runLoop() - end");
 
 	/*
 
@@ -48,28 +48,43 @@ MainFrame.dtor()
 	*/
 }
 
-void window1thread(void)
+void WindowUI_Example1_Thread1(void)
 {
-	WindowMessageLoop windowMessageLoop;
+	WindowUI::WindowMessageLoop windowMessageLoop;
 
 
-	MainFrame mainFrame;
-	OtherWindow otherWindow;
+	WindowUI_Example1::MainFrame mainFrame;
+	WindowUI_Example1::OtherWindow otherWindow;
 
 
 	windowMessageLoop.runLoop();
 }
 
-void window2thread(void)
+void WindowUI_Example1_Thread2(void)
 {
-	WindowMessageLoop windowMessageLoop;
+	WindowUI::WindowMessageLoop windowMessageLoop;
 
 
-	MainFrame mainFrame;
+	WindowUI_Example1::MainFrame mainFrame;
 
 
 	windowMessageLoop.runLoop();
 }
+
+void WindowUI_Example1_Main(void)
+{
+	//std::thread thread1(WindowUI_Example1_Thread1);
+	//std::thread thread2(WindowUI_Example1_Thread2);
+
+
+	WindowUI_Example1_Thread0();
+
+
+	//thread1.join();
+	//thread2.join();
+}
+
+
 
 
 
@@ -82,19 +97,11 @@ int APIENTRY wWinMain(
     int       nCmdShow
 )
 {
-	getWindowInstance()->setHandle(hInstance);
+	WindowUI::getWindowInstance()->setHandle(hInstance);
 
 
+	WindowUI_Example1_Main();
 
-	//std::thread thread1(window1thread);
-	//std::thread thread2(window2thread);
-
-
-	window0Thread();
-
-
-	//thread1.join();
-	//thread2.join();
 
 	return 0;
 }

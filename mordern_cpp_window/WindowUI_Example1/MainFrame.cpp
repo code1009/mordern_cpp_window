@@ -1,12 +1,21 @@
 ﻿/////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-#include "framework.h"
-#include "resource.h"
+#include "../framework.h"
+#include "../resource.h"
 
-#include "WindowUI.hpp"
-#include "WindowUI_WindowMessageManipulator.hpp"
+#include "../WindowUI/Core.hpp"
+#include "../WindowUI/WindowMessageManipulator.hpp"
 
 #include "MainFrame.hpp"
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+namespace WindowUI_Example1
+{
 
 
 
@@ -17,7 +26,7 @@
 MainFrame::MainFrame()
 {
 	//-----------------------------------------------------------------------
-	debugPrintln(L"MainFrame.ctor() - begin");
+	WindowUI::debugPrintln(L"MainFrame.ctor() - begin");
 
 
 	//-----------------------------------------------------------------------
@@ -27,7 +36,7 @@ MainFrame::MainFrame()
 	//-----------------------------------------------------------------------
 	initializeWindowClass();
 	registerWindowClass();
-	createWindow(getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
+	createWindow(WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
 
 
 	//-----------------------------------------------------------------------
@@ -39,19 +48,19 @@ MainFrame::MainFrame()
 
 
 	//-----------------------------------------------------------------------
-	debugPrintln(L"MainFrame.ctor() - end");
+	WindowUI::debugPrintln(L"MainFrame.ctor() - end");
 }
 
 MainFrame::~MainFrame()
 {
-	debugPrintln(L"MainFrame.dtor()");
+	WindowUI::debugPrintln(L"MainFrame.dtor()");
 }
 
 void MainFrame::registerWindowMessageHandler(void)
 {
-	getWindowMessageHandler(WM_NCCREATE) = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_NCCREATE) = [this](WindowUI::WindowMessage& windowMessage)
 	{ 
-		WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+		WindowUI::WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
 		onNcCreate();
@@ -60,15 +69,15 @@ void MainFrame::registerWindowMessageHandler(void)
 		windowMessageManipulator.Result(true);
 	};
 
-	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowMessage& windowMessage) 
+	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowUI::WindowMessage& windowMessage)
 	{ 
 		onNcDestory(); 
 		//defaultWindowMessageHandler(windowMessage);
 	};
 
-	getWindowMessageHandler(WM_CREATE) = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage)
 	{
-		WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+		WindowUI::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 		windowMessageManipulator.lpCreateStruct();
 		onCreate();
@@ -77,17 +86,17 @@ void MainFrame::registerWindowMessageHandler(void)
 		//defaultWindowMessageHandler(windowMessage);
 	};
 
-	getWindowMessageHandler(WM_DESTROY) = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage)
 	{
 		onDestory();
 	};
 
-	getWindowMessageHandler(WM_CLOSE) = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage)
 	{
 		onClose();
 	};
 
-	getWindowMessageHandler(WM_COMMAND) = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage)
 	{
 		// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
 		// func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
@@ -98,7 +107,7 @@ void MainFrame::registerWindowMessageHandler(void)
 		}
 	};
 
-	getWindowMessageHandler(WM_PAINT) = [this](WindowMessage& windowMessage)
+	getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage)
 	{
 		// void OnPaint(CDCHandle dc)
 		// func((HDC)wParam);
@@ -111,46 +120,46 @@ void MainFrame::initializeWindowClass(void)
 	BaseWindow::initializeWindowClass();
 
 
-	static std::wstring windowClassName = getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);
+	static std::wstring windowClassName = WindowUI::getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);
 
 
 	getWindowClass().lpszClassName = windowClassName.c_str();
-	getWindowClass().lpszMenuName  = getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
-	getWindowClass().hIcon         = getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
-	getWindowClass().hIconSm       = getWindowInstance()->loadIcon(IDI_SMALL);
+	getWindowClass().lpszMenuName  = WindowUI::getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
+	getWindowClass().hIcon         = WindowUI::getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
+	getWindowClass().hIconSm       = WindowUI::getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
 void MainFrame::onNcCreate(void)
 {
-	debugPrintln(L"MainFrame.onNcCreate()");
+	WindowUI::debugPrintln(L"MainFrame.onNcCreate()");
 }
 
 void MainFrame::onNcDestory(void)
 {
-	debugPrintln(L"MainFrame.onNcDestory()");
+	WindowUI::debugPrintln(L"MainFrame.onNcDestory()");
 }
 
 void MainFrame::onCreate(void)
 {
-	debugPrintln(L"MainFrame.onCreate()");
+	WindowUI::debugPrintln(L"MainFrame.onCreate()");
 }
 
 void MainFrame::onDestory(void)
 {
-	debugPrintln(L"MainFrame.onDestory() - begin");
+	WindowUI::debugPrintln(L"MainFrame.onDestory() - begin");
 
 	::PostQuitMessage(0);
 
-	debugPrintln(L"MainFrame.onDestory() - end");
+	WindowUI::debugPrintln(L"MainFrame.onDestory() - end");
 }
 
 void MainFrame::onClose(void)
 {
-	debugPrintln(L"MainFrame.onClose() - begin");
+	WindowUI::debugPrintln(L"MainFrame.onClose() - begin");
 
 	destroyWindow();
 
-	debugPrintln(L"MainFrame.onClose() - end");
+	WindowUI::debugPrintln(L"MainFrame.onClose() - end");
 }
 
 bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
@@ -189,3 +198,15 @@ void MainFrame::onPaint(HDC hDC)
 
 	EndPaint(getHandle(), &ps);
 }
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+}
+
+
+
+

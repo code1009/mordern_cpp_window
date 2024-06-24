@@ -6,6 +6,15 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+namespace WindowUI
+{
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 void debugPrintln(const std::wstring& message);
 
 
@@ -14,10 +23,20 @@ void debugPrintln(const std::wstring& message);
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class WindowInstance
+class WindowInstance final
 {
 private:
 	HINSTANCE _Handle{ nullptr };
+
+public:
+	WindowInstance();
+
+public:
+	WindowInstance(const WindowInstance&) = delete;
+	WindowInstance& operator=(const WindowInstance&) = delete;
+
+	WindowInstance(const WindowInstance&&) = delete;
+	WindowInstance& operator=(const WindowInstance&&) = delete;
 
 public:
 	HINSTANCE getHandle(void);
@@ -48,7 +67,7 @@ WindowInstance* getWindowInstance(void);
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class WindowMessage
+class WindowMessage final
 {
 public:
 	HWND     hWnd;
@@ -64,6 +83,13 @@ public:
 		WPARAM        wparam,
 		LPARAM        lparam
 	);
+
+public:
+	WindowMessage(const WindowMessage& other);
+	WindowMessage& operator=(const WindowMessage& other);
+
+	WindowMessage(WindowMessage&& other) noexcept;
+	WindowMessage& operator=(WindowMessage&& other) noexcept;
 };
 
 
@@ -92,6 +118,13 @@ public:
 	virtual ~Window();
 
 public:
+	Window(const Window&) = delete;
+	Window& operator=(const Window&) = delete;
+
+	Window(const Window&&) = delete;
+	Window& operator=(const Window&&) = delete;
+
+public:
 	virtual HWND getHandle(void);
 	virtual HWND setHandle(HWND handle);
 
@@ -118,6 +151,17 @@ private:
 	WNDCLASSEXW _WindowClass{ };
 
 public:
+	BaseWindow();
+	virtual ~BaseWindow();
+
+public:
+	BaseWindow(const BaseWindow&) = delete;
+	BaseWindow& operator=(const BaseWindow&) = delete;
+
+	BaseWindow(const BaseWindow&&) = delete;
+	BaseWindow& operator=(const BaseWindow&&) = delete;
+
+public:
 	virtual WNDCLASSEXW& getWindowClass(void);
 	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
@@ -142,8 +186,19 @@ public:
 //===========================================================================
 class SubclassWindow : public Window
 {
-public:
+private:
 	WNDPROC _ChainWindowProc{ nullptr };
+
+public:
+	SubclassWindow();
+	virtual ~SubclassWindow();
+
+public:
+	SubclassWindow(const SubclassWindow&) = delete;
+	SubclassWindow& operator=(const SubclassWindow&) = delete;
+
+	SubclassWindow(const SubclassWindow&&) = delete;
+	SubclassWindow& operator=(const SubclassWindow&&) = delete;
 
 public:
 	virtual WNDPROC subclassWindow(HWND hwnd);
@@ -152,6 +207,9 @@ public:
 	// 윈도우 프로시저 안에서 호출
 public:
 	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage) override;
+
+public:
+	virtual WNDPROC getChainWindowProc(void);
 
 public:
 	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
@@ -166,6 +224,28 @@ public:
 class WindowMessageLoop
 {
 public:
-	void runLoop(void);
+	WindowMessageLoop();
+	virtual ~WindowMessageLoop();
+
+public:
+	WindowMessageLoop(const WindowMessageLoop&) = delete;
+	WindowMessageLoop& operator=(const WindowMessageLoop&) = delete;
+
+	WindowMessageLoop(const WindowMessageLoop&&) = delete;
+	WindowMessageLoop& operator=(const WindowMessageLoop&&) = delete;
+
+public:
+	virtual void runLoop(void);
 };
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+}
+
+
+
 

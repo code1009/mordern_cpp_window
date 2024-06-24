@@ -4,9 +4,6 @@
     <Filter Include="WindowUI">
       <UniqueIdentifier>{b41185ab-e9a1-4e0b-920e-21fa79a33081}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WindowUI_Example">
-      <UniqueIdentifier>{d121c96f-41d1-440b-89cf-4f18efd50ff7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="main">
       <UniqueIdentifier>{f3dc3302-749f-4bc3-a61a-d2be60f9d964}</UniqueIdentifier>
     </Filter>
@@ -16,20 +13,11 @@
     <Filter Include="framework">
       <UniqueIdentifier>{cb4cea81-342a-413d-8e5d-cc219485466a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WindowUI_Example1">
+      <UniqueIdentifier>{d121c96f-41d1-440b-89cf-4f18efd50ff7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WindowUI.hpp">
-      <Filter>WindowUI</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowUI_WindowMessageManipulator.hpp">
-      <Filter>WindowUI</Filter>
-    </ClInclude>
-    <ClInclude Include="MainFrame.hpp">
-      <Filter>WindowUI_Example</Filter>
-    </ClInclude>
-    <ClInclude Include="OtherWindow.hpp">
-      <Filter>WindowUI_Example</Filter>
-    </ClInclude>
     <ClInclude Include="main.hpp">
       <Filter>main</Filter>
     </ClInclude>
@@ -42,19 +30,31 @@
     <ClInclude Include="targetver.h">
       <Filter>framework</Filter>
     </ClInclude>
+    <ClInclude Include="WindowUI\WindowMessageManipulator.hpp">
+      <Filter>WindowUI</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI\Core.hpp">
+      <Filter>WindowUI</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI_Example1\MainFrame.hpp">
+      <Filter>WindowUI_Example1</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI_Example1\OtherWindow.hpp">
+      <Filter>WindowUI_Example1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WindowUI.cpp">
-      <Filter>WindowUI</Filter>
-    </ClCompile>
-    <ClCompile Include="MainFrame.cpp">
-      <Filter>WindowUI_Example</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowUI_WindowMessageManipulator.cpp">
-      <Filter>WindowUI</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowUI\Core.cpp">
+      <Filter>WindowUI</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowUI\WindowMessageManipulator.cpp">
+      <Filter>WindowUI</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowUI_Example1\MainFrame.cpp">
+      <Filter>WindowUI_Example1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

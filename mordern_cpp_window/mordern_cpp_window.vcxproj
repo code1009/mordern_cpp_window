@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -117,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,18 +143,18 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="main.hpp" />
-    <ClInclude Include="MainFrame.hpp" />
-    <ClInclude Include="OtherWindow.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WindowUI.hpp" />
-    <ClInclude Include="WindowUI_WindowMessageManipulator.hpp" />
+    <ClInclude Include="WindowUI\Core.hpp" />
+    <ClInclude Include="WindowUI\WindowMessageManipulator.hpp" />
+    <ClInclude Include="WindowUI_Example1\MainFrame.hpp" />
+    <ClInclude Include="WindowUI_Example1\OtherWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="WindowUI.cpp" />
-    <ClCompile Include="WindowUI_WindowMessageManipulator.cpp" />
+    <ClCompile Include="WindowUI\Core.cpp" />
+    <ClCompile Include="WindowUI\WindowMessageManipulator.cpp" />
+    <ClCompile Include="WindowUI_Example1\MainFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mordern_cpp_window.rc" />
