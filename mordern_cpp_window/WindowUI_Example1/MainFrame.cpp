@@ -117,7 +117,7 @@ void MainFrame::registerWindowMessageHandler(void)
 
 void MainFrame::initializeWindowClass(void)
 {
-	BaseWindow::initializeWindowClass();
+	BasicWindow::initializeWindowClass();
 
 
 	static std::wstring windowClassName = WindowUI::getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);

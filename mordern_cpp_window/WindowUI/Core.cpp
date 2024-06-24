@@ -345,20 +345,20 @@ void Window::onWindowMessage(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-BaseWindow::BaseWindow()
+BasicWindow::BasicWindow()
 {
 }
 
-BaseWindow::~BaseWindow()
+BasicWindow::~BasicWindow()
 {
 }
 
-WNDCLASSEXW& BaseWindow::getWindowClass(void)
+WNDCLASSEXW& BasicWindow::getWindowClass(void)
 {
 	return _WindowClass;
 }
 
-void BaseWindow::initializeWindowClass(void)
+void BasicWindow::initializeWindowClass(void)
 {
 	memset(&_WindowClass, 0, sizeof(_WindowClass));
 
@@ -376,7 +376,7 @@ void BaseWindow::initializeWindowClass(void)
 	_WindowClass.hIconSm = nullptr;
 }
 
-void BaseWindow::registerWindowClass(void)
+void BasicWindow::registerWindowClass(void)
 {
 	WNDCLASSEXW wndClass;
 	BOOL rv;
@@ -393,7 +393,7 @@ void BaseWindow::registerWindowClass(void)
 	}
 }
 
-HWND BaseWindow::createWindow(
+HWND BasicWindow::createWindow(
 	LPCWSTR lpWindowName,
 	DWORD dwStyle,
 	DWORD dwExStyle,
@@ -426,7 +426,7 @@ HWND BaseWindow::createWindow(
 	return handle;
 }
 
-void BaseWindow::destroyWindow(void)
+void BasicWindow::destroyWindow(void)
 {
 	HWND handle;
 

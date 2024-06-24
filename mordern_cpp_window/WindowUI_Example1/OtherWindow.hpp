@@ -15,7 +15,7 @@ namespace WindowUI_Example1
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class OtherWindow : public WindowUI::BaseWindow
+class OtherWindow : public WindowUI::BasicWindow
 {
 public:
 	OtherWindow()

@@ -15,7 +15,7 @@ namespace WindowUI_Example1
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class MainFrame : public WindowUI::BaseWindow
+class MainFrame : public WindowUI::BasicWindow
 {
 public:
 	MainFrame();

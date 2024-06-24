@@ -145,21 +145,21 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class BaseWindow : public Window
+class BasicWindow : public Window
 {
 private:
 	WNDCLASSEXW _WindowClass{ };
 
 public:
-	BaseWindow();
-	virtual ~BaseWindow();
+	BasicWindow();
+	virtual ~BasicWindow();
 
 public:
-	BaseWindow(const BaseWindow&) = delete;
-	BaseWindow& operator=(const BaseWindow&) = delete;
+	BasicWindow(const BasicWindow&) = delete;
+	BasicWindow& operator=(const BasicWindow&) = delete;
 
-	BaseWindow(const BaseWindow&&) = delete;
-	BaseWindow& operator=(const BaseWindow&&) = delete;
+	BasicWindow(const BasicWindow&&) = delete;
+	BasicWindow& operator=(const BasicWindow&&) = delete;
 
 public:
 	virtual WNDCLASSEXW& getWindowClass(void);
