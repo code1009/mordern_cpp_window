@@ -33,6 +33,13 @@ public:
 	virtual ~WindowMessageManipulator();
 
 public:
+	WindowMessageManipulator(const WindowMessageManipulator&) = delete;
+	WindowMessageLoop& operator=(const WindowMessageManipulator&) = delete;
+
+	WindowMessageManipulator(WindowMessageManipulator&&) = delete;
+	WindowMessageManipulator& operator=(WindowMessageManipulator&&) = delete;
+
+public:
 	WindowMessage* getWindowMessage(void);
 };
 

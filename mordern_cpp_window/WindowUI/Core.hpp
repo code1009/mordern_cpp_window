@@ -35,8 +35,8 @@ public:
 	WindowInstance(const WindowInstance&) = delete;
 	WindowInstance& operator=(const WindowInstance&) = delete;
 
-	WindowInstance(const WindowInstance&&) = delete;
-	WindowInstance& operator=(const WindowInstance&&) = delete;
+	WindowInstance(WindowInstance&&) = delete;
+	WindowInstance& operator=(WindowInstance&&) = delete;
 
 public:
 	HINSTANCE getHandle(void);
@@ -121,8 +121,8 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 
-	Window(const Window&&) = delete;
-	Window& operator=(const Window&&) = delete;
+	Window(Window&&) = delete;
+	Window& operator=(Window&&) = delete;
 
 public:
 	virtual HWND getHandle(void);
@@ -158,8 +158,8 @@ public:
 	BasicWindow(const BasicWindow&) = delete;
 	BasicWindow& operator=(const BasicWindow&) = delete;
 
-	BasicWindow(const BasicWindow&&) = delete;
-	BasicWindow& operator=(const BasicWindow&&) = delete;
+	BasicWindow(BasicWindow&&) = delete;
+	BasicWindow& operator=(BasicWindow&&) = delete;
 
 public:
 	virtual WNDCLASSEXW& getWindowClass(void);
@@ -197,8 +197,8 @@ public:
 	SubclassWindow(const SubclassWindow&) = delete;
 	SubclassWindow& operator=(const SubclassWindow&) = delete;
 
-	SubclassWindow(const SubclassWindow&&) = delete;
-	SubclassWindow& operator=(const SubclassWindow&&) = delete;
+	SubclassWindow(SubclassWindow&&) = delete;
+	SubclassWindow& operator=(SubclassWindow&&) = delete;
 
 public:
 	virtual WNDPROC subclassWindow(HWND hwnd);
@@ -221,21 +221,21 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class Dialog : public Window
+class BasicDialog : public Window
 {
 private:
 	std::int32_t _TemplateNameId{ -1 };
 
 public:
-	explicit Dialog(std::int32_t templateNameId);
-	virtual ~Dialog();
+	explicit BasicDialog(std::int32_t templateNameId);
+	virtual ~BasicDialog();
 
 public:
-	Dialog(const Dialog&) = delete;
-	Dialog& operator=(const Dialog&) = delete;
+	BasicDialog(const BasicDialog&) = delete;
+	BasicDialog& operator=(const BasicDialog&) = delete;
 
-	Dialog(const Dialog&&) = delete;
-	Dialog& operator=(const Dialog&&) = delete;
+	BasicDialog(BasicDialog&&) = delete;
+	BasicDialog& operator=(BasicDialog&&) = delete;
 
 public:
 	virtual std::int32_t getTemplateNameId(void);
@@ -263,8 +263,8 @@ public:
 	WindowMessageLoop(const WindowMessageLoop&) = delete;
 	WindowMessageLoop& operator=(const WindowMessageLoop&) = delete;
 
-	WindowMessageLoop(const WindowMessageLoop&&) = delete;
-	WindowMessageLoop& operator=(const WindowMessageLoop&&) = delete;
+	WindowMessageLoop(WindowMessageLoop&&) = delete;
+	WindowMessageLoop& operator=(WindowMessageLoop&&) = delete;
 
 public:
 	virtual void runLoop(void);
