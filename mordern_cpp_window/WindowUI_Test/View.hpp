@@ -28,7 +28,7 @@ public:
 
 		initializeWindowClass();
 		registerWindowClass();
-		createWindow(L"View", WS_CHILD| WS_VISIBLE, 0, 0, 0, 0, 0, hParent);
+		createWindow(hParent, L"View", WS_CHILD| WS_VISIBLE, 0, 0, 0, 0, 0);
 
 
 		::ShowWindow(getHandle(), SW_SHOW);

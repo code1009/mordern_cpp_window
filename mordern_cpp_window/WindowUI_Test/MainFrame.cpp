@@ -40,7 +40,7 @@ MainFrame::MainFrame()
 	//-----------------------------------------------------------------------
 	initializeWindowClass();
 	registerWindowClass();
-	createWindow(WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
+	createWindow(nullptr, WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
 
 
 	//-----------------------------------------------------------------------

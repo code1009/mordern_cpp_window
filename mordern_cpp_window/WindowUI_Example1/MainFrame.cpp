@@ -47,7 +47,7 @@ MainFrame::MainFrame()
 
 
 	windowText = WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE);
-	hwnd = createWindow(windowText.c_str());
+	hwnd = createWindow(nullptr, windowText.c_str());
 	if (!hwnd)
 	{
 		throw std::wstring(L"MainFrame::MainFrame(): createWindow() failed");

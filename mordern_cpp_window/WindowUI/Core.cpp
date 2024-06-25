@@ -505,6 +505,7 @@ void BasicWindow::registerWindowClass(void)
 }
 
 HWND BasicWindow::createWindow(
+	HWND hWndParent,
 	LPCWSTR lpWindowName,
 	DWORD dwStyle,
 	DWORD dwExStyle,
@@ -512,7 +513,6 @@ HWND BasicWindow::createWindow(
 	int Y,
 	int nWidth,
 	int nHeight,
-	HWND hWndParent,
 	HMENU hMenu
 )
 {

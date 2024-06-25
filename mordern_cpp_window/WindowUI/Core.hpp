@@ -205,6 +205,7 @@ public:
 	virtual void initializeWindowClass(void);
 	virtual void registerWindowClass(void);
 	virtual HWND createWindow(
+		HWND hWndParent = nullptr,
 		LPCWSTR lpWindowName = L"Window",
 		DWORD dwStyle = WS_OVERLAPPEDWINDOW,
 		DWORD dwExStyle = 0,
@@ -212,8 +213,8 @@ public:
 		int Y = CW_USEDEFAULT,
 		int nWidth = 500,
 		int nHeight = 500,
-		HWND hWndParent = nullptr,
-		HMENU hMenu = nullptr);
+		HMENU hMenu = nullptr
+	);
 	virtual void destroyWindow(void);
 };
 

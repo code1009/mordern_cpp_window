@@ -21,8 +21,8 @@ public:
 	explicit View(
 		HWND hParent, 
 		const RECT& rect, 
-		DWORD style= WS_CHILD | WS_VISIBLE | WS_BORDER, 
-		DWORD styleEx = WS_EX_CLIENTEDGE
+		std::uint32_t style= WS_CHILD | WS_VISIBLE | WS_BORDER, 
+		std::uint32_t styleEx = WS_EX_CLIENTEDGE
 	)
 	{
 		//-----------------------------------------------------------------------
@@ -45,10 +45,11 @@ public:
 
 		windowText = L"View";
 		hwnd = createWindow(
+			hParent,
 			windowText.c_str(),
-			style, styleEx,
-			rect.left, rect.top, rect.right, rect.bottom,
-			hParent
+			static_cast<DWORD>(style),
+			static_cast<DWORD>(styleEx),
+			rect.left, rect.top, rect.right, rect.bottom
 		);
 		if (!hwnd)
 		{
