@@ -40,7 +40,7 @@ public:
 	WindowInstance& operator=(WindowInstance&&) = delete;
 
 public:
-	HINSTANCE getHandle(void);
+	HINSTANCE getHandle(void) const;
 	HINSTANCE setHandle(HINSTANCE handle);
 
 public:
@@ -126,7 +126,7 @@ public:
 	Window& operator=(Window&&) = delete;
 
 public:
-	virtual HWND getHandle(void);
+	virtual HWND getHandle(void) const;
 	virtual HWND setHandle(HWND handle);
 
 public:

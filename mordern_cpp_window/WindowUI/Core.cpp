@@ -94,7 +94,7 @@ WindowInstance::WindowInstance():
 {
 }
 
-HINSTANCE WindowInstance::getHandle(void)
+HINSTANCE WindowInstance::getHandle(void) const
 {
 	return _Handle;
 }
@@ -284,7 +284,7 @@ Window::~Window()
 {
 }
 
-HWND Window::getHandle(void)
+HWND Window::getHandle(void) const
 {
 	return _Handle;
 }

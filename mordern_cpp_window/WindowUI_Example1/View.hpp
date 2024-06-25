@@ -31,7 +31,7 @@ public:
 		//-----------------------------------------------------------------------
 		initializeWindowClass();
 		registerWindowClass();
-		createWindow(L"View", WS_CHILD | WS_VISIBLE, 0,
+		createWindow(L"View", WS_CHILD | WS_VISIBLE | WS_BORDER, WS_EX_CLIENTEDGE,
 			rect.left , rect.top, rect.right, rect.bottom,
 			hParent);
 
@@ -64,7 +64,7 @@ public:
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_CREATE ) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
 		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
 		getWindowMessageHandler(WM_CLOSE  ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
 		getWindowMessageHandler(WM_PAINT  ) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
@@ -72,20 +72,26 @@ public:
 
 	void onCreate(WindowUI::WindowMessage& windowMessage)
 	{
-		SetWindowTextW(windowMessage.hWnd, L"View");
+		WindowUI::debugPrintln(L"View.onCreate() - begin");
+
+
+		//SetWindowTextW(windowMessage.hWnd, L"View");
 
 		defaultWindowMessageHandler(windowMessage);
+
+
+		WindowUI::debugPrintln(L"View.onCreate() - end");
+	}
+
+	void onDestory(WindowUI::WindowMessage& windowMessage)
+	{
+		WindowUI::debugPrintln(L"View.onDestory()");
 	}
 
 	void onClose(WindowUI::WindowMessage& windowMessage)
 	{
 		WindowUI::debugPrintln(L"View.onClose() - begin");
 		WindowUI::debugPrintln(L"View.onClose() - end");
-	}
-
-	void onDestory(WindowUI::WindowMessage& windowMessage)
-	{
-		WindowUI::debugPrintln(L"View.onDestory()");
 	}
 
 	void onPaint(WindowUI::WindowMessage& windowMessage)
