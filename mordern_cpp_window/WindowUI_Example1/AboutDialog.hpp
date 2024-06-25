@@ -21,25 +21,28 @@ public:
 	AboutDialog():
 		WindowUI::BasicModalDialog{ IDD_ABOUTBOX }
 	{
-		//-----------------------------------------------------------------------
+		//-------------------------------------------------------------------
 		WindowUI::debugPrintln(L"AboutDialog.ctor() - begin");
 
 
-		//-----------------------------------------------------------------------
+		//-------------------------------------------------------------------
 		registerWindowMessageHandler();
 
 
-		//-----------------------------------------------------------------------
+		//-------------------------------------------------------------------
 		WindowUI::debugPrintln(L"AboutDialog.ctor() - end");
 	}
 
 	~AboutDialog()
 	{
+		//-------------------------------------------------------------------
 		WindowUI::debugPrintln(L"AboutDialog.dtor() - begin");
 
 
+		//-------------------------------------------------------------------
 
 
+		//-------------------------------------------------------------------
 		WindowUI::debugPrintln(L"AboutDialog.dtor() - end");
 	}
 
@@ -52,13 +55,17 @@ public:
 
 	void onInitDialog(WindowUI::WindowMessage& windowMessage)
 	{
+		//-------------------------------------------------------------------
 		WindowUI::debugPrintln(L"AboutDialog.onInitDialog()");
 
+
+		//-------------------------------------------------------------------
 		defaultWindowMessageHandler(windowMessage);
 	}
 
 	void onDestory(WindowUI::WindowMessage& windowMessage)
 	{
+		//-------------------------------------------------------------------
 		WindowUI::debugPrintln(L"AboutDialog.onDestory()");
 	}
 

@@ -479,7 +479,7 @@ void BasicWindow::initializeWindowClass(void)
 	_WindowClass.cbWndExtra = 0;
 	_WindowClass.hInstance = getWindowInstance()->getHandle();
 	_WindowClass.lpfnWndProc = WindowProc;
-	_WindowClass.lpszClassName = L"TheBaseWindowClass";
+	_WindowClass.lpszClassName = L"WindowUI.BasicWindowClass";
 	_WindowClass.lpszMenuName = nullptr;
 	_WindowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
 	_WindowClass.hCursor = getWindowInstance()->loadCursor(IDC_ARROW);

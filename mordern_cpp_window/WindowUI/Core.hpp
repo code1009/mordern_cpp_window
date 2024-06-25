@@ -16,7 +16,7 @@ namespace WindowUI
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
 void debugPrintln(const std::wstring& message);
-void reportError(const std::wstring& message);
+void errorReport(const std::wstring& message);
 
 
 

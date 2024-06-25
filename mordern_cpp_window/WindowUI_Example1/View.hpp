@@ -92,14 +92,17 @@ public:
 
 	void onCreate(WindowUI::WindowMessage& windowMessage)
 	{
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.onCreate() - begin");
 
 
+		//-----------------------------------------------------------------------
 		//SetWindowTextW(windowMessage.hWnd, L"View");
 
 		defaultWindowMessageHandler(windowMessage);
 
 
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.onCreate() - end");
 	}
 
@@ -110,12 +113,21 @@ public:
 
 	void onClose(WindowUI::WindowMessage& windowMessage)
 	{
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.onClose() - begin");
+
+
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.onClose() - end");
 	}
 
 	void onPaint(WindowUI::WindowMessage& windowMessage)
 	{
+		//-----------------------------------------------------------------------
+		WindowUI::debugPrintln(L"View.onPaint() - begin");
+
+
+		//-----------------------------------------------------------------------
 		RECT rect;
 
 
@@ -132,6 +144,10 @@ public:
 
 
 		EndPaint(getHandle(), &ps);
+
+
+		//-----------------------------------------------------------------------
+		WindowUI::debugPrintln(L"View.onPaint() - end");
 	}
 
 	void draw(HDC hdc, RECT& rect)
