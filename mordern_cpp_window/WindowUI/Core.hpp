@@ -45,12 +45,15 @@ public:
 
 public:
 	std::wstring loadString(int id);
+
 	HCURSOR loadCursor(int id);
 	HICON loadIcon(int id);
 	HBITMAP loadBitmap(int id);
+
 	HCURSOR loadCursor(LPCWSTR id);	
 	HICON loadIcon(LPCWSTR id);
 	HBITMAP loadBitmap(LPCWSTR id);
+
 	LPCWSTR makeIntResource(int id);
 };
 
