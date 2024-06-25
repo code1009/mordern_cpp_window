@@ -8,6 +8,7 @@
 
 #include "AboutDialog.hpp"
 #include "AboutModelessDialog.hpp"
+#include "View.hpp"
 #include "MainFrame.hpp"
 
 
@@ -43,6 +44,10 @@ MainFrame::MainFrame()
 
 	//-----------------------------------------------------------------------
 	_AboutModelessDialog = std::make_shared<AboutModelessDialog>(getHandle());
+
+
+	//-----------------------------------------------------------------------
+	_View = std::make_shared<View>(getHandle());
 
 
 	//-----------------------------------------------------------------------
@@ -114,6 +119,12 @@ void MainFrame::registerWindowMessageHandler(void)
 		}
 	};
 
+	getWindowMessageHandler(WM_SIZE) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		onSize(windowMessage);
+	};
+
+
 	getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage)
 	{
 		// void OnPaint(CDCHandle dc)
@@ -183,6 +194,17 @@ void MainFrame::onPaint(HDC hDC)
 	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 
 	EndPaint(getHandle(), &ps);
+}
+
+void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
+{
+	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+
+	if (_View)
+	{
+		::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx,
+			100, FALSE);
+	}
 }
 
 bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)

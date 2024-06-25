@@ -3,9 +3,12 @@
 #include "main.hpp"
 
 #include "WindowUI/Core.hpp"
+#include "WindowUI/WindowMessageManipulator.hpp"
+
 #include "WindowUI_Example1/OtherWindow.hpp"
 #include "WindowUI_Example1/AboutDialog.hpp"
 #include "WindowUI_Example1/AboutModelessDialog.hpp"
+#include "WindowUI_Example1/View.hpp"
 #include "WindowUI_Example1/MainFrame.hpp"
 
 

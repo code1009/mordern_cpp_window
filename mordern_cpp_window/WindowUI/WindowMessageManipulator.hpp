@@ -170,6 +170,8 @@ public:
 	}
 
 public:
+
+public:
 	void Result(void)
 	{
 		getWindowMessage()->lResult = (LRESULT)0;
@@ -362,6 +364,142 @@ public:
 		getWindowMessage()->lResult = (LRESULT)0;
 	}
 };
+
+//===========================================================================
+// void OnPaint(CDCHandle dc)
+/*
+WM_PAINT
+		func((HDC)wParam); \
+		lResult = 0; \
+*/
+class WM_PAINT_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_PAINT_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	HDC dc(void)
+	{
+		return (HDC)getWindowMessage()->wParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// void OnClose()
+/*
+WM_CLOSE
+		func(); \
+		lResult = 0; \
+*/
+class WM_CLOSE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_CLOSE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// BOOL OnQueryEndSession(UINT nSource, UINT uLogOff)
+/*
+WM_QUERYENDSESSION
+		lResult = (LRESULT)func((UINT)wParam, (UINT)lParam); \
+*/
+class WM_QUERYENDSESSION_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_QUERYENDSESSION_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	UINT nSource(void)
+	{
+		return (UINT)getWindowMessage()->wParam;
+	}
+
+	UINT uLogOff(void)
+	{
+		return (UINT)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(BOOL rv)
+	{
+		getWindowMessage()->lResult = (LRESULT)rv;
+	}
+};
+
+//===========================================================================
+// BOOL OnQueryOpen()
+/*
+WM_QUERYOPEN
+		lResult = (LRESULT)func(); \
+*/
+class WM_QUERYOPEN_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_QUERYOPEN_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+
+public:
+	void Result(BOOL rv)
+	{
+		getWindowMessage()->lResult = (LRESULT)rv;
+	}
+};
+
+//===========================================================================
+// BOOL OnEraseBkgnd(CDCHandle dc)
+/*
+WM_ERASEBKGND
+		lResult = (LRESULT)func((HDC)wParam); \
+*/
+class WM_ERASEBKGND_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_ERASEBKGND_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	HDC dc(void)
+	{
+		return (HDC)getWindowMessage()->wParam;
+	}
+
+public:
+	void Result(BOOL rv)
+	{
+		getWindowMessage()->lResult = (LRESULT)rv;
+	}
+};
+
+
 
 
 //===========================================================================

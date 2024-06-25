@@ -19,6 +19,7 @@ class MainFrame : public WindowUI::BasicWindow
 {
 public:
 	std::shared_ptr<AboutModelessDialog> _AboutModelessDialog;
+	std::shared_ptr<View> _View;
 
 public:
 	MainFrame();
@@ -37,6 +38,8 @@ public:
 	void onClose(void);
 
 	void onPaint(HDC hDC);
+
+	void onSize(WindowUI::WindowMessage& windowMessage);
 
 	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl);
 	void onAbout(void);
