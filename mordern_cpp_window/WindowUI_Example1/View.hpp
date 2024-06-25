@@ -42,6 +42,17 @@ public:
 
 
 		//-----------------------------------------------------------------------
+		std::wstring text;
+		
+		
+		text = getWindowText(this);
+		text = L"View Window";
+		setWindowText(this, text);
+		text = getWindowText(this);
+		WindowUI::debugPrintln(text);
+
+
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.ctor() - end");
 	}
 

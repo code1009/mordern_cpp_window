@@ -150,6 +150,7 @@
     <ClInclude Include="Res\Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowUI\Core.hpp" />
+    <ClInclude Include="WindowUI\WindowFunction.hpp" />
     <ClInclude Include="WindowUI\WindowMessageManipulator.hpp" />
     <ClInclude Include="WindowUI_Example1\AboutDialog.hpp" />
     <ClInclude Include="WindowUI_Example1\MainFrame.hpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowUI\Core.cpp" />
+    <ClCompile Include="WindowUI\WindowFunction.cpp" />
     <ClCompile Include="WindowUI\WindowMessageManipulator.cpp" />
     <ClCompile Include="WindowUI_Example1\MainFrame.cpp" />
     <ClCompile Include="WindowUI_Test\MainFrame.cpp" />

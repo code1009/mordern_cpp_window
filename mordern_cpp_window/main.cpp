@@ -4,6 +4,7 @@
 
 #include "WindowUI/Core.hpp"
 #include "WindowUI/WindowMessageManipulator.hpp"
+#include "WindowUI/WindowFunction.hpp"
 
 #include "WindowUI_Test/OtherWindow.hpp"
 #include "WindowUI_Test/AboutDialog.hpp"

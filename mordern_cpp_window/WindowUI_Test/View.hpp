@@ -35,6 +35,10 @@ public:
 		::UpdateWindow(getHandle());
 
 
+		std::wstring text = getWindowText(this);
+		WindowUI::debugPrintln(text);
+
+
 		WindowUI::debugPrintln(L"View.ctor() - end");
 	}
 
