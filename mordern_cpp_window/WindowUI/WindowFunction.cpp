@@ -2,8 +2,8 @@
 //===========================================================================
 #include "../framework.h"
 
-#include "Core.hpp"
 #include "WindowFunction.hpp"
+#include "Core.hpp"
 
 
 

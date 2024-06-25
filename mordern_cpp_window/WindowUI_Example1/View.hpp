@@ -18,7 +18,12 @@ namespace WindowUI_Example1
 class View : public WindowUI::BasicWindow
 {
 public:
-	explicit View(HWND hParent, const RECT& rect)
+	explicit View(
+		HWND hParent, 
+		const RECT& rect, 
+		DWORD style= WS_CHILD | WS_VISIBLE | WS_BORDER, 
+		DWORD styleEx = WS_EX_CLIENTEDGE
+	)
 	{
 		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.ctor() - begin");
@@ -31,9 +36,24 @@ public:
 		//-----------------------------------------------------------------------
 		initializeWindowClass();
 		registerWindowClass();
-		createWindow(L"View", WS_CHILD | WS_VISIBLE | WS_BORDER, WS_EX_CLIENTEDGE,
-			rect.left , rect.top, rect.right, rect.bottom,
-			hParent);
+
+
+		//-----------------------------------------------------------------------
+		std::wstring windowText;
+		HWND hwnd;
+
+
+		windowText = L"View";
+		hwnd = createWindow(
+			windowText.c_str(),
+			style, styleEx,
+			rect.left, rect.top, rect.right, rect.bottom,
+			hParent
+		);
+		if (!hwnd)
+		{
+			throw std::wstring(L"View::View(): createWindow() failed");
+		}
 
 
 		//-----------------------------------------------------------------------

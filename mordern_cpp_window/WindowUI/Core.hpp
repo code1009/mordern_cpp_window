@@ -136,7 +136,6 @@ public:
 	virtual WindowMessageHandler& getWindowMessageHandler(std::uint32_t umsg);
 	virtual void registerWindowMessageHandler(void) = 0;
 
-	// 윈도우 프로시저 안에서 호출
 public:
 	virtual void callDefWindowProc(WindowMessage& windowMessage);
 	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage);
@@ -169,7 +168,6 @@ public:
 	virtual WNDPROC subclassWindow(HWND hwnd);
 	virtual WNDPROC unsubclassWindow(WNDPROC windowProc = nullptr);
 
-	// 윈도우 프로시저 안에서 호출
 public:
 	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage) override;
 

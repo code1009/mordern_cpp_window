@@ -25,7 +25,7 @@ void debugPrintln(const std::wstring& message)
 	OutputDebugStringW(L"\r\n");
 }
 
-void reportError(const std::wstring& message)
+void errorReport(const std::wstring& message)
 {
 	//-----------------------------------------------------------------------
 	DWORD dwLastErrorCode;
@@ -355,12 +355,15 @@ SubclassWindow::~SubclassWindow()
 
 WNDPROC SubclassWindow::subclassWindow(HWND hwnd)
 {
+	//-----------------------------------------------------------------------
 #ifdef _DEBUG
 	if (reinterpret_cast<void*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA)))
 	{
-		reportError(L"subclassWindow-GWLP_USERDATA");
+		errorReport(L"SubclassWindow::subclassWindow(): GWLP_USERDATA");
 	}
 #endif
+
+
 	//-----------------------------------------------------------------------
 	setHandle(hwnd);
 
@@ -496,7 +499,7 @@ void BasicWindow::registerWindowClass(void)
 		ATOM atom = ::RegisterClassExW(&_WindowClass);
 		if (!atom)
 		{
-			reportError(L"registerWindowClass");
+			errorReport(L"BasicWindow::registerWindowClass(): RegisterClassExW()");
 		}
 	}
 }
@@ -684,12 +687,16 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 {
 	if (WM_NCCREATE == message)
 	{
+		//-------------------------------------------------------------------
 #ifdef _DEBUG
 		if (reinterpret_cast<void*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA)))
 		{
-			reportError(L"WindowProc-GWLP_USERDATA");
+			errorReport(L"WindowProc(): GWLP_USERDATA");
 		}
 #endif
+
+
+		//-------------------------------------------------------------------
 		auto userData = reinterpret_cast<CREATESTRUCTW*>(lParam)->lpCreateParams;
 		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
 
@@ -725,12 +732,16 @@ INT_PTR __stdcall DialogProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 {
 	if (WM_INITDIALOG == message)
 	{
+		//-------------------------------------------------------------------
 #ifdef _DEBUG
 		if (reinterpret_cast<void*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA)))
 		{
-			reportError(L"DialogProc-GWLP_USERDATA");
+			errorReport(L"DialogProc(): GWLP_USERDATA");
 		}
 #endif
+
+
+		//-------------------------------------------------------------------
 		auto userData = reinterpret_cast<BasicModalDialog*>(lParam);
 		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
 

@@ -3,9 +3,9 @@
 #include "../framework.h"
 #include "../res/resource.h"
 
+#include "../WindowUI/WindowFunction.hpp"
 #include "../WindowUI/Core.hpp"
 #include "../WindowUI/WindowMessageManipulator.hpp"
-#include "../WindowUI/WindowFunction.hpp"
 
 #include "AboutDialog.hpp"
 #include "View.hpp"
@@ -39,7 +39,19 @@ MainFrame::MainFrame()
 	//-----------------------------------------------------------------------
 	initializeWindowClass();
 	registerWindowClass();
-	createWindow(WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE).c_str());
+
+
+	//-----------------------------------------------------------------------
+	std::wstring windowText;
+	HWND hwnd;
+
+
+	windowText = WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE);
+	hwnd = createWindow(windowText.c_str());
+	if (!hwnd)
+	{
+		throw std::wstring(L"MainFrame::MainFrame(): createWindow() failed");
+	}
 
 
 	//-----------------------------------------------------------------------
