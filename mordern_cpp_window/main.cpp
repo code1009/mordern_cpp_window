@@ -103,6 +103,8 @@ int APIENTRY wWinMain(
 )
 {
 	/*
+	$(SolutionDir)$(Configuration)\
+
 	중간 디렉토리 
 	$(Configuration)\ 
 	$(IntDir)/%(RelativeDir)/
