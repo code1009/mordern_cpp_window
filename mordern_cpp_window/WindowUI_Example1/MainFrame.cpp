@@ -164,10 +164,7 @@ void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
 {
 	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
-	if (_View)
-	{
-		::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx, 100, FALSE);
-	}
+	::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx, 100, FALSE);
 }
 
 void MainFrame::onPaint(WindowUI::WindowMessage& windowMessage)
