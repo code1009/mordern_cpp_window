@@ -7,6 +7,7 @@
 #include "../WindowUI/WindowMessageManipulator.hpp"
 
 #include "AboutDialog.hpp"
+#include "AboutModelessDialog.hpp"
 #include "View.hpp"
 #include "MainFrame.hpp"
 
@@ -16,7 +17,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace WindowUI_Test
 {
 
 
@@ -42,6 +43,10 @@ MainFrame::MainFrame()
 
 
 	//-----------------------------------------------------------------------
+	_AboutModelessDialog = std::make_shared<AboutModelessDialog>(getHandle());
+
+
+	//-----------------------------------------------------------------------
 	_View = std::make_shared<View>(getHandle());
 
 
@@ -58,19 +63,74 @@ MainFrame::~MainFrame()
 {
 	WindowUI::debugPrintln(L"MainFrame.dtor() - begin");
 
+	_AboutModelessDialog.reset();
+
 	WindowUI::debugPrintln(L"MainFrame.dtor() - end");
 }
 
 void MainFrame::registerWindowMessageHandler(void)
 {
-	getWindowMessageHandler(WM_NCCREATE) = [this](WindowUI::WindowMessage& windowMessage) { onNcCreate(windowMessage); };
-	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onNcDestory(windowMessage); };
-	getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
-	getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
-	getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-	getWindowMessageHandler(WM_SIZE) = [this](WindowUI::WindowMessage& windowMessage) { onSize(windowMessage); };
-	getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
-	getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage) { onCommand(windowMessage); };
+	getWindowMessageHandler(WM_NCCREATE) = [this](WindowUI::WindowMessage& windowMessage)
+	{ 
+		WindowUI::WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+
+
+		onNcCreate();
+		//defaultWindowMessageHandler(windowMessage);
+		
+		windowMessageManipulator.Result(true);
+	};
+
+	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowUI::WindowMessage& windowMessage)
+	{ 
+		onNcDestory(); 
+		//defaultWindowMessageHandler(windowMessage);
+	};
+
+	getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		WindowUI::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+
+		windowMessageManipulator.lpCreateStruct();
+		onCreate();
+		//windowMessageManipulator.Result(0);
+
+		//defaultWindowMessageHandler(windowMessage);
+	};
+
+	getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		onDestory();
+	};
+
+	getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		onClose();
+	};
+
+	getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
+		// func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
+		bool rv = onCommand((UINT)HIWORD(windowMessage.wParam), (int)LOWORD(windowMessage.wParam), (HWND)windowMessage.lParam);
+		if (!rv)
+		{
+			defaultWindowMessageHandler(windowMessage);
+		}
+	};
+
+	getWindowMessageHandler(WM_SIZE) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		onSize(windowMessage);
+	};
+
+
+	getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage)
+	{
+		// void OnPaint(CDCHandle dc)
+		// func((HDC)wParam);
+		onPaint((HDC)windowMessage.wParam);
+	};
 }
 
 void MainFrame::initializeWindowClass(void)
@@ -87,28 +147,22 @@ void MainFrame::initializeWindowClass(void)
 	getWindowClass().hIconSm       = WindowUI::getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
-void MainFrame::onNcCreate(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onNcCreate(void)
 {
-	WindowUI::WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
-
-
 	WindowUI::debugPrintln(L"MainFrame.onNcCreate()");
 }
 
-void MainFrame::onNcDestory(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onNcDestory(void)
 {
 	WindowUI::debugPrintln(L"MainFrame.onNcDestory()");
 }
 
-void MainFrame::onCreate(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onCreate(void)
 {
-	WindowUI::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
-
-
 	WindowUI::debugPrintln(L"MainFrame.onCreate()");
 }
 
-void MainFrame::onDestory(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onDestory(void)
 {
 	WindowUI::debugPrintln(L"MainFrame.onDestory() - begin");
 
@@ -117,13 +171,29 @@ void MainFrame::onDestory(WindowUI::WindowMessage& windowMessage)
 	WindowUI::debugPrintln(L"MainFrame.onDestory() - end");
 }
 
-void MainFrame::onClose(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onClose(void)
 {
 	WindowUI::debugPrintln(L"MainFrame.onClose() - begin");
 
 	destroyWindow();
 
 	WindowUI::debugPrintln(L"MainFrame.onClose() - end");
+}
+
+void MainFrame::onPaint(HDC hDC)
+{
+	// 최초 실행시 UpdateWindow()에 의해서
+	// ctor()안에서 호출 되지만 createWindow()호출 이후라서 getHandle() 유효함
+
+	PAINTSTRUCT ps;
+	
+	
+	HDC hdc = BeginPaint(getHandle(), &ps);
+	RECT rect{ 0,0, 500, 500 };
+
+	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+
+	EndPaint(getHandle(), &ps);
 }
 
 void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
@@ -136,34 +206,18 @@ void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
 	}
 }
 
-void MainFrame::onPaint(WindowUI::WindowMessage& windowMessage)
+bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	PAINTSTRUCT ps;
-	
-	
-	HDC hdc = BeginPaint(getHandle(), &ps);
-	RECT rect{ 0,0, 500, 500 };
-
-	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
-
-	EndPaint(getHandle(), &ps);
-}
-
-void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
-{
-	WindowUI::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
-
-
-	switch (windowMessageManipulator.nID())
+	switch (nID)
 	{
 	case IDM_ABOUT:
-		onAbout(windowMessage);
-		return;
+		onAbout();
+		return true;
 		break;
 
 	case IDM_EXIT:
 		destroyWindow();
-		return;
+		return true;
 		break;
 
 	default:
@@ -171,10 +225,10 @@ void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
 	}
 
 
-	defaultWindowMessageHandler(windowMessage);
+	return false;
 }
 
-void MainFrame::onAbout(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onAbout(void)
 {
 	AboutDialog dlg;
 

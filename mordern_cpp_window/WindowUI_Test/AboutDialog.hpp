@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace WindowUI_Test
 {
 
 
@@ -41,61 +41,63 @@ public:
 	{
 		getWindowMessageHandler(WM_INITDIALOG) = [this](WindowUI::WindowMessage& windowMessage)
 		{
-			onInitDialog(windowMessage);
+			onInitDialog();
+			defaultWindowMessageHandler(windowMessage);
 		};
-		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) 
-		{ 
-			onDestory(windowMessage);
-		};
+
+
+		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(); };
+
+
 		getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage)
-		{
-			onCommand(windowMessage);
-		};
+			{
+				// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
+				// func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam);
+				bool rv = onCommand((UINT)HIWORD(windowMessage.wParam), (int)LOWORD(windowMessage.wParam), (HWND)windowMessage.lParam);
+				if (!rv)
+				{
+					defaultWindowMessageHandler(windowMessage);
+				}
+			};
 	}
 
-	void onInitDialog(WindowUI::WindowMessage& windowMessage)
+	void onInitDialog(void)
 	{
 		WindowUI::debugPrintln(L"AboutDialog.onInitDialog()");
-
-		defaultWindowMessageHandler(windowMessage);
 	}
 
-	void onDestory(WindowUI::WindowMessage& windowMessage)
+	void onDestory(void)
 	{
 		WindowUI::debugPrintln(L"AboutDialog.onDestory()");
 	}
 
-	void onCommand(WindowUI::WindowMessage& windowMessage)
+	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 	{
-		WindowUI::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
-
-
-		switch (windowMessageManipulator.nID())
+		switch (nID)
 		{
 		case IDOK:
-			onOK(windowMessage);
-			return;
+			onOK();
+			return true;
 			break;
 
 		case IDCANCEL:
-			onCancel(windowMessage);
-			return;
+			onCancel();
+			return true;
 			break;
 
 		default:
 			break;
 		}
 
-
-		defaultWindowMessageHandler(windowMessage);
+		return false;
 	}
 
-	void onOK(WindowUI::WindowMessage& windowMessage)
+	void onOK(void)
 	{
 		endDialog(IDOK);
 	}
 
-	void onCancel(WindowUI::WindowMessage& windowMessage)
+	void onCancel(void)
 	{
 		endDialog(IDCANCEL);
 	}

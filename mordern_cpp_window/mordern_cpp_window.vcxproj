@@ -72,6 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(IntDir)/%(RelativeDir)/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,16 +151,20 @@
     <ClInclude Include="WindowUI\Core.hpp" />
     <ClInclude Include="WindowUI\WindowMessageManipulator.hpp" />
     <ClInclude Include="WindowUI_Example1\AboutDialog.hpp" />
-    <ClInclude Include="WindowUI_Example1\AboutModelessDialog.hpp" />
     <ClInclude Include="WindowUI_Example1\MainFrame.hpp" />
-    <ClInclude Include="WindowUI_Example1\OtherWindow.hpp" />
     <ClInclude Include="WindowUI_Example1\View.hpp" />
+    <ClInclude Include="WindowUI_Test\AboutDialog.hpp" />
+    <ClInclude Include="WindowUI_Test\AboutModelessDialog.hpp" />
+    <ClInclude Include="WindowUI_Test\MainFrame.hpp" />
+    <ClInclude Include="WindowUI_Test\OtherWindow.hpp" />
+    <ClInclude Include="WindowUI_Test\View.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowUI\Core.cpp" />
     <ClCompile Include="WindowUI\WindowMessageManipulator.cpp" />
     <ClCompile Include="WindowUI_Example1\MainFrame.cpp" />
+    <ClCompile Include="WindowUI_Test\MainFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\mordern_cpp_window.ico" />

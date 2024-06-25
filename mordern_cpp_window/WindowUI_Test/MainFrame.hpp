@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace WindowUI_Test
 {
 
 
@@ -18,6 +18,7 @@ namespace WindowUI_Example1
 class MainFrame : public WindowUI::BasicWindow
 {
 public:
+	std::shared_ptr<AboutModelessDialog> _AboutModelessDialog;
 	std::shared_ptr<View> _View;
 
 public:
@@ -29,19 +30,19 @@ public:
 	virtual void initializeWindowClass(void) override;
 
 public:
-	void onNcCreate(WindowUI::WindowMessage& windowMessage);
-	void onNcDestory(WindowUI::WindowMessage& windowMessage);
+	void onNcCreate(void);
+	void onNcDestory(void);
 
-	void onCreate(WindowUI::WindowMessage& windowMessage);
-	void onDestory(WindowUI::WindowMessage& windowMessage);
-	void onClose(WindowUI::WindowMessage& windowMessage);
+	void onCreate(void);
+	void onDestory(void);
+	void onClose(void);
+
+	void onPaint(HDC hDC);
 
 	void onSize(WindowUI::WindowMessage& windowMessage);
 
-	void onPaint(WindowUI::WindowMessage& windowMessage);
-
-	void onCommand(WindowUI::WindowMessage& windowMessage);
-	void onAbout(WindowUI::WindowMessage& windowMessage);
+	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl);
+	void onAbout(void);
 };
 
 

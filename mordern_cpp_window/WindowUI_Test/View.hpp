@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace WindowUI_Test
 {
 
 
@@ -41,22 +41,23 @@ public:
 	~View()
 	{
 		WindowUI::debugPrintln(L"View.dtor() - begin");
+
 		WindowUI::debugPrintln(L"View.dtor() - end");
 	}
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
+		getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage)
+		{
+			SetWindowTextW(windowMessage.hWnd, L"View");
+			defaultWindowMessageHandler(windowMessage);
+		}
+		;
+
 		getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
+
 		getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
-	}
-
-	void onCreate(WindowUI::WindowMessage& windowMessage)
-	{
-		SetWindowTextW(windowMessage.hWnd, L"View");
-
-		defaultWindowMessageHandler(windowMessage);
 	}
 
 	void onClose(WindowUI::WindowMessage& windowMessage)

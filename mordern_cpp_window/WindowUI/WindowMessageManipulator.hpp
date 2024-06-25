@@ -579,9 +579,9 @@ public:
 	}
 
 public:
-	void Result(bool rv)
+	void Result(BOOL rv)
 	{
-		getWindowMessage()->lResult = (LRESULT) rv ? 1 : 0;
+		getWindowMessage()->lResult = (LRESULT)rv;
 	}
 };
 
@@ -594,6 +594,45 @@ WM_NCDESTROY
 */
 using WM_NCDESTROY_WindowMessageManipulator = WM_DESTROY_WindowMessageManipulator;
 
+
+
+//===========================================================================
+// void OnCommand(UINT uNotifyCode, int nID, CWindow wndCtl)
+/*
+WM_COMMAND
+		func((UINT)HIWORD(wParam), (int)LOWORD(wParam), (HWND)lParam); \
+		lResult = 0; \
+*/
+class WM_COMMAND_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_COMMAND_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	UINT uNotifyCode(void)
+	{
+		return (UINT)HIWORD(getWindowMessage()->wParam);
+	}
+
+	int nID(void)
+	{
+		return (int)LOWORD(getWindowMessage()->wParam);
+	}
+
+	HWND wndCtl(void)
+	{
+		return (HWND)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
 
 
 
