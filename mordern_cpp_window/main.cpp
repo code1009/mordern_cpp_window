@@ -25,29 +25,6 @@ void WindowUI_Example1_Thread0(void)
 	WindowUI::debugPrintln(L"windowMessageLoop.runLoop() - begin");
 	windowMessageLoop.runLoop();
 	WindowUI::debugPrintln(L"windowMessageLoop.runLoop() - end");
-
-	/*
-
-MainFrame.ctor() - begin
-MainFrame.onNcCreate()
-MainFrame.onCreate()
-MainFrame.ctor() - end
-
-windowMessageLoop.runLoop() - begin
-
-MainFrame.onClose() - begin
-
-MainFrame.onDestory() - begin
-MainFrame.onDestory() - end
-MainFrame.onNcDestory()
-
-MainFrame.onClose() - end
-
-windowMessageLoop.runLoop() - end
-
-MainFrame.dtor()
-
-	*/
 }
 
 void WindowUI_Example1_Thread1(void)

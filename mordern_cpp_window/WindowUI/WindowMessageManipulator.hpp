@@ -80,11 +80,7 @@ public:
 public:
 	LPCREATESTRUCT lpCreateStruct(void) 
 	{ 
-		LPARAM lParam;
-
-
-		lParam = getWindowMessage()->lParam;
-		return (LPCREATESTRUCT)(lParam); 
+		return (LPCREATESTRUCT)(getWindowMessage()->lParam);
 	}
 
 public:
@@ -109,13 +105,20 @@ public:
 	}
 
 public:
-	HWND wndFocus(void) { return (HWND)getWindowMessage()->wParam; }
-	LPARAM lInitParam(void) { return getWindowMessage()->lParam; }
+	HWND wndFocus(void)
+	{ 
+		return (HWND)getWindowMessage()->wParam; 
+	}
+
+	LPARAM lInitParam(void) 
+	{ 
+		return getWindowMessage()->lParam; 
+	}
 
 public:
-	void Result(bool rv)
+	void Result(BOOL rv)
 	{
-		getWindowMessage()->lResult = (LRESULT) rv ? 1 : 0;
+		getWindowMessage()->lResult = (LRESULT) rv;
 	}
 };
 
@@ -134,13 +137,20 @@ public:
 	}
 
 public:
-	HWND wnd(void) { return (HWND)getWindowMessage()->wParam; }
-	PCOPYDATASTRUCT pCopyDataStruct(void) { return (PCOPYDATASTRUCT)getWindowMessage()->lParam; }
+	HWND wnd(void) 
+	{ 
+		return (HWND)getWindowMessage()->wParam; 
+	}
+
+	PCOPYDATASTRUCT pCopyDataStruct(void) 
+	{ 
+		return (PCOPYDATASTRUCT)getWindowMessage()->lParam; 
+	}
 
 public:
-	void Result(bool rv)
+	void Result(BOOL rv)
 	{
-		getWindowMessage()->lResult = (LRESULT)rv ? 1 : 0;
+		getWindowMessage()->lResult = (LRESULT)rv;
 	}
 };
 
@@ -181,6 +191,7 @@ public:
 	{
 	}
 
+public:
 	POINT point(void)
 	{
 		POINT pt{ GET_X_LPARAM(getWindowMessage()->lParam), GET_Y_LPARAM(getWindowMessage()->lParam) };
@@ -194,6 +205,164 @@ public:
 		getWindowMessage()->lResult = (LRESULT)0;
 	}
 };
+
+//===========================================================================
+// void OnSize(UINT nType, CSize size)
+/*
+WM_SIZE
+		func((UINT)wParam, _WTYPES_NS::CSize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))); \
+		lResult = 0; \
+*/
+class WM_SIZE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_SIZE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	UINT nTYPE(void)
+	{
+		return (UINT)getWindowMessage()->wParam;
+	}
+
+	SIZE size(void)
+	{
+		SIZE size{ GET_X_LPARAM(getWindowMessage()->lParam), GET_Y_LPARAM(getWindowMessage()->lParam) };
+
+		return size;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// void OnActivate(UINT nState, BOOL bMinimized, CWindow wndOther)
+/*
+WM_ACTIVATE
+		func((UINT)LOWORD(wParam), (BOOL)HIWORD(wParam), (HWND)lParam); \
+		lResult = 0; \
+*/
+class WM_ACTIVATE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_ACTIVATE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	UINT nState(void)
+	{
+		return (UINT)LOWORD(getWindowMessage()->wParam);
+	}
+
+	BOOL bMinimized(void)
+	{
+		return (BOOL)HIWORD(getWindowMessage()->wParam);
+	}
+
+	HWND wndOther(void)
+	{
+		return (HWND)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// void OnSetFocus(CWindow wndOld)
+/*
+WM_SETFOCUS
+		func((HWND)wParam); \
+		lResult = 0; \
+*/
+class WM_SETFOCUS_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_SETFOCUS_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	HWND wndOld(void)
+	{
+		return (HWND)getWindowMessage()->wParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// void OnKillFocus(CWindow wndFocus)
+/*
+WM_KILLFOCUS
+		func((HWND)wParam); \
+		lResult = 0; \
+*/
+class WM_KILLFOCUS_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_KILLFOCUS_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	HWND wndFocus(void)
+	{
+		return (HWND)getWindowMessage()->wParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// void OnEnable(BOOL bEnable)
+/*
+WM_ENABLE
+		func((BOOL)wParam); \
+		lResult = 0; \
+*/
+class WM_ENABLE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_ENABLE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	BOOL bEnable(void)
+	{
+		return (BOOL)getWindowMessage()->wParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
 
 //===========================================================================
 // BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct)
@@ -212,11 +381,7 @@ public:
 public:
 	LPCREATESTRUCT lpCreateStruct(void)
 	{
-		LPARAM lParam;
-
-
-		lParam = getWindowMessage()->lParam;
-		return (LPCREATESTRUCT)(lParam);
+		return (LPCREATESTRUCT)(getWindowMessage()->lParam);
 	}
 
 public:

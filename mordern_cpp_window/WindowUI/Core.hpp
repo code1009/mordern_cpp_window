@@ -145,6 +145,43 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+class SubclassWindow : public Window
+{
+private:
+	WNDPROC _ChainWindowProc{ nullptr };
+
+public:
+	SubclassWindow();
+	virtual ~SubclassWindow();
+
+public:
+	SubclassWindow(const SubclassWindow&) = delete;
+	SubclassWindow& operator=(const SubclassWindow&) = delete;
+
+	SubclassWindow(SubclassWindow&&) = delete;
+	SubclassWindow& operator=(SubclassWindow&&) = delete;
+
+public:
+	virtual WNDPROC subclassWindow(HWND hwnd);
+	virtual WNDPROC unsubclassWindow(WNDPROC windowProc = nullptr);
+
+	// 윈도우 프로시저 안에서 호출
+public:
+	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage) override;
+
+public:
+	virtual WNDPROC getChainWindowProc(void);
+
+public:
+	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 class BasicWindow : public Window
 {
 private:
@@ -176,43 +213,6 @@ public:
 		HWND hWndParent = nullptr,
 		HMENU hMenu = nullptr);
 	virtual void destroyWindow(void);
-};
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-class SubclassWindow : public Window
-{
-private:
-	WNDPROC _ChainWindowProc{ nullptr };
-
-public:
-	SubclassWindow();
-	virtual ~SubclassWindow();
-
-public:
-	SubclassWindow(const SubclassWindow&) = delete;
-	SubclassWindow& operator=(const SubclassWindow&) = delete;
-
-	SubclassWindow(SubclassWindow&&) = delete;
-	SubclassWindow& operator=(SubclassWindow&&) = delete;
-
-public:
-	virtual WNDPROC subclassWindow(HWND hwnd);
-	virtual WNDPROC unsubclassWindow(WNDPROC windowProc = nullptr);
-
-	// 윈도우 프로시저 안에서 호출
-public:
-	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage) override;
-
-public:
-	virtual WNDPROC getChainWindowProc(void);
-
-public:
-	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
 };
 
 

@@ -48,6 +48,9 @@
     <ClInclude Include="WindowUI_Example1\AboutModelessDialog.hpp">
       <Filter>WindowUI_Example1</Filter>
     </ClInclude>
+    <ClInclude Include="WindowUI_Example1\View.hpp">
+      <Filter>WindowUI_Example1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

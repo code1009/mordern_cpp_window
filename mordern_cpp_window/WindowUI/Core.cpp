@@ -345,107 +345,6 @@ void Window::onWindowMessage(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-BasicWindow::BasicWindow()
-{
-}
-
-BasicWindow::~BasicWindow()
-{
-}
-
-WNDCLASSEXW& BasicWindow::getWindowClass(void)
-{
-	return _WindowClass;
-}
-
-void BasicWindow::initializeWindowClass(void)
-{
-	memset(&_WindowClass, 0, sizeof(_WindowClass));
-
-	_WindowClass.cbSize = sizeof(_WindowClass);
-	_WindowClass.style = CS_HREDRAW | CS_VREDRAW;
-	_WindowClass.cbClsExtra = 0;
-	_WindowClass.cbWndExtra = 0;
-	_WindowClass.hInstance = getWindowInstance()->getHandle();
-	_WindowClass.lpfnWndProc = WindowProc;
-	_WindowClass.lpszClassName = L"TheBaseWindowClass";
-	_WindowClass.lpszMenuName = nullptr;
-	_WindowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-	_WindowClass.hCursor = getWindowInstance()->loadCursor(IDC_ARROW);
-	_WindowClass.hIcon = nullptr;
-	_WindowClass.hIconSm = nullptr;
-}
-
-void BasicWindow::registerWindowClass(void)
-{
-	WNDCLASSEXW wndClass;
-	BOOL rv;
-
-
-	rv = ::GetClassInfoExW(_WindowClass.hInstance, _WindowClass.lpszClassName, &wndClass);
-	if (FALSE == rv)
-	{
-		ATOM atom = ::RegisterClassExW(&_WindowClass);
-		if (!atom)
-		{
-			reportError(L"registerWindowClass");
-		}
-	}
-}
-
-HWND BasicWindow::createWindow(
-	LPCWSTR lpWindowName,
-	DWORD dwStyle,
-	DWORD dwExStyle,
-	int X,
-	int Y,
-	int nWidth,
-	int nHeight,
-	HWND hWndParent,
-	HMENU hMenu
-)
-{
-	HWND handle;
-
-
-	handle = ::CreateWindowExW(
-		dwExStyle,
-		_WindowClass.lpszClassName,
-		lpWindowName,
-		dwStyle,
-		X,
-		Y,
-		nWidth,
-		nHeight,
-		hWndParent,
-		hMenu,
-		_WindowClass.hInstance,
-		this
-	);
-
-	return handle;
-}
-
-void BasicWindow::destroyWindow(void)
-{
-	HWND handle;
-
-
-	handle = getHandle();
-	if (handle)
-	{
-		::DestroyWindow(handle);
-	}
-
-	setHandle(nullptr);
-}
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
 SubclassWindow::SubclassWindow()
 {
 }
@@ -540,6 +439,107 @@ void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 	{
 		callDefWindowProc(windowMessage);
 	}
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+BasicWindow::BasicWindow()
+{
+}
+
+BasicWindow::~BasicWindow()
+{
+}
+
+WNDCLASSEXW& BasicWindow::getWindowClass(void)
+{
+	return _WindowClass;
+}
+
+void BasicWindow::initializeWindowClass(void)
+{
+	memset(&_WindowClass, 0, sizeof(_WindowClass));
+
+	_WindowClass.cbSize = sizeof(_WindowClass);
+	_WindowClass.style = CS_HREDRAW | CS_VREDRAW;
+	_WindowClass.cbClsExtra = 0;
+	_WindowClass.cbWndExtra = 0;
+	_WindowClass.hInstance = getWindowInstance()->getHandle();
+	_WindowClass.lpfnWndProc = WindowProc;
+	_WindowClass.lpszClassName = L"TheBaseWindowClass";
+	_WindowClass.lpszMenuName = nullptr;
+	_WindowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
+	_WindowClass.hCursor = getWindowInstance()->loadCursor(IDC_ARROW);
+	_WindowClass.hIcon = nullptr;
+	_WindowClass.hIconSm = nullptr;
+}
+
+void BasicWindow::registerWindowClass(void)
+{
+	WNDCLASSEXW wndClass;
+	BOOL rv;
+
+
+	rv = ::GetClassInfoExW(_WindowClass.hInstance, _WindowClass.lpszClassName, &wndClass);
+	if (FALSE == rv)
+	{
+		ATOM atom = ::RegisterClassExW(&_WindowClass);
+		if (!atom)
+		{
+			reportError(L"registerWindowClass");
+		}
+	}
+}
+
+HWND BasicWindow::createWindow(
+	LPCWSTR lpWindowName,
+	DWORD dwStyle,
+	DWORD dwExStyle,
+	int X,
+	int Y,
+	int nWidth,
+	int nHeight,
+	HWND hWndParent,
+	HMENU hMenu
+)
+{
+	HWND handle;
+
+
+	handle = ::CreateWindowExW(
+		dwExStyle,
+		_WindowClass.lpszClassName,
+		lpWindowName,
+		dwStyle,
+		X,
+		Y,
+		nWidth,
+		nHeight,
+		hWndParent,
+		hMenu,
+		_WindowClass.hInstance,
+		this
+	);
+
+	return handle;
+}
+
+void BasicWindow::destroyWindow(void)
+{
+	HWND handle;
+
+
+	handle = getHandle();
+	if (handle)
+	{
+		::DestroyWindow(handle);
+	}
+
+	setHandle(nullptr);
 }
 
 
