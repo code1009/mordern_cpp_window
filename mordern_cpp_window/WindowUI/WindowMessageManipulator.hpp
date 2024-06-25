@@ -556,6 +556,154 @@ public:
 	}
 };
 
+//===========================================================================
+// void OnShowWindow(BOOL bShow, UINT nStatus)
+/*
+WM_SHOWWINDOW
+		func((BOOL)wParam, (int)lParam); \
+		lResult = 0; \
+*/
+class WM_SHOWWINDOW_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_SHOWWINDOW_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	BOOL bShow(void)
+	{
+		return (BOOL)getWindowMessage()->wParam;
+	}
+
+	UINT nStatus(void)
+	{
+		return (UINT)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// HBRUSH OnCtlColorEdit(CDCHandle dc, CEdit edit)
+/*
+WM_CTLCOLOREDIT
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+class WM_CTLCOLOREDIT_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_CTLCOLOREDIT_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	HDC dc(void)
+	{
+		return (HDC)getWindowMessage()->wParam;
+	}
+
+	HWND ctl(void)
+	{
+		return (HWND)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(HBRUSH rv)
+	{
+		getWindowMessage()->lResult = (LRESULT)rv;
+	}
+};
+
+//===========================================================================
+// HBRUSH OnCtlColorListBox(CDCHandle dc, CListBox listBox)
+/*
+WM_CTLCOLORLISTBOX
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+using WM_CTLCOLORLISTBOX_WindowMessageManipulator = WM_CTLCOLOREDIT_WindowMessageManipulator;
+
+//===========================================================================
+// HBRUSH OnCtlColorBtn(CDCHandle dc, CButton button)
+/*
+WM_CTLCOLORBTN
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+using WM_CTLCOLORBTN_WindowMessageManipulator = WM_CTLCOLOREDIT_WindowMessageManipulator;
+
+//===========================================================================
+// HBRUSH OnCtlColorDlg(CDCHandle dc, CWindow wnd)
+/*
+WM_CTLCOLORDLG
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+using WM_CTLCOLORDLG_WindowMessageManipulator = WM_CTLCOLOREDIT_WindowMessageManipulator;
+
+//===========================================================================
+// HBRUSH OnCtlColorScrollBar(CDCHandle dc, CScrollBar scrollBar)
+/*
+WM_CTLCOLORSCROLLBAR
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+using WM_CTLCOLORSCROLLBAR_WindowMessageManipulator = WM_CTLCOLOREDIT_WindowMessageManipulator;
+
+//===========================================================================
+// HBRUSH OnCtlColorScrollBar(CDCHandle dc, CScrollBar scrollBar)
+/*
+WM_CTLCOLORSCROLLBAR
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+using WM_CTLCOLORSCROLLBAR_WindowMessageManipulator = WM_CTLCOLOREDIT_WindowMessageManipulator;
+
+//===========================================================================
+// HBRUSH OnCtlColorStatic(CDCHandle dc, CStatic wndStatic)
+/*
+WM_CTLCOLORSTATIC
+		lResult = (LRESULT)func((HDC)wParam, (HWND)lParam); \
+*/
+using WM_CTLCOLORSTATIC_WindowMessageManipulator = WM_CTLCOLOREDIT_WindowMessageManipulator;
+
+
+//===========================================================================
+// void OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
+/*
+WM_SETTINGCHANGE
+		func((UINT)wParam, (LPCTSTR)lParam); \
+		lResult = 0; \
+*/
+class WM_SETTINGCHANGE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_SETTINGCHANGE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	UINT uFlags(void)
+	{
+		return (UINT)getWindowMessage()->wParam;
+	}
+
+	LPCTSTR lpszSection(void)
+	{
+		return (LPCTSTR)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+
 
 
 //===========================================================================
@@ -593,6 +741,8 @@ WM_NCDESTROY
 		lResult = 0; \
 */
 using WM_NCDESTROY_WindowMessageManipulator = WM_DESTROY_WindowMessageManipulator;
+
+
 
 
 
