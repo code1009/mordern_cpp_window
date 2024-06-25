@@ -42,6 +42,9 @@ public:
 
 	void onCommand(WindowUI::WindowMessage& windowMessage);
 	void onAbout(WindowUI::WindowMessage& windowMessage);
+
+public:
+	void draw(HDC hdc, RECT& rect);
 };
 
 

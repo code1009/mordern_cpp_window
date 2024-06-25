@@ -18,23 +18,30 @@ namespace WindowUI_Example1
 class View : public WindowUI::BasicWindow
 {
 public:
-	explicit View(HWND hParent)
+	explicit View(HWND hParent, const RECT& rect)
 	{
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.ctor() - begin");
 
 
+		//-----------------------------------------------------------------------
 		registerWindowMessageHandler();
 
 
+		//-----------------------------------------------------------------------
 		initializeWindowClass();
 		registerWindowClass();
-		createWindow(L"View", WS_CHILD| WS_VISIBLE, 0, 0, 0, 0, 0, hParent);
+		createWindow(L"View", WS_CHILD | WS_VISIBLE, 0,
+			rect.left , rect.top, rect.right, rect.bottom,
+			hParent);
 
 
+		//-----------------------------------------------------------------------
 		::ShowWindow(getHandle(), SW_SHOW);
 		::UpdateWindow(getHandle());
 
 
+		//-----------------------------------------------------------------------
 		WindowUI::debugPrintln(L"View.ctor() - end");
 	}
 
@@ -46,10 +53,10 @@ public:
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_CREATE ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
 		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
-		getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-		getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
+		getWindowMessageHandler(WM_CLOSE  ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_PAINT  ) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
 	}
 
 	void onCreate(WindowUI::WindowMessage& windowMessage)
@@ -72,11 +79,26 @@ public:
 
 	void onPaint(WindowUI::WindowMessage& windowMessage)
 	{
+		RECT rect;
+
+
+		GetClientRect(getHandle(), &rect);
+
+
 		PAINTSTRUCT ps;
 
 
 		HDC hdc = BeginPaint(getHandle(), &ps);
-		RECT rect{ 0,0, 500, 100 };
+
+
+		draw(hdc, rect);
+
+
+		EndPaint(getHandle(), &ps);
+	}
+
+	void draw(HDC hdc, RECT& rect)
+	{
 		HBRUSH hbr;
 
 
@@ -84,9 +106,8 @@ public:
 
 
 		FillRect(hdc, &rect, hbr);
+		SetBkMode(hdc, TRANSPARENT);
 		DrawText(hdc, L"View", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
-
-		EndPaint(getHandle(), &ps);
 	}
 };
 

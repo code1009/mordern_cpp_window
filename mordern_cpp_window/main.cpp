@@ -103,16 +103,18 @@ int APIENTRY wWinMain(
 )
 {
 	/*
-	$(SolutionDir)$(Configuration)\
-
-	중간 디렉토리 
-	$(Configuration)\ 
-	$(IntDir)/%(RelativeDir)/
+	구성 속성/
+		C/C++/
+			출력 파일/
+				개체 파일 이름: $(IntDir)
+				에서
+				개체 파일 이름: $(IntDir)%(RelativeDir)
+				으로
 	*/
 	WindowUI::getWindowInstance()->setHandle(hInstance);
 
 	WindowUI_Example1_Main();
-	WindowUI_Test_Main();
+	//WindowUI_Test_Main();
 
 
 	return 0;
