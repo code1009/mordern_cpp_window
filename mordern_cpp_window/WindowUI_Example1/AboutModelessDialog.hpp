@@ -18,7 +18,7 @@ namespace WindowUI_Example1
 class AboutModelessDialog : public WindowUI::BasicModelessDialog
 {
 public:
-	AboutModelessDialog():
+	explicit AboutModelessDialog(HWND hParent):
 		WindowUI::BasicModelessDialog{ IDD_ABOUTBOX }
 	{
 		WindowUI::debugPrintln(L"AboutModelessDialog.ctor() - begin");
@@ -26,7 +26,7 @@ public:
 
 		registerWindowMessageHandler();
 
-		createDialog(nullptr);
+		createDialog(hParent);
 		::ShowWindow(getHandle(), SW_SHOW);
 
 		WindowUI::debugPrintln(L"AboutModelessDialog.ctor() - end");
@@ -49,7 +49,11 @@ public:
 
 
 		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(); };
-
+		
+		getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage)
+		{
+			onClose();
+		};
 
 		getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage)
 		{
@@ -69,6 +73,15 @@ public:
 	void onDestory(void)
 	{
 		WindowUI::debugPrintln(L"AboutModelessDialog.onDestory()");
+	}
+
+	void onClose(void)
+	{
+		WindowUI::debugPrintln(L"AboutModelessDialog.onClose() - begin");
+
+		destroyWindow();
+
+		WindowUI::debugPrintln(L"AboutModelessDialog.onClose() - end");
 	}
 
 	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl)

@@ -583,7 +583,7 @@ std::int64_t BasicModalDialog::endDialog(std::int64_t result)
 	std::int64_t rv;
 
 
-	rv = ::EndDialog(getHandle(), result);
+	rv = ::EndDialog(getHandle(), static_cast<INT_PTR>(result));
 
 	return rv;
 }

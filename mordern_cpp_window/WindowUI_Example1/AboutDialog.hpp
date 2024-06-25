@@ -71,6 +71,7 @@ public:
 		WindowUI::debugPrintln(L"AboutDialog.onDestory()");
 	}
 
+	void onClose(void);
 	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 	{
 		switch (nID)

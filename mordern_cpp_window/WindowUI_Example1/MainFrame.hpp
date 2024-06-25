@@ -18,7 +18,7 @@ namespace WindowUI_Example1
 class MainFrame : public WindowUI::BasicWindow
 {
 public:
-	AboutModelessDialog _AboutModelessDialog;
+	std::shared_ptr<AboutModelessDialog> _AboutModelessDialog;
 
 public:
 	MainFrame();

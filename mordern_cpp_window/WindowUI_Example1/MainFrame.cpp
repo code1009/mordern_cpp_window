@@ -42,6 +42,7 @@ MainFrame::MainFrame()
 
 
 	//-----------------------------------------------------------------------
+	_AboutModelessDialog = std::make_shared<AboutModelessDialog>(getHandle());
 
 
 	//-----------------------------------------------------------------------
@@ -55,7 +56,11 @@ MainFrame::MainFrame()
 
 MainFrame::~MainFrame()
 {
-	WindowUI::debugPrintln(L"MainFrame.dtor()");
+	WindowUI::debugPrintln(L"MainFrame.dtor() - begin");
+
+	_AboutModelessDialog.reset();
+
+	WindowUI::debugPrintln(L"MainFrame.dtor() - end");
 }
 
 void MainFrame::registerWindowMessageHandler(void)
