@@ -499,6 +499,62 @@ public:
 	}
 };
 
+//===========================================================================
+// void OnSysColorChange()
+/*
+WM_SYSCOLORCHANGE
+		func(); \
+		lResult = 0; \
+*/
+class WM_SYSCOLORCHANGE_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_SYSCOLORCHANGE_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
+
+//===========================================================================
+// void OnEndSession(BOOL bEnding, UINT uLogOff)
+/*
+WM_ENDSESSION
+		func((BOOL)wParam, (UINT)lParam); \
+		lResult = 0; \
+*/
+class WM_ENDSESSION_WindowMessageManipulator : public WindowMessageManipulator
+{
+public:
+	explicit WM_ENDSESSION_WindowMessageManipulator(WindowMessage* windowMessage) :
+		WindowMessageManipulator(windowMessage)
+	{
+	}
+
+public:
+	BOOL bEnding(void)
+	{
+		return (BOOL)getWindowMessage()->wParam;
+	}
+
+	UINT uLogOff(void)
+	{
+		return (UINT)getWindowMessage()->lParam;
+	}
+
+public:
+	void Result(void)
+	{
+		getWindowMessage()->lResult = (LRESULT)0;
+	}
+};
 
 
 
