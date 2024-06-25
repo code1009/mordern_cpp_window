@@ -221,30 +221,60 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class BasicDialog : public Window
+class BasicModalDialog : public Window
 {
 private:
 	std::int32_t _TemplateNameId{ -1 };
 
 public:
-	explicit BasicDialog(std::int32_t templateNameId);
-	virtual ~BasicDialog();
+	explicit BasicModalDialog(std::int32_t templateNameId);
+	virtual ~BasicModalDialog();
 
 public:
-	BasicDialog(const BasicDialog&) = delete;
-	BasicDialog& operator=(const BasicDialog&) = delete;
+	BasicModalDialog(const BasicModalDialog&) = delete;
+	BasicModalDialog& operator=(const BasicModalDialog&) = delete;
 
-	BasicDialog(BasicDialog&&) = delete;
-	BasicDialog& operator=(BasicDialog&&) = delete;
+	BasicModalDialog(BasicModalDialog&&) = delete;
+	BasicModalDialog& operator=(BasicModalDialog&&) = delete;
 
 public:
 	virtual std::int32_t getTemplateNameId(void);
 
 public:
-	virtual int doModal(HWND hwndParent);
+	virtual std::int64_t doModal(HWND hwndParent);
 
 public:
-	virtual int createDialog(HWND hwndParent);
+	virtual std::int64_t endDialog(std::int64_t result);
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+class BasicModelessDialog : public Window
+{
+private:
+	std::int32_t _TemplateNameId{ -1 };
+
+public:
+	explicit BasicModelessDialog(std::int32_t templateNameId);
+	virtual ~BasicModelessDialog();
+
+public:
+	BasicModelessDialog(const BasicModelessDialog&) = delete;
+	BasicModelessDialog& operator=(const BasicModelessDialog&) = delete;
+
+	BasicModelessDialog(BasicModelessDialog&&) = delete;
+	BasicModelessDialog& operator=(BasicModelessDialog&&) = delete;
+
+public:
+	virtual std::int32_t getTemplateNameId(void);
+
+public:
+	virtual HWND createDialog(HWND hwndParent);
+	virtual void destroyWindow(void);
 };
 
 

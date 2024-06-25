@@ -18,6 +18,9 @@ namespace WindowUI_Example1
 class MainFrame : public WindowUI::BasicWindow
 {
 public:
+	AboutModelessDialog _AboutModelessDialog;
+
+public:
 	MainFrame();
 	virtual ~MainFrame();
 
@@ -33,8 +36,10 @@ public:
 	void onDestory(void);
 	void onClose(void);
 
-	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl);
 	void onPaint(HDC hDC);
+
+	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl);
+	void onAbout(void);
 };
 
 

@@ -382,10 +382,10 @@ void BasicWindow::registerWindowClass(void)
 	BOOL rv;
 
 
-	rv = GetClassInfoExW(_WindowClass.hInstance, _WindowClass.lpszClassName, &wndClass);
+	rv = ::GetClassInfoExW(_WindowClass.hInstance, _WindowClass.lpszClassName, &wndClass);
 	if (FALSE == rv)
 	{
-		ATOM atom = RegisterClassExW(&_WindowClass);
+		ATOM atom = ::RegisterClassExW(&_WindowClass);
 		if (!atom)
 		{
 			reportError(L"registerWindowClass");
@@ -408,7 +408,7 @@ HWND BasicWindow::createWindow(
 	HWND handle;
 
 
-	handle = CreateWindowExW(
+	handle = ::CreateWindowExW(
 		dwExStyle,
 		_WindowClass.lpszClassName,
 		lpWindowName,
@@ -434,7 +434,7 @@ void BasicWindow::destroyWindow(void)
 	handle = getHandle();
 	if (handle)
 	{
-		DestroyWindow(handle);
+		::DestroyWindow(handle);
 	}
 
 	setHandle(nullptr);
@@ -548,23 +548,26 @@ void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-BasicDialog::BasicDialog(std::int32_t templateNameId):
+BasicModalDialog::BasicModalDialog(std::int32_t templateNameId):
 	_TemplateNameId{ templateNameId }
 {
 }
 
-BasicDialog::~BasicDialog()
+BasicModalDialog::~BasicModalDialog()
 {
 }
 
-std::int32_t BasicDialog::getTemplateNameId(void)
+std::int32_t BasicModalDialog::getTemplateNameId(void)
 {
 	return _TemplateNameId;
 }
 
-int BasicDialog::doModal(HWND hwndParent)
+std::int64_t BasicModalDialog::doModal(HWND hwndParent)
 {
-	DialogBoxParamW(
+	std::int64_t rv;
+
+
+	rv = ::DialogBoxParamW(
 		getWindowInstance()->getHandle(),
 		getWindowInstance()->makeIntResource(getTemplateNameId()),
 		hwndParent,
@@ -572,12 +575,44 @@ int BasicDialog::doModal(HWND hwndParent)
 		reinterpret_cast<LPARAM>(this)
 	);
 
-	return 0;
+	return rv;
 }
 
-int BasicDialog::createDialog(HWND hwndParent)
+std::int64_t BasicModalDialog::endDialog(std::int64_t result)
 {
-	CreateDialogParamW(
+	std::int64_t rv;
+
+
+	rv = ::EndDialog(getHandle(), result);
+
+	return rv;
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+BasicModelessDialog::BasicModelessDialog(std::int32_t templateNameId) :
+	_TemplateNameId{ templateNameId }
+{
+}
+
+BasicModelessDialog::~BasicModelessDialog()
+{
+}
+
+std::int32_t BasicModelessDialog::getTemplateNameId(void)
+{
+	return _TemplateNameId;
+}
+
+HWND BasicModelessDialog::createDialog(HWND hwndParent)
+{
+	HWND hwnd;
+
+
+	hwnd = ::CreateDialogParamW(
 		getWindowInstance()->getHandle(), 
 		getWindowInstance()->makeIntResource(getTemplateNameId()),
 		hwndParent,
@@ -586,7 +621,21 @@ int BasicDialog::createDialog(HWND hwndParent)
 	);
 
 
-	return 0;
+	return hwnd;
+}
+
+void BasicModelessDialog::destroyWindow(void)
+{
+	HWND handle;
+
+
+	handle = getHandle();
+	if (handle)
+	{
+		::DestroyWindow(handle);
+	}
+
+	setHandle(nullptr);
 }
 
 
@@ -664,14 +713,14 @@ INT_PTR __stdcall DialogProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 {
 	if (WM_INITDIALOG == message)
 	{
-		auto userData = reinterpret_cast<BasicDialog*>(lParam);
+		auto userData = reinterpret_cast<BasicModalDialog*>(lParam);
 		::SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(userData));
 
-		(reinterpret_cast<BasicDialog*>(userData))->setHandle(hwnd);
+		(reinterpret_cast<BasicModalDialog*>(userData))->setHandle(hwnd);
 	}
 
 
-	auto dialogPtr = reinterpret_cast<BasicDialog*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+	auto dialogPtr = reinterpret_cast<BasicModalDialog*>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA));
 	if (dialogPtr)
 	{
 		WindowMessage windowMessage{ hwnd, message, wParam, lParam };

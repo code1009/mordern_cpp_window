@@ -6,6 +6,8 @@
 #include "../WindowUI/Core.hpp"
 #include "../WindowUI/WindowMessageManipulator.hpp"
 
+#include "AboutDialog.hpp"
+#include "AboutModelessDialog.hpp"
 #include "MainFrame.hpp"
 
 
@@ -162,27 +164,6 @@ void MainFrame::onClose(void)
 	WindowUI::debugPrintln(L"MainFrame.onClose() - end");
 }
 
-bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
-{
-	switch (nID)
-	{
-	case IDM_ABOUT:
-		return true;
-		break;
-
-	case IDM_EXIT:
-		destroyWindow();
-		return true;
-		break;
-
-	default:
-		break;
-	}
-
-
-	return false;
-}
-
 void MainFrame::onPaint(HDC hDC)
 {
 	// 최초 실행시 UpdateWindow()에 의해서
@@ -199,7 +180,35 @@ void MainFrame::onPaint(HDC hDC)
 	EndPaint(getHandle(), &ps);
 }
 
+bool MainFrame::onCommand(UINT uNotifyCode, int nID, HWND wndCtl)
+{
+	switch (nID)
+	{
+	case IDM_ABOUT:
+		onAbout();
+		return true;
+		break;
 
+	case IDM_EXIT:
+		destroyWindow();
+		return true;
+		break;
+
+	default:
+		break;
+	}
+
+
+	return false;
+}
+
+void MainFrame::onAbout(void)
+{
+	AboutDialog dlg;
+
+
+	dlg.doModal(getHandle());
+}
 
 
 

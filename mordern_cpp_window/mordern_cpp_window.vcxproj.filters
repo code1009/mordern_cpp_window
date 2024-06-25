@@ -42,6 +42,12 @@
     <ClInclude Include="Res\Resource.h">
       <Filter>res</Filter>
     </ClInclude>
+    <ClInclude Include="WindowUI_Example1\AboutDialog.hpp">
+      <Filter>WindowUI_Example1</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI_Example1\AboutModelessDialog.hpp">
+      <Filter>WindowUI_Example1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

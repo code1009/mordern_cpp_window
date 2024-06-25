@@ -103,6 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,6 +148,8 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowUI\Core.hpp" />
     <ClInclude Include="WindowUI\WindowMessageManipulator.hpp" />
+    <ClInclude Include="WindowUI_Example1\AboutDialog.hpp" />
+    <ClInclude Include="WindowUI_Example1\AboutModelessDialog.hpp" />
     <ClInclude Include="WindowUI_Example1\MainFrame.hpp" />
     <ClInclude Include="WindowUI_Example1\OtherWindow.hpp" />
   </ItemGroup>
