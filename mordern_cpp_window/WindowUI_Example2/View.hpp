@@ -18,6 +18,11 @@ namespace WindowUI_Example2
 class View : public WindowUI::BasicWindow
 {
 public:
+	CComQIPtr<IWebBrowser2> _pWB2;
+	CComQIPtr<IHTMLDocument2> _pDocument;
+	HWND _hBrowser;
+
+public:
 	explicit View(
 		HWND hParent,
 		const RECT& rect,
@@ -34,8 +39,12 @@ public:
 	void onCreate(WindowUI::WindowMessage& windowMessage);
 	void onDestory(WindowUI::WindowMessage& windowMessage);
 	void onClose(WindowUI::WindowMessage& windowMessage);
-	void onPaint(WindowUI::WindowMessage& windowMessage);
-	void draw(HDC hdc, RECT& rect);
+
+	void onSize(WindowUI::WindowMessage& windowMessage);
+
+public:
+	void createBrowser(void);
+	void destroyBrowser(void);
 };
 
 

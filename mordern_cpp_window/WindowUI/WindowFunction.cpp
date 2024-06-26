@@ -30,7 +30,7 @@ std::wstring getWindowText(const Window* w)
 
 	length = GetWindowTextLengthW(w->getHandle());
 
-	
+
 	if (length > 0)
 	{
 		s.resize(length + 1, 0);
@@ -47,7 +47,23 @@ void setWindowText(const Window* w, const std::wstring& s)
 	SetWindowText(w->getHandle(), s.c_str());
 }
 
+void moveWindow(const Window* w, const RECT& rect, bool repaint)
+{
+	::MoveWindow(w->getHandle(),
+		rect.left, rect.top, 
+		rect.right - rect.left,
+		rect.bottom - rect.top,
+		repaint ? TRUE : FALSE);
+}
 
+void moveWindow(const HWND hwnd, const RECT& rect, bool repaint)
+{
+	::MoveWindow(hwnd,
+		rect.left, rect.top,
+		rect.right - rect.left,
+		rect.bottom - rect.top,
+		repaint ? TRUE : FALSE);
+}
 
 
 

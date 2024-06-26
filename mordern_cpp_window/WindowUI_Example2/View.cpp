@@ -3,6 +3,11 @@
 #include "../framework.h"
 #include "../res/resource.h"
 
+#include <atlbase.h>
+#include <atlhost.h>
+
+#include <winternl.h>
+
 #include "../WindowUI/WindowFunction.hpp"
 #include "../WindowUI/Core.hpp"
 #include "../WindowUI/WindowMessageManipulator.hpp"
@@ -32,10 +37,6 @@ View::View(
 )
 {
 	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.ctor() - begin");
-
-
-	//-----------------------------------------------------------------------
 	registerWindowMessageHandler();
 
 
@@ -49,6 +50,7 @@ View::View(
 	HWND hwnd;
 
 
+	style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	windowText = L"View";
 	hwnd = createWindow(
 		hParent,
@@ -61,6 +63,10 @@ View::View(
 	{
 		throw std::wstring(L"View::View(): createWindow() failed");
 	}
+
+
+	//-----------------------------------------------------------------------
+	createBrowser();
 
 
 	//-----------------------------------------------------------------------
@@ -77,16 +83,10 @@ View::View(
 	setWindowText(this, text);
 	text = getWindowText(this);
 	WindowUI::debugPrintln(text);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.ctor() - end");
 }
 
 View::~View()
 {
-	WindowUI::debugPrintln(L"View.dtor() - begin");
-	WindowUI::debugPrintln(L"View.dtor() - end");
 }
 
 void View::registerWindowMessageHandler(void)
@@ -94,82 +94,153 @@ void View::registerWindowMessageHandler(void)
 	getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
 	getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
 	getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-	getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
+	getWindowMessageHandler(WM_SIZE) = [this](WindowUI::WindowMessage& windowMessage) { onSize(windowMessage); };
 }
 
 void View::onCreate(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.onCreate() - begin");
-
-
-	//-----------------------------------------------------------------------
 	//SetWindowTextW(windowMessage.hWnd, L"View");
 
 	defaultWindowMessageHandler(windowMessage);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.onCreate() - end");
 }
 
 void View::onDestory(WindowUI::WindowMessage& windowMessage)
 {
-	WindowUI::debugPrintln(L"View.onDestory()");
+	destroyBrowser();
 }
 
 void View::onClose(WindowUI::WindowMessage& windowMessage)
 {
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.onClose() - begin");
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.onClose() - end");
 }
 
-void View::onPaint(WindowUI::WindowMessage& windowMessage)
+void View::onSize(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.onPaint() - begin");
+	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
 	//-----------------------------------------------------------------------
+	if (_hBrowser)
+	{
+		RECT rect;
+
+
+		GetClientRect(getHandle(), &rect);
+		WindowUI::moveWindow(_hBrowser, rect);
+	}
+}
+
+void View::destroyBrowser(void)
+{
+	_pDocument.Release();
+	_pWB2.Release();
+}
+
+void View::createBrowser(void)
+{
+	//------------------------------------------------------------------------
+	DWORD style;
+	DWORD styleEx;
+
+
+	style = WS_CHILD | WS_VISIBLE | WS_VSCROLL;
+	styleEx = 0;
+	_hBrowser=
+		CreateWindowExW(
+			styleEx,
+			L"AtlAxWin140", 
+			L"about:blank", 
+			style, 
+			0, 0, 0, 0, 
+			getHandle(),
+			0, 
+			getWindowClass().hInstance, 
+			0);
+	if (!_hBrowser)
+	{
+		throw std::wstring(L"View::createBrowser(): CreateWindowExW() failed");
+	}
+
+
+	//------------------------------------------------------------------------
+	{
+		CComPtr<IUnknown> punkIE;
+
+
+		if (AtlAxGetControl(_hBrowser, &punkIE) != S_OK)
+		{
+			throw std::wstring(L"View::createBrowser(): AtlAxGetControl() failed");
+		}
+
+		_pWB2 = punkIE;
+
+
+		punkIE.Release();
+	}
+
+
+	//------------------------------------------------------------------------
+	if (!_pWB2)
+	{
+		throw std::wstring(L"View::createBrowser(): _pWB2 failed");
+	}
+	_pWB2->put_Silent(VARIANT_TRUE);
+	_pWB2->put_RegisterAsDropTarget(VARIANT_FALSE);
+	_pWB2->get_Document((IDispatch**)&_pDocument);
+
+
+	//------------------------------------------------------------------------
+	{
+		CComPtr<IUnknown> punkIE;
+		ATL::CComPtr<IAxWinAmbientDispatch> ambient;
+
+
+		AtlAxGetHost(_hBrowser, &punkIE);
+		ambient = punkIE;
+		if (ambient)
+		{
+			ambient->put_AllowContextMenu(VARIANT_FALSE);
+		}
+	}
+
+
+	//------------------------------------------------------------------------
+	if (!_pDocument) 
+	{
+		throw std::wstring(L"View::createBrowser(): _pDocument failed");
+	}
+
+
+	//------------------------------------------------------------------------
+	WCHAR szModuleFilePath[MAX_PATH] = { 0 };
+
+
+	GetModuleFileNameW(NULL, szModuleFilePath, MAX_PATH);
+
+
+	//------------------------------------------------------------------------
+	WCHAR szURL[MAX_PATH] = { 0 };
+
+
+	wsprintfW(szURL, L"res://%s/%d", szModuleFilePath, IDR_HTML1);
+
+
+
+	//------------------------------------------------------------------------
+	CComBSTR url(szURL);
+
+
+	_pWB2->Navigate(url, NULL, NULL, NULL, NULL);
+
+
+	//------------------------------------------------------------------------
 	RECT rect;
 
 
 	GetClientRect(getHandle(), &rect);
-
-
-	PAINTSTRUCT ps;
-
-
-	HDC hdc = BeginPaint(getHandle(), &ps);
-
-
-	draw(hdc, rect);
-
-
-	EndPaint(getHandle(), &ps);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"View.onPaint() - end");
+	WindowUI::moveWindow(_hBrowser, rect);
 }
-
-void View::draw(HDC hdc, RECT& rect)
-{
-	HBRUSH hbr;
-
-
-	hbr = reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1);
-
-
-	FillRect(hdc, &rect, hbr);
-	SetBkMode(hdc, TRANSPARENT);
-	DrawText(hdc, L"View", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
-}
-
 
 
 

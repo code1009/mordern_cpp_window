@@ -3,6 +3,11 @@
 #include "../framework.h"
 #include "../res/resource.h"
 
+#include <atlbase.h>
+#include <atlhost.h>
+
+#include <winternl.h>
+
 #include "../WindowUI/WindowFunction.hpp"
 #include "../WindowUI/Core.hpp"
 #include "../WindowUI/WindowMessageManipulator.hpp"
@@ -43,7 +48,7 @@ MainFrame::MainFrame()
 
 
 	windowText = WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE);
-	hwnd = createWindow(nullptr, windowText.c_str());
+	hwnd = createWindow(nullptr, windowText.c_str(), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 	if (!hwnd)
 	{
 		throw std::wstring(L"MainFrame::MainFrame(): createWindow() failed");
@@ -54,11 +59,15 @@ MainFrame::MainFrame()
 	RECT rect;
 
 	
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = 500;
-	rect.bottom = 100;
-	_View = std::make_shared<View>(getHandle(), rect);
+	GetClientRect(getHandle(), &rect);
+
+
+	//-----------------------------------------------------------------------
+	std::shared_ptr<Window> view;
+
+
+	view = std::make_shared<View>(getHandle(), rect);
+	_View = view;
 
 
 	//-----------------------------------------------------------------------
@@ -120,7 +129,12 @@ void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
 	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
-	::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx, 100, FALSE);
+	//-----------------------------------------------------------------------
+	RECT rect;
+
+
+	GetClientRect(getHandle(), &rect);
+	WindowUI::moveWindow(_View.get(), rect);
 }
 
 void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)

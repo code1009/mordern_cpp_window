@@ -25,6 +25,8 @@ class Window;
 std::wstring getWindowText(const Window* w);
 void         setWindowText(const Window* w, const std::wstring& s);
 
+void moveWindow(const Window* w, const RECT& rect, bool repaint = false);
+void moveWindow(const HWND hwnd, const RECT& rect, bool repaint = false);
 
 
 
