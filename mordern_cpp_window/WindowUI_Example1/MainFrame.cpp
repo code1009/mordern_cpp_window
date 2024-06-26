@@ -145,7 +145,8 @@ void MainFrame::onCreate(WindowUI::WindowMessage& windowMessage)
 	WindowUI::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
-	defaultWindowMessageHandler(windowMessage);
+	//defaultWindowMessageHandler(windowMessage);
+	windowMessageManipulator.Result(0);
 
 
 	//-----------------------------------------------------------------------
