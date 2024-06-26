@@ -38,6 +38,7 @@ public:
 	void onCommand(WindowUI::WindowMessage& windowMessage);
 	void onAbout(WindowUI::WindowMessage& windowMessage);
 	void onExit(WindowUI::WindowMessage& windowMessage);
+	void onTest1(WindowUI::WindowMessage& windowMessage);
 };
 
 

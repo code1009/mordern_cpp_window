@@ -10,6 +10,8 @@
 #define IDD_ABOUTBOX			103
 #define IDM_ABOUT				104
 #define IDM_EXIT				105
+#define IDM_TEST1   			110
+#define IDM_TEST2   			111
 #define IDI_MORDERNCPPWINDOW			107
 #define IDI_SMALL				108
 #define IDC_MORDERNCPPWINDOW			109
@@ -26,6 +28,6 @@
 #define _APS_NEXT_RESOURCE_VALUE	129
 #define _APS_NEXT_COMMAND_VALUE		32771
 #define _APS_NEXT_CONTROL_VALUE		1000
-#define _APS_NEXT_SYMED_VALUE		110
+#define _APS_NEXT_SYMED_VALUE		112
 #endif
 #endif

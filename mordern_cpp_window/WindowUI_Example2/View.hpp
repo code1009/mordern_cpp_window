@@ -42,9 +42,17 @@ public:
 
 	void onSize(WindowUI::WindowMessage& windowMessage);
 
+	void onCommand(WindowUI::WindowMessage& windowMessage);
+	void onTest1(WindowUI::WindowMessage& windowMessage);
+
 public:
 	void createBrowser(void);
 	void destroyBrowser(void);
+
+public:
+	void browserScrollBottom(void);
+	void browserExecCommand(std::wstring command);
+	void browserInsertAdjacentHTML(std::wstring html);
 };
 
 

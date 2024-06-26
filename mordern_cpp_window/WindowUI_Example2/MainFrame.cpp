@@ -154,6 +154,10 @@ void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
 		return;
 		break;
 
+	case IDM_TEST1:
+		onTest1(windowMessage);
+		break;
+
 	default:
 		break;
 	}
@@ -175,7 +179,10 @@ void MainFrame::onExit(WindowUI::WindowMessage& windowMessage)
 	destroyWindow();
 }
 
-
+void MainFrame::onTest1(WindowUI::WindowMessage& windowMessage)
+{
+	sendMessage(_View.get(), windowMessage);
+}
 
 
 

@@ -20,7 +20,7 @@ namespace WindowUI
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-std::wstring getWindowText(const Window* w)
+std::wstring getWindowText(const Window* window)
 {
 	std::wstring s;
 
@@ -28,28 +28,28 @@ std::wstring getWindowText(const Window* w)
 	int length;
 
 
-	length = GetWindowTextLengthW(w->getHandle());
+	length = GetWindowTextLengthW(window->getHandle());
 
 
 	if (length > 0)
 	{
 		s.resize(length + 1, 0);
 
-		GetWindowTextW(w->getHandle(), s.data(), length + 1);
+		GetWindowTextW(window->getHandle(), s.data(), length + 1);
 	}
 
 
 	return s;
 }
 
-void setWindowText(const Window* w, const std::wstring& s)
+void setWindowText(const Window* window, const std::wstring& s)
 {
-	SetWindowText(w->getHandle(), s.c_str());
+	SetWindowText(window->getHandle(), s.c_str());
 }
 
-void moveWindow(const Window* w, const RECT& rect, bool repaint)
+void moveWindow(const Window* window, const RECT& rect, bool repaint)
 {
-	::MoveWindow(w->getHandle(),
+	::MoveWindow(window->getHandle(),
 		rect.left, rect.top, 
 		rect.right - rect.left,
 		rect.bottom - rect.top,
@@ -63,6 +63,17 @@ void moveWindow(const HWND hwnd, const RECT& rect, bool repaint)
 		rect.right - rect.left,
 		rect.bottom - rect.top,
 		repaint ? TRUE : FALSE);
+}
+
+void sendMessage(const Window* window, WindowMessage& windowMessage)
+{
+	windowMessage.lResult = 
+		::SendMessageW(
+			window->getHandle(), 
+			windowMessage.uMsg, 
+			windowMessage.wParam, 
+			windowMessage.lParam
+		);
 }
 
 

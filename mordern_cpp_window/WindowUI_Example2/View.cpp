@@ -66,7 +66,7 @@ View::View(
 
 
 	//-----------------------------------------------------------------------
-	createBrowser();
+	//createBrowser();
 
 
 	//-----------------------------------------------------------------------
@@ -95,12 +95,15 @@ void View::registerWindowMessageHandler(void)
 	getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
 	getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
 	getWindowMessageHandler(WM_SIZE) = [this](WindowUI::WindowMessage& windowMessage) { onSize(windowMessage); };
+	getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage) { onCommand(windowMessage); };
 }
 
 void View::onCreate(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
 	//SetWindowTextW(windowMessage.hWnd, L"View");
+	createBrowser();
+
 
 	defaultWindowMessageHandler(windowMessage);
 }
@@ -129,6 +132,51 @@ void View::onSize(WindowUI::WindowMessage& windowMessage)
 		GetClientRect(getHandle(), &rect);
 		WindowUI::moveWindow(_hBrowser, rect);
 	}
+}
+
+void View::onCommand(WindowUI::WindowMessage& windowMessage)
+{
+	WindowUI::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+
+
+	switch (windowMessageManipulator.nID())
+	{
+	case IDM_TEST1:
+		onTest1(windowMessage);
+		return;
+		break;
+
+	default:
+		break;
+	}
+
+
+	defaultWindowMessageHandler(windowMessage);
+}
+
+void View::onTest1(WindowUI::WindowMessage& windowMessage)
+{
+	//------------------------------------------------------------------------
+	std::wstring html;
+	std::wostringstream oss;
+
+
+
+	oss << L"<div class=\"input\">";
+	oss << "<pre>";
+	oss << L"안녕하세요?";
+	oss << L"</pre>";
+	oss << L"</div>";
+
+
+	html = oss.str();
+	browserInsertAdjacentHTML(html);
+
+
+	oss.str(L"");
+	oss.clear();
+
+
 }
 
 void View::destroyBrowser(void)
@@ -190,6 +238,7 @@ void View::createBrowser(void)
 	_pWB2->get_Document((IDispatch**)&_pDocument);
 
 
+
 	//------------------------------------------------------------------------
 	{
 		CComPtr<IUnknown> punkIE;
@@ -200,7 +249,7 @@ void View::createBrowser(void)
 		ambient = punkIE;
 		if (ambient)
 		{
-			ambient->put_AllowContextMenu(VARIANT_FALSE);
+//			ambient->put_AllowContextMenu(VARIANT_FALSE);
 		}
 	}
 
@@ -228,10 +277,10 @@ void View::createBrowser(void)
 
 
 	//------------------------------------------------------------------------
-	CComBSTR url(szURL);
+	CComBSTR bstr_url(szURL);
 
 
-	_pWB2->Navigate(url, NULL, NULL, NULL, NULL);
+	_pWB2->Navigate(bstr_url, NULL, NULL, NULL, NULL);
 
 
 	//------------------------------------------------------------------------
@@ -241,6 +290,60 @@ void View::createBrowser(void)
 	GetClientRect(getHandle(), &rect);
 	WindowUI::moveWindow(_hBrowser, rect);
 }
+
+void View::browserScrollBottom(void)
+{
+	IHTMLWindow2* pHtmlWindow2;
+
+
+	_pDocument->get_parentWindow(&pHtmlWindow2);
+	if (pHtmlWindow2) 
+	{
+		pHtmlWindow2->scrollTo(0, SHRT_MAX);
+		pHtmlWindow2->Release();
+	}
+}
+
+void View::browserExecCommand(std::wstring command)
+{
+	// command = L"Copy"
+	// command = L"Unselect"
+	// command = L"Copy"
+	// command = L"Copy"
+
+	VARIANT var = { 0 };
+	VARIANT_BOOL varBool = { 0 };
+
+
+	var.vt = VT_EMPTY;
+	
+	
+	CComBSTR bstr_command(command.c_str());
+
+
+	_pDocument->execCommand(bstr_command, VARIANT_FALSE, var, &varBool);
+}
+
+void View::browserInsertAdjacentHTML(std::wstring html)
+{
+	CComQIPtr<IHTMLElement>pElementBody;
+
+
+	_pDocument->get_body((IHTMLElement**)&pElementBody);
+	if (pElementBody)
+	{
+		CComBSTR bstr_where("beforeEnd");
+		CComBSTR bstr_html(html.c_str());
+
+
+		pElementBody->insertAdjacentHTML(bstr_where, bstr_html);
+		pElementBody.Release();
+	}
+
+
+	browserScrollBottom();
+}
+
 
 
 
