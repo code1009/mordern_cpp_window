@@ -76,7 +76,6 @@ void MainFrame::registerWindowMessageHandler(void)
 	getWindowMessageHandler(WM_DESTROY  ) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
 	getWindowMessageHandler(WM_CLOSE    ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
 	getWindowMessageHandler(WM_SIZE     ) = [this](WindowUI::WindowMessage& windowMessage) { onSize(windowMessage); };
-	getWindowMessageHandler(WM_PAINT    ) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
 	getWindowMessageHandler(WM_COMMAND  ) = [this](WindowUI::WindowMessage& windowMessage) { onCommand(windowMessage); };
 }
 
@@ -122,41 +121,6 @@ void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
 
 
 	::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx, 100, FALSE);
-}
-
-void MainFrame::onPaint(WindowUI::WindowMessage& windowMessage)
-{
-	//-----------------------------------------------------------------------
-	RECT rect;
-
-
-	GetClientRect(getHandle(), &rect);
-
-
-	//-----------------------------------------------------------------------
-	PAINTSTRUCT ps;
-
-
-	HDC hdc = BeginPaint(getHandle(), &ps);
-
-
-	draw(hdc, rect);
-
-
-	EndPaint(getHandle(), &ps);
-}
-
-void MainFrame::draw(HDC hdc, RECT& rect)
-{
-	HBRUSH hbr;
-
-
-	hbr = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-
-
-	FillRect(hdc, &rect, hbr);
-	SetBkMode(hdc, TRANSPARENT);
-	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 }
 
 void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
