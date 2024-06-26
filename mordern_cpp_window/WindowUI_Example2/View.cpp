@@ -161,7 +161,7 @@ void View::onTest1(WindowUI::WindowMessage& windowMessage)
 	std::wostringstream oss;
 
 
-
+	//------------------------------------------------------------------------
 	oss << L"<div class=\"input\">";
 	oss << "<pre>";
 	oss << L"안녕하세요?";
@@ -173,10 +173,31 @@ void View::onTest1(WindowUI::WindowMessage& windowMessage)
 	browserInsertAdjacentHTML(html);
 
 
+	//------------------------------------------------------------------------
 	oss.str(L"");
 	oss.clear();
 
 
+	//------------------------------------------------------------------------
+	oss << L"<div class=\"result\">";
+	oss << L"<div class=\"icon\">";
+	oss << L"<img>";
+	oss << L"</div>";
+	oss << L"<div class=\"chatting\">";
+	oss << L"<div class=\"output\">";
+	oss << L"<pre>";
+
+	oss << L"안녕하세요?";
+
+	oss << L"</pre>";
+	oss << L"</div>";
+	oss << L"</div>";
+	oss << L"</div>";
+
+
+
+	html = oss.str();
+	browserInsertAdjacentHTML(html);
 }
 
 void View::destroyBrowser(void)
