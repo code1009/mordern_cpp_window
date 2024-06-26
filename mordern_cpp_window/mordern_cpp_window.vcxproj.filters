@@ -19,6 +19,9 @@
     <Filter Include="WindowUI_Test">
       <UniqueIdentifier>{bcc445d5-39c8-4e0a-aec0-da0069c2155d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WindowUI_Example2">
+      <UniqueIdentifier>{7ff755dc-e00d-4ca7-b269-3e2dea33d259}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.hpp">
@@ -66,6 +69,15 @@
     <ClInclude Include="WindowUI\WindowFunction.hpp">
       <Filter>WindowUI</Filter>
     </ClInclude>
+    <ClInclude Include="WindowUI_Example2\MainFrame.hpp">
+      <Filter>WindowUI_Example2</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI_Example2\View.hpp">
+      <Filter>WindowUI_Example2</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI_Example2\AboutDialog.hpp">
+      <Filter>WindowUI_Example2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -85,6 +97,12 @@
     </ClCompile>
     <ClCompile Include="WindowUI\WindowFunction.cpp">
       <Filter>WindowUI</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowUI_Example2\MainFrame.cpp">
+      <Filter>WindowUI_Example2</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowUI_Example2\View.cpp">
+      <Filter>WindowUI_Example2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

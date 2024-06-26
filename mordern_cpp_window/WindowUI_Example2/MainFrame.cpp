@@ -17,7 +17,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace WindowUI_Example2
 {
 
 
@@ -28,10 +28,6 @@ namespace WindowUI_Example1
 //===========================================================================
 MainFrame::MainFrame()
 {
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.ctor() - begin");
-
-
 	//-----------------------------------------------------------------------
 	registerWindowMessageHandler();
 
@@ -68,29 +64,14 @@ MainFrame::MainFrame()
 	//-----------------------------------------------------------------------
 	::ShowWindow(getHandle(), SW_SHOW);
 	::UpdateWindow(getHandle());
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.ctor() - end");
 }
 
 MainFrame::~MainFrame()
 {
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.dtor() - begin");
-
-
-	//-----------------------------------------------------------------------
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.dtor() - end");
 }
 
 void MainFrame::registerWindowMessageHandler(void)
 {
-	getWindowMessageHandler(WM_NCCREATE ) = [this](WindowUI::WindowMessage& windowMessage) { onNcCreate(windowMessage); };
-	getWindowMessageHandler(WM_NCDESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onNcDestory(windowMessage); };
 	getWindowMessageHandler(WM_CREATE   ) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
 	getWindowMessageHandler(WM_DESTROY  ) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
 	getWindowMessageHandler(WM_CLOSE    ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
@@ -113,72 +94,25 @@ void MainFrame::initializeWindowClass(void)
 	getWindowClass().hIconSm       = WindowUI::getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
-void MainFrame::onNcCreate(WindowUI::WindowMessage& windowMessage)
-{
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onNcCreate() - begin");
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
-
-
-	windowMessageManipulator.Result(TRUE);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onNcCreate() - end");
-}
-
-void MainFrame::onNcDestory(WindowUI::WindowMessage& windowMessage)
-{
-	WindowUI::debugPrintln(L"MainFrame.onNcDestory()");
-}
-
 void MainFrame::onCreate(WindowUI::WindowMessage& windowMessage)
 {
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onCreate() - begin");
-
-
 	//-----------------------------------------------------------------------
 	WindowUI::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
-	//defaultWindowMessageHandler(windowMessage);
 	windowMessageManipulator.Result(0);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onCreate() - end");
 }
 
 void MainFrame::onDestory(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onDestory() - begin");
-
-
-	//-----------------------------------------------------------------------
 	::PostQuitMessage(0);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onDestory() - end");
 }
 
 void MainFrame::onClose(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onClose() - begin");
-
-
-	//-----------------------------------------------------------------------
 	destroyWindow();
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onClose() - end");
 }
 
 void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
@@ -186,15 +120,12 @@ void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
 	//-----------------------------------------------------------------------
 	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
+
 	::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx, 100, FALSE);
 }
 
 void MainFrame::onPaint(WindowUI::WindowMessage& windowMessage)
 {
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onPaint() - begin");
-
-
 	//-----------------------------------------------------------------------
 	RECT rect;
 
@@ -202,6 +133,7 @@ void MainFrame::onPaint(WindowUI::WindowMessage& windowMessage)
 	GetClientRect(getHandle(), &rect);
 
 
+	//-----------------------------------------------------------------------
 	PAINTSTRUCT ps;
 
 
@@ -212,10 +144,6 @@ void MainFrame::onPaint(WindowUI::WindowMessage& windowMessage)
 
 
 	EndPaint(getHandle(), &ps);
-
-
-	//-----------------------------------------------------------------------
-	WindowUI::debugPrintln(L"MainFrame.onPaint() - end");
 }
 
 void MainFrame::draw(HDC hdc, RECT& rect)
@@ -244,7 +172,7 @@ void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
 		break;
 
 	case IDM_EXIT:
-		destroyWindow();
+		onExit(windowMessage);
 		return;
 		break;
 
@@ -262,6 +190,11 @@ void MainFrame::onAbout(WindowUI::WindowMessage& windowMessage)
 
 
 	dlg.doModal(getHandle());
+}
+
+void MainFrame::onExit(WindowUI::WindowMessage& windowMessage)
+{
+	destroyWindow();
 }
 
 
