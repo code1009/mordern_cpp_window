@@ -63,6 +63,9 @@
     <ClInclude Include="WindowUI_Test\MainFrame.hpp">
       <Filter>WindowUI_Test</Filter>
     </ClInclude>
+    <ClInclude Include="WindowUI\WindowFunction.hpp">
+      <Filter>WindowUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="WindowUI_Test\MainFrame.cpp">
       <Filter>WindowUI_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowUI\WindowFunction.cpp">
+      <Filter>WindowUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
