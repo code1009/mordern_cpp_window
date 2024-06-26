@@ -158,6 +158,10 @@ void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
 		onTest1(windowMessage);
 		break;
 
+	case IDM_TEST2:
+		onTest2(windowMessage);
+		break;
+
 	default:
 		break;
 	}
@@ -184,6 +188,10 @@ void MainFrame::onTest1(WindowUI::WindowMessage& windowMessage)
 	sendMessage(_View.get(), windowMessage);
 }
 
+void MainFrame::onTest2(WindowUI::WindowMessage& windowMessage)
+{
+	sendMessage(_View.get(), windowMessage);
+}
 
 
 /////////////////////////////////////////////////////////////////////////////

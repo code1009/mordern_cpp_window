@@ -39,6 +39,7 @@ public:
 	void onAbout(WindowUI::WindowMessage& windowMessage);
 	void onExit(WindowUI::WindowMessage& windowMessage);
 	void onTest1(WindowUI::WindowMessage& windowMessage);
+	void onTest2(WindowUI::WindowMessage& windowMessage);
 };
 
 

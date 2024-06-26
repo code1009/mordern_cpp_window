@@ -44,6 +44,7 @@ public:
 
 	void onCommand(WindowUI::WindowMessage& windowMessage);
 	void onTest1(WindowUI::WindowMessage& windowMessage);
+	void onTest2(WindowUI::WindowMessage& windowMessage);
 
 public:
 	void createBrowser(void);
@@ -53,6 +54,7 @@ public:
 	void browserScrollBottom(void);
 	void browserExecCommand(std::wstring command);
 	void browserInsertAdjacentHTML(std::wstring html);
+	void browserExecJSfunction(std::wstring function);
 };
 
 

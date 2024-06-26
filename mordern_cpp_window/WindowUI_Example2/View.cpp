@@ -146,6 +146,11 @@ void View::onCommand(WindowUI::WindowMessage& windowMessage)
 		return;
 		break;
 
+	case IDM_TEST2:
+		onTest2(windowMessage);
+		return;
+		break;
+
 	default:
 		break;
 	}
@@ -187,7 +192,7 @@ void View::onTest1(WindowUI::WindowMessage& windowMessage)
 	oss << L"<div class=\"output\">";
 	oss << L"<pre>";
 
-	oss << L"안녕하세요?";
+	oss << L"안녕?";
 
 	oss << L"</pre>";
 	oss << L"</div>";
@@ -198,6 +203,11 @@ void View::onTest1(WindowUI::WindowMessage& windowMessage)
 
 	html = oss.str();
 	browserInsertAdjacentHTML(html);
+}
+
+void View::onTest2(WindowUI::WindowMessage& windowMessage)
+{
+	browserExecJSfunction(L"test0");
 }
 
 void View::destroyBrowser(void)
@@ -329,8 +339,6 @@ void View::browserExecCommand(std::wstring command)
 {
 	// command = L"Copy"
 	// command = L"Unselect"
-	// command = L"Copy"
-	// command = L"Copy"
 
 	VARIANT var = { 0 };
 	VARIANT_BOOL varBool = { 0 };
@@ -365,7 +373,92 @@ void View::browserInsertAdjacentHTML(std::wstring html)
 	browserScrollBottom();
 }
 
+void View::browserExecJSfunction(std::wstring functionName)
+{
+	CComQIPtr<IDispatch> pDispatch;
 
+
+	_pDocument->get_Script((IDispatch**)&pDispatch);
+	if (!pDispatch)
+	{
+		return;
+	}
+
+
+
+	CComBSTR bstr_functionName(functionName.c_str());
+	DISPID dispid = NULL;
+	HRESULT hr;
+
+
+	hr = pDispatch->GetIDsOfNames(IID_NULL, &bstr_functionName, 1, LOCALE_SYSTEM_DEFAULT, &dispid);
+	if (FAILED(hr))
+	{
+		pDispatch.Release();
+		return;
+	}
+
+
+	std::vector<std::wstring> functionParamArray;
+	std::wstring functionResult;
+
+	functionParamArray.push_back(std::wstring(L"C++에서 부름"));
+
+
+	UINT count; 
+	UINT i;
+
+
+	count = static_cast<UINT>(functionParamArray.size());
+
+	DISPPARAMS dispparams;
+
+
+	memset(&dispparams, 0, sizeof dispparams);
+	dispparams.cArgs = count;
+	dispparams.rgvarg = new VARIANT[dispparams.cArgs];
+
+
+	for (i = 0; i < count; i++)
+	{
+		CComBSTR bstr(functionParamArray.at(count - 1 - i).c_str() ); // back reading
+		
+		
+		hr = bstr.CopyTo(&dispparams.rgvarg[i].bstrVal);
+
+		dispparams.rgvarg[i].vt = VT_BSTR;
+	}
+	dispparams.cNamedArgs = 0;
+
+
+	EXCEPINFO excepInfo;
+
+
+	memset(&excepInfo, 0, sizeof excepInfo);
+
+
+	CComVariant vaResult;
+
+
+	UINT nArgErr = (UINT)-1;  // initialize to invalid arg
+
+
+	hr = pDispatch->Invoke(dispid, IID_NULL, 0,
+		DISPATCH_METHOD, &dispparams, &vaResult, &excepInfo, &nArgErr);
+
+	delete[] dispparams.rgvarg;
+
+
+	if (vaResult.vt == VT_BSTR)
+	{
+		functionResult = vaResult.bstrVal;
+	}
+
+	pDispatch.Release();
+
+
+	::MessageBoxW(nullptr, functionResult.c_str(), L"C++에서 받음", MB_OK);
+}
 
 
 
