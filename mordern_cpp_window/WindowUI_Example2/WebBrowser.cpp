@@ -12,7 +12,7 @@
 #include "../WindowUI/Core.hpp"
 #include "../WindowUI/WindowMessageManipulator.hpp"
 
-#include "WebBrowserView.hpp"
+#include "WebBrowser.hpp"
 
 
 
@@ -123,17 +123,17 @@ STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID, LCID, WORD, DISP
 
 	switch (dispid)
 	{
-	case DISPID_BEFORENAVIGATE2   : _pWebBrowserView->WebBrowser_onBeforeNavigate2   (pDispParams);
-	case DISPID_COMMANDSTATECHANGE: _pWebBrowserView->WebBrowser_onCommandStateChange(pDispParams);
-	case DISPID_DOCUMENTCOMPLETE  : _pWebBrowserView->WebBrowser_onDocumentComplete  (pDispParams);
-	case DISPID_DOWNLOADBEGIN     : _pWebBrowserView->WebBrowser_onDownloadBegin     (pDispParams);
-	case DISPID_DOWNLOADCOMPLETE  : _pWebBrowserView->WebBrowser_onDownloadComplete  (pDispParams);
-	case DISPID_NAVIGATECOMPLETE2 : _pWebBrowserView->WebBrowser_onNavigateComplete2 (pDispParams);
-	case DISPID_PROGRESSCHANGE    : _pWebBrowserView->WebBrowser_onProgressChange    (pDispParams);
-	case DISPID_PROPERTYCHANGE    : _pWebBrowserView->WebBrowser_onPropertyChange    (pDispParams);
-	case DISPID_STATUSTEXTCHANGE  : _pWebBrowserView->WebBrowser_onStatusTextChange  (pDispParams);
-	case DISPID_NEWWINDOW2        : _pWebBrowserView->WebBrowser_onNewWindow2        (pDispParams);
-	case DISPID_TITLECHANGE       : _pWebBrowserView->WebBrowser_onTitleChange       (pDispParams);
+	case DISPID_BEFORENAVIGATE2   : _pHostWindow->WebBrowser_onBeforeNavigate2   (pDispParams);
+	case DISPID_COMMANDSTATECHANGE: _pHostWindow->WebBrowser_onCommandStateChange(pDispParams);
+	case DISPID_DOCUMENTCOMPLETE  : _pHostWindow->WebBrowser_onDocumentComplete  (pDispParams);
+	case DISPID_DOWNLOADBEGIN     : _pHostWindow->WebBrowser_onDownloadBegin     (pDispParams);
+	case DISPID_DOWNLOADCOMPLETE  : _pHostWindow->WebBrowser_onDownloadComplete  (pDispParams);
+	case DISPID_NAVIGATECOMPLETE2 : _pHostWindow->WebBrowser_onNavigateComplete2 (pDispParams);
+	case DISPID_PROGRESSCHANGE    : _pHostWindow->WebBrowser_onProgressChange    (pDispParams);
+	case DISPID_PROPERTYCHANGE    : _pHostWindow->WebBrowser_onPropertyChange    (pDispParams);
+	case DISPID_STATUSTEXTCHANGE  : _pHostWindow->WebBrowser_onStatusTextChange  (pDispParams);
+	case DISPID_NEWWINDOW2        : _pHostWindow->WebBrowser_onNewWindow2        (pDispParams);
+	case DISPID_TITLECHANGE       : _pHostWindow->WebBrowser_onTitleChange       (pDispParams);
 	}
 	
 	return S_OK;
@@ -145,7 +145,7 @@ STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID, LCID, WORD, DISP
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-WebBrowserView::WebBrowserView(
+WebBrowserWindow::WebBrowserWindow(
 	HWND hParent,
 	const RECT& rect,
 	std::uint32_t style,
@@ -167,7 +167,7 @@ WebBrowserView::WebBrowserView(
 
 
 	style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-	windowText = L"WebBrowserView";
+	windowText = L"WebBrowserWindow";
 	hwnd = createWindow(
 		hParent,
 		windowText.c_str(),
@@ -177,7 +177,7 @@ WebBrowserView::WebBrowserView(
 	);
 	if (!hwnd)
 	{
-		throw std::wstring(L"WebBrowserView::WebBrowserView(): createWindow() failed");
+		throw std::wstring(L"WebBrowserWindow::WebBrowserWindow(): createWindow() failed");
 	}
 
 
@@ -191,17 +191,17 @@ WebBrowserView::WebBrowserView(
 
 
 	text = getWindowText(this);
-	text = L"WebBrowserView Window";
+	text = L"WebBrowserWindow";
 	setWindowText(this, text);
 	text = getWindowText(this);
 	WindowUI::debugPrintln(text);
 }
 
-WebBrowserView::~WebBrowserView()
+WebBrowserWindow::~WebBrowserWindow()
 {
 }
 
-void WebBrowserView::registerWindowMessageHandler(void)
+void WebBrowserWindow::registerWindowMessageHandler(void)
 {
 	getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
 	getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
@@ -210,26 +210,26 @@ void WebBrowserView::registerWindowMessageHandler(void)
 	getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage) { onCommand(windowMessage); };
 }
 
-void WebBrowserView::onCreate(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onCreate(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	//SetWindowTextW(windowMessage.hWnd, L"WebBrowserView");
+	//SetWindowTextW(windowMessage.hWnd, L"WebBrowserWindow");
 	WebBrowser_create();
 
 
 	defaultWindowMessageHandler(windowMessage);
 }
 
-void WebBrowserView::onDestory(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onDestory(WindowUI::WindowMessage& windowMessage)
 {
 	WebBrowser_destroy();
 }
 
-void WebBrowserView::onClose(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onClose(WindowUI::WindowMessage& windowMessage)
 {
 }
 
-void WebBrowserView::onSize(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onSize(WindowUI::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
 	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
@@ -246,7 +246,7 @@ void WebBrowserView::onSize(WindowUI::WindowMessage& windowMessage)
 	}
 }
 
-void WebBrowserView::onCommand(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onCommand(WindowUI::WindowMessage& windowMessage)
 {
 	WindowUI::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
@@ -271,7 +271,7 @@ void WebBrowserView::onCommand(WindowUI::WindowMessage& windowMessage)
 	defaultWindowMessageHandler(windowMessage);
 }
 
-void WebBrowserView::onTest1(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onTest1(WindowUI::WindowMessage& windowMessage)
 {
 	//------------------------------------------------------------------------
 	std::wstring html;
@@ -317,7 +317,7 @@ void WebBrowserView::onTest1(WindowUI::WindowMessage& windowMessage)
 	WebBrowser_insertAdjacentHTML(html);
 }
 
-void WebBrowserView::onTest2(WindowUI::WindowMessage& windowMessage)
+void WebBrowserWindow::onTest2(WindowUI::WindowMessage& windowMessage)
 {
 	WebBrowser_execJSfunction(L"test0");
 }
@@ -325,13 +325,13 @@ void WebBrowserView::onTest2(WindowUI::WindowMessage& windowMessage)
 //===========================================================================
 // https://github.com/kenjinote/cmdchat/blob/main/Source.cpp
 //===========================================================================
-void WebBrowserView::WebBrowser_destroy(void)
+void WebBrowserWindow::WebBrowser_destroy(void)
 {
 	_pHTMLDocument.Release();
 	_pWebBrowser.Release();
 }
 
-void WebBrowserView::WebBrowser_create(void)
+void WebBrowserWindow::WebBrowser_create(void)
 {
 	//------------------------------------------------------------------------
 	DWORD style;
@@ -353,7 +353,7 @@ void WebBrowserView::WebBrowser_create(void)
 			0);
 	if (!_hWebBrowserWindowHandle)
 	{
-		throw std::wstring(L"WebBrowserView::WebBrowser_create(): CreateWindowExW() failed");
+		throw std::wstring(L"WebBrowser::WebBrowser_create(): CreateWindowExW() failed");
 	}
 
 
@@ -364,7 +364,7 @@ void WebBrowserView::WebBrowser_create(void)
 
 		if (AtlAxGetControl(_hWebBrowserWindowHandle, &punkIE) != S_OK)
 		{
-			throw std::wstring(L"WebBrowserView::WebBrowser_create(): AtlAxGetControl() failed");
+			throw std::wstring(L"WebBrowser::WebBrowser_create(): AtlAxGetControl() failed");
 		}
 
 		_pWebBrowser = punkIE;
@@ -377,7 +377,7 @@ void WebBrowserView::WebBrowser_create(void)
 	//------------------------------------------------------------------------
 	if (!_pWebBrowser)
 	{
-		throw std::wstring(L"WebBrowserView::WebBrowser_create(): _pWebBrowser failed");
+		throw std::wstring(L"WebBrowser::WebBrowser_create(): _pWebBrowser failed");
 	}
 	_pWebBrowser->put_Silent(VARIANT_TRUE);
 	_pWebBrowser->put_RegisterAsDropTarget(VARIANT_FALSE);
@@ -403,7 +403,7 @@ void WebBrowserView::WebBrowser_create(void)
 	//------------------------------------------------------------------------
 	if (!_pHTMLDocument) 
 	{
-		throw std::wstring(L"WebBrowserView::WebBrowser_create(): _pHTMLDocument failed");
+		throw std::wstring(L"WebBrowser::WebBrowser_create(): _pHTMLDocument failed");
 	}
 
 
@@ -437,7 +437,7 @@ void WebBrowserView::WebBrowser_create(void)
 	WindowUI::moveWindow(_hWebBrowserWindowHandle, rect);
 }
 
-void WebBrowserView::WebBrowser_scrollBottom(void)
+void WebBrowserWindow::WebBrowser_scrollBottom(void)
 {
 	IHTMLWindow2* pHtmlWindow2;
 
@@ -450,7 +450,7 @@ void WebBrowserView::WebBrowser_scrollBottom(void)
 	}
 }
 
-void WebBrowserView::WebBrowser_execCommand(std::wstring command)
+void WebBrowserWindow::WebBrowser_execCommand(std::wstring command)
 {
 	// command = L"Copy"
 	// command = L"Unselect"
@@ -468,7 +468,7 @@ void WebBrowserView::WebBrowser_execCommand(std::wstring command)
 	_pHTMLDocument->execCommand(bstr_command, VARIANT_FALSE, var, &varBool);
 }
 
-void WebBrowserView::WebBrowser_insertAdjacentHTML(std::wstring html)
+void WebBrowserWindow::WebBrowser_insertAdjacentHTML(std::wstring html)
 {
 	CComQIPtr<IHTMLElement>pElementBody;
 
@@ -491,7 +491,7 @@ void WebBrowserView::WebBrowser_insertAdjacentHTML(std::wstring html)
 //===========================================================================
 // https://www.codeproject.com/Articles/2352/JavaScript-call-from-C
 //===========================================================================
-void WebBrowserView::WebBrowser_execJSfunction(std::wstring functionName)
+void WebBrowserWindow::WebBrowser_execJSfunction(std::wstring functionName)
 {
 	//-----------------------------------------------------------------------
 	CComQIPtr<IDispatch> pDispatch;
@@ -599,13 +599,13 @@ void WebBrowserView::WebBrowser_execJSfunction(std::wstring functionName)
 // https://github.com/DavidNash2024/Win32xx/blob/master/samples/Browser/src/Mainfrm.cpp
 //===========================================================================
 // Called before navigation occurs on either a window or frameset element.
-void WebBrowserView::WebBrowser_onBeforeNavigate2(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onBeforeNavigate2(DISPPARAMS* pDispParams)
 {
 
 }
 
 // Called when the enabled state of a command changes.
-void WebBrowserView::WebBrowser_onCommandStateChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onCommandStateChange(DISPPARAMS* pDispParams)
 {
 	/*
 	CToolBar& TB = GetToolBar();
@@ -631,25 +631,25 @@ void WebBrowserView::WebBrowser_onCommandStateChange(DISPPARAMS* pDispParams)
 }
 
 // Called when a document has been completely loaded and initialized.
-void WebBrowserView::WebBrowser_onDocumentComplete(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onDocumentComplete(DISPPARAMS* pDispParams)
 {
 
 }
 
 // Called when a navigation operation is beginning.
-void WebBrowserView::WebBrowser_onDownloadBegin(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onDownloadBegin(DISPPARAMS* pDispParams)
 {
 
 }
 
 // Called when a navigation operation finishes, is halted, or fails.
-void WebBrowserView::WebBrowser_onDownloadComplete(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onDownloadComplete(DISPPARAMS* pDispParams)
 {
 
 }
 
 // Called when navigation completes on either a window or frameset element.
-void WebBrowserView::WebBrowser_onNavigateComplete2(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onNavigateComplete2(DISPPARAMS* pDispParams)
 {
 	/*
 	CString str = _T("Navigate Complete");
@@ -673,13 +673,13 @@ void WebBrowserView::WebBrowser_onNavigateComplete2(DISPPARAMS* pDispParams)
 }
 
 // Called when a new window is to be created.
-void WebBrowserView::WebBrowser_onNewWindow2(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onNewWindow2(DISPPARAMS* pDispParams)
 {
 
 }
 
 // Called when the progress of a download operation is updated on the object.
-void WebBrowserView::WebBrowser_onProgressChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onProgressChange(DISPPARAMS* pDispParams)
 {
 	/*
 	CString str;
@@ -706,7 +706,7 @@ void WebBrowserView::WebBrowser_onProgressChange(DISPPARAMS* pDispParams)
 
 // Called when the IWebBrowser2::PutProperty method of the object changes the
 // value of a property.
-void WebBrowserView::WebBrowser_onPropertyChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onPropertyChange(DISPPARAMS* pDispParams)
 {
 	/*
 	CString str;
@@ -722,7 +722,7 @@ void WebBrowserView::WebBrowser_onPropertyChange(DISPPARAMS* pDispParams)
 }
 
 // Called when the status bar text of the object has changed.
-void WebBrowserView::WebBrowser_onStatusTextChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onStatusTextChange(DISPPARAMS* pDispParams)
 {
 	/*
 	CString statusText = pDispParams->rgvarg->bstrVal;
@@ -736,7 +736,7 @@ void WebBrowserView::WebBrowser_onStatusTextChange(DISPPARAMS* pDispParams)
 
 // Called when the title of a document in the object becomes available
 // or changes.
-void WebBrowserView::WebBrowser_onTitleChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::WebBrowser_onTitleChange(DISPPARAMS* pDispParams)
 {
 	/*
 	TRACE(_T("TitleChange: \n"));

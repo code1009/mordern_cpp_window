@@ -15,7 +15,7 @@ namespace WindowUI_Example2
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class WebBrowserView;
+class WebBrowserWindow;
 
 
 
@@ -26,7 +26,7 @@ class WebBrowserView;
 class WebBrowserEventSink : public IDispatch
 {
 public:
-	WebBrowserView* _pWebBrowserView{ nullptr };
+	WebBrowserWindow* _pHostWindow{ nullptr };
 
 public:
 	virtual ~WebBrowserEventSink() {}
@@ -52,7 +52,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class WebBrowserView : public WindowUI::BasicWindow
+class WebBrowserWindow : public WindowUI::BasicWindow
 {
 public:
 	CComQIPtr<IWebBrowser2> _pWebBrowser;
@@ -60,14 +60,14 @@ public:
 	HWND _hWebBrowserWindowHandle;
 
 public:
-	explicit WebBrowserView(
+	explicit WebBrowserWindow(
 		HWND hParent,
 		const RECT& rect,
 		std::uint32_t style = WS_CHILD | WS_VISIBLE | WS_BORDER,
 		std::uint32_t styleEx = WS_EX_CLIENTEDGE
 	);
 
-	~WebBrowserView();
+	virtual ~WebBrowserWindow();
 
 public:
 	virtual void registerWindowMessageHandler(void) override;

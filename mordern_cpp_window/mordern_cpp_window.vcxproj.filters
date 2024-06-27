@@ -72,7 +72,7 @@
     <ClInclude Include="WindowUI_Example2\MainFrame.hpp">
       <Filter>WindowUI_Example2</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example2\WebBrowserView.hpp">
+    <ClInclude Include="WindowUI_Example2\WebBrowser.hpp">
       <Filter>WindowUI_Example2</Filter>
     </ClInclude>
     <ClInclude Include="WindowUI_Example2\AboutDialog.hpp">
@@ -101,7 +101,7 @@
     <ClCompile Include="WindowUI_Example2\MainFrame.cpp">
       <Filter>WindowUI_Example2</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI_Example2\WebBrowserView.cpp">
+    <ClCompile Include="WindowUI_Example2\WebBrowser.cpp">
       <Filter>WindowUI_Example2</Filter>
     </ClCompile>
   </ItemGroup>
