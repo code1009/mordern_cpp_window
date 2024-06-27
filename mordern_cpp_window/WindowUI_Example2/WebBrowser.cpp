@@ -123,17 +123,17 @@ STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID, LCID, WORD, DISP
 
 	switch (dispid)
 	{
-	case DISPID_BEFORENAVIGATE2   : _pHostWindow->WebBrowser_onBeforeNavigate2   (pDispParams);
-	case DISPID_COMMANDSTATECHANGE: _pHostWindow->WebBrowser_onCommandStateChange(pDispParams);
-	case DISPID_DOCUMENTCOMPLETE  : _pHostWindow->WebBrowser_onDocumentComplete  (pDispParams);
-	case DISPID_DOWNLOADBEGIN     : _pHostWindow->WebBrowser_onDownloadBegin     (pDispParams);
-	case DISPID_DOWNLOADCOMPLETE  : _pHostWindow->WebBrowser_onDownloadComplete  (pDispParams);
-	case DISPID_NAVIGATECOMPLETE2 : _pHostWindow->WebBrowser_onNavigateComplete2 (pDispParams);
-	case DISPID_PROGRESSCHANGE    : _pHostWindow->WebBrowser_onProgressChange    (pDispParams);
-	case DISPID_PROPERTYCHANGE    : _pHostWindow->WebBrowser_onPropertyChange    (pDispParams);
-	case DISPID_STATUSTEXTCHANGE  : _pHostWindow->WebBrowser_onStatusTextChange  (pDispParams);
-	case DISPID_NEWWINDOW2        : _pHostWindow->WebBrowser_onNewWindow2        (pDispParams);
-	case DISPID_TITLECHANGE       : _pHostWindow->WebBrowser_onTitleChange       (pDispParams);
+	case DISPID_BEFORENAVIGATE2   : _pHostWindow->WebBrowser_onBeforeNavigate2   (pDispParams); break;
+	case DISPID_COMMANDSTATECHANGE: _pHostWindow->WebBrowser_onCommandStateChange(pDispParams); break;
+	case DISPID_DOCUMENTCOMPLETE  : _pHostWindow->WebBrowser_onDocumentComplete  (pDispParams); break;
+	case DISPID_DOWNLOADBEGIN     : _pHostWindow->WebBrowser_onDownloadBegin     (pDispParams); break;
+	case DISPID_DOWNLOADCOMPLETE  : _pHostWindow->WebBrowser_onDownloadComplete  (pDispParams); break;
+	case DISPID_NAVIGATECOMPLETE2 : _pHostWindow->WebBrowser_onNavigateComplete2 (pDispParams); break;
+	case DISPID_PROGRESSCHANGE    : _pHostWindow->WebBrowser_onProgressChange    (pDispParams); break;
+	case DISPID_PROPERTYCHANGE    : _pHostWindow->WebBrowser_onPropertyChange    (pDispParams); break;
+	case DISPID_STATUSTEXTCHANGE  : _pHostWindow->WebBrowser_onStatusTextChange  (pDispParams); break;
+	case DISPID_NEWWINDOW2        : _pHostWindow->WebBrowser_onNewWindow2        (pDispParams); break;
+	case DISPID_TITLECHANGE       : _pHostWindow->WebBrowser_onTitleChange       (pDispParams); break;
 	}
 	
 	return S_OK;
