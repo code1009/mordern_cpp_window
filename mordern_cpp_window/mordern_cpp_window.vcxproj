@@ -158,7 +158,7 @@
     <ClInclude Include="WindowUI_Example1\View.hpp" />
     <ClInclude Include="WindowUI_Example2\AboutDialog.hpp" />
     <ClInclude Include="WindowUI_Example2\MainFrame.hpp" />
-    <ClInclude Include="WindowUI_Example2\View.hpp" />
+    <ClInclude Include="WindowUI_Example2\WebBrowserView.hpp" />
     <ClInclude Include="WindowUI_Test\AboutDialog.hpp" />
     <ClInclude Include="WindowUI_Test\AboutModelessDialog.hpp" />
     <ClInclude Include="WindowUI_Test\MainFrame.hpp" />
@@ -172,7 +172,7 @@
     <ClCompile Include="WindowUI\WindowMessageManipulator.cpp" />
     <ClCompile Include="WindowUI_Example1\MainFrame.cpp" />
     <ClCompile Include="WindowUI_Example2\MainFrame.cpp" />
-    <ClCompile Include="WindowUI_Example2\View.cpp" />
+    <ClCompile Include="WindowUI_Example2\WebBrowserView.cpp" />
     <ClCompile Include="WindowUI_Test\MainFrame.cpp" />
   </ItemGroup>
   <ItemGroup>

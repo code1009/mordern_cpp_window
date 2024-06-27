@@ -13,7 +13,7 @@
 #include "../WindowUI/WindowMessageManipulator.hpp"
 
 #include "AboutDialog.hpp"
-#include "View.hpp"
+#include "WebBrowserView.hpp"
 #include "MainFrame.hpp"
 
 
@@ -66,7 +66,7 @@ MainFrame::MainFrame()
 	std::shared_ptr<Window> view;
 
 
-	view = std::make_shared<View>(getHandle(), rect);
+	view = std::make_shared<WebBrowserView>(getHandle(), rect);
 	_View = view;
 
 
