@@ -710,6 +710,22 @@ void WebBrowserWindow::onCommandStateChange(DISPPARAMS* pDispParams)
 // Called when a document has been completely loaded and initialized.
 void WebBrowserWindow::onDocumentComplete(DISPPARAMS* pDispParams)
 {
+	//------------------------------------------------------------------------
+	std::wstring html;
+	std::wostringstream oss;
+
+
+	//------------------------------------------------------------------------
+	oss << L"<div class=\"input\">";
+	oss << "<pre>";
+	oss << L"WebBrowserWindow::onDocumentComplete()";
+	oss << L"</pre>";
+	oss << L"</div>";
+
+
+	//------------------------------------------------------------------------
+	html = oss.str();
+	insertAdjacentHTML(html);
 }
 
 // Called when a navigation operation is beginning.
