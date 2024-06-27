@@ -27,9 +27,15 @@ class WebBrowserEventSink : public IDispatch
 {
 public:
 	WebBrowserWindow* _pHostWindow{ nullptr };
+	DWORD _Cookie{ 0 };
 
 public:
 	virtual ~WebBrowserEventSink() {}
+
+public:
+	IConnectionPoint* getConnectionPoint(REFIID riid);
+	void connect(void);
+	void disconnect(void);
 
 public:
 	// IUnknown
@@ -58,6 +64,7 @@ public:
 	CComQIPtr<IWebBrowser2> _pWebBrowser;
 	CComQIPtr<IHTMLDocument2> _pHTMLDocument;
 	HWND _hWebBrowserWindowHandle;
+	WebBrowserEventSink _EventSink;
 
 public:
 	explicit WebBrowserWindow(
@@ -84,27 +91,27 @@ public:
 	void onTest2(WindowUI::WindowMessage& windowMessage);
 
 public:
-	void WebBrowser_create(void);
-	void WebBrowser_destroy(void);
+	void createWebBrowser(void);
+	void destroyWebBrowser(void);
 
 public:
-	void WebBrowser_scrollBottom(void);
-	void WebBrowser_execCommand(std::wstring command);
-	void WebBrowser_insertAdjacentHTML(std::wstring html);
-	void WebBrowser_execJSfunction(std::wstring function);
+	void scrollBottom(void);
+	void execCommand(std::wstring command);
+	void insertAdjacentHTML(std::wstring html);
+	void execJSfunction(std::wstring function);
 
 public:
-	void WebBrowser_onBeforeNavigate2   (DISPPARAMS* pDispParams);
-	void WebBrowser_onCommandStateChange(DISPPARAMS* pDispParams);
-	void WebBrowser_onDocumentComplete  (DISPPARAMS* pDispParams);
-	void WebBrowser_onDownloadBegin     (DISPPARAMS* pDispParams);
-	void WebBrowser_onDownloadComplete  (DISPPARAMS* pDispParams);
-	void WebBrowser_onNavigateComplete2 (DISPPARAMS* pDispParams);
-	void WebBrowser_onNewWindow2        (DISPPARAMS* pDispParams);
-	void WebBrowser_onProgressChange    (DISPPARAMS* pDispParams);
-	void WebBrowser_onPropertyChange    (DISPPARAMS* pDispParams);
-	void WebBrowser_onStatusTextChange  (DISPPARAMS* pDispParams);
-	void WebBrowser_onTitleChange       (DISPPARAMS* pDispParams);
+	void onBeforeNavigate2   (DISPPARAMS* pDispParams);
+	void onCommandStateChange(DISPPARAMS* pDispParams);
+	void onDocumentComplete  (DISPPARAMS* pDispParams);
+	void onDownloadBegin     (DISPPARAMS* pDispParams);
+	void onDownloadComplete  (DISPPARAMS* pDispParams);
+	void onNavigateComplete2 (DISPPARAMS* pDispParams);
+	void onNewWindow2        (DISPPARAMS* pDispParams);
+	void onProgressChange    (DISPPARAMS* pDispParams);
+	void onPropertyChange    (DISPPARAMS* pDispParams);
+	void onStatusTextChange  (DISPPARAMS* pDispParams);
+	void onTitleChange       (DISPPARAMS* pDispParams);
 };
 
 
