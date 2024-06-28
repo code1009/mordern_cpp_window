@@ -12,6 +12,9 @@
 #include <iomanip>
 
 //===========================================================================
+#include <windows.h>
+
+//===========================================================================
 #include "uri.hpp"
 
 
@@ -59,20 +62,85 @@ https://                                                          :  protocol or
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-void toupper(std::wstring& s)
+std::wstring mbcs_to_wcs(std::string input, UINT codepage)
+{
+	int len = MultiByteToWideChar(codepage, 0, input.c_str(), -1, NULL, 0);
+
+
+	if (len > 0)
+	{
+		std::vector<wchar_t> buf(len);
+
+
+		MultiByteToWideChar(codepage, 0, input.c_str(), -1, &buf[0], len);
+
+		return std::wstring(&buf[0]);
+	}
+
+	return std::wstring();
+}
+
+std::string wcs_to_mbcs(std::wstring input, UINT codepage)
+{
+	int len = WideCharToMultiByte(codepage, 0, input.c_str(), -1, NULL, 0, NULL, NULL);
+
+
+	if (len > 0)
+	{
+		std::vector<char> buf(len);
+
+
+		WideCharToMultiByte(codepage, 0, input.c_str(), -1, &buf[0], len, NULL, NULL);
+
+		return std::string(&buf[0]);
+	}
+
+	return std::string();
+}
+
+std::string utf8_to_mbcs(std::string /*input*/utf8, UINT codepage)
+{
+	//	std::string  utf8 ;
+	std::wstring utf16;
+	std::string  mbcs;
+
+
+	//	utf8  = input;
+	utf16 = mbcs_to_wcs(utf8, CP_UTF8);
+	mbcs = wcs_to_mbcs(utf16, codepage);
+
+	return mbcs;
+}
+
+std::string mbcs_to_utf8(std::string /*input*/mbcs, UINT codepage)
+{
+	std::string  utf8;
+	std::wstring utf16;
+	//	std::string  mbcs ;
+
+
+	//	mbcs  = input;
+	utf16 = mbcs_to_wcs(mbcs, codepage);
+	utf8 = wcs_to_mbcs(utf16, CP_UTF8);
+
+	return utf8;
+}
+
+//===========================================================================
+void toupper(std::string& s)
 {
 	std::transform(
 		s.begin(), 
 		s.end(), 
 		s.begin(),
-		[](wchar_t c) 
+		[](char c) 
 		{
-			return static_cast<wchar_t>(std::toupper(c)); 
+			return static_cast<char>(std::toupper(c)); 
 		}
 	);
 }
 
-std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim)
+std::vector<std::string> split(const std::string& str, const char delim)
 {
 	if (str.empty())
 	{
@@ -80,9 +148,9 @@ std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim)
 	}
 
 
-	std::vector<std::wstring> tokens;
-	std::wistringstream iss(str);
-	std::wstring token;
+	std::vector<std::string> tokens;
+	std::istringstream iss(str);
+	std::string token;
 
 
 	while (std::getline(iss, token, delim))
@@ -94,14 +162,14 @@ std::vector<std::wstring> split(const std::wstring& str, const wchar_t delim)
 }
 
 //===========================================================================
-std::wstring encode(const std::wstring& decodedString, bool retainLineFeed)
+std::string encode(const std::string& decodedString, bool retainLineFeed)
 {
-	std::wstring encodedString;
+	std::string encodedString;
 
-	wchar_t allowedChars[] = { '-', '_', '.','~','&', '=', '+', };
+	char allowedChars[] = { '-', '_', '.','~','&', '=', '+', };
 
 
-	for (wchar_t aChar : decodedString)
+	for (char aChar : decodedString)
 	{
 		/*
 			'\n' : newline,
@@ -122,14 +190,14 @@ std::wstring encode(const std::wstring& decodedString, bool retainLineFeed)
 
 		if (
 			(!std::isalnum(aChar)) &&
-			(!(std::any_of(std::begin(allowedChars), std::end(allowedChars), [aChar](const wchar_t c) {return aChar == c; })))
+			(!(std::any_of(std::begin(allowedChars), std::end(allowedChars), [aChar](const char c) {return aChar == c; })))
 			)
 		{
-			std::wstringstream ss;
+			std::stringstream ss;
 
 
 			ss << '%';
-			ss << std::uppercase << std::setfill(L'0') << std::setw(2) << std::hex << static_cast<int>(aChar);
+			ss << std::uppercase << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(aChar);
 
 			encodedString += ss.str();
 		}
@@ -142,9 +210,9 @@ std::wstring encode(const std::wstring& decodedString, bool retainLineFeed)
 	return encodedString;
 }
 
-std::wstring decode(const std::wstring& encodedString)
+std::string decode(const std::string& encodedString)
 {
-	std::wstring decodedString;
+	std::string decodedString;
 
 	std::size_t size;
 	std::size_t pos;
@@ -161,14 +229,14 @@ std::wstring decode(const std::wstring& encodedString)
 			}
 
 
-			std::wistringstream iss(encodedString.substr(pos + 1, 2));
+			std::istringstream iss(encodedString.substr(pos + 1, 2));
 			int charValue;
 
 
 			iss >> std::hex >> charValue;
 
 
-			decodedString += static_cast<wchar_t> (charValue);
+			decodedString += static_cast<char> (charValue);
 			
 
 			pos += 2;
@@ -184,12 +252,12 @@ std::wstring decode(const std::wstring& encodedString)
 }
 
 //===========================================================================
-std::wstring erase_query_string(const std::wstring& s)
+std::string erase_query_string(const std::string& s)
 {
 	auto pos = s.find_first_of('?');
 
 
-	if (pos != std::wstring::npos)
+	if (pos != std::string::npos)
 	{
 		return s.substr(0, pos);
 	}
@@ -197,12 +265,12 @@ std::wstring erase_query_string(const std::wstring& s)
 	return s;
 }
 
-std::wstring parse_query_string(const std::wstring& s)
+std::string parse_query_string(const std::string& s)
 {
 	auto pos = s.find_first_of('?');
 
 
-	if (pos != std::wstring::npos)
+	if (pos != std::string::npos)
 	{
 		return s.substr(pos + 1);
 	}
@@ -210,9 +278,9 @@ std::wstring parse_query_string(const std::wstring& s)
 	return {};
 }
 
-std::map<std::wstring, std::wstring> parse_query_string_parameters(const std::wstring& s)
+std::map<std::string, std::string> parse_query_string_parameters(const std::string& s)
 {
-	std::map<std::wstring, std::wstring> parameter_map;
+	std::map<std::string, std::string> parameter_map;
 
 
 	auto keyValTokens = split(s, '&');
@@ -238,9 +306,9 @@ std::map<std::wstring, std::wstring> parse_query_string_parameters(const std::ws
 	return parameter_map;
 }
 
-std::wstring build_query_string_parameters(const std::map<std::wstring, std::wstring>& parameter_map, bool retainLineFeed)
+std::string build_query_string_parameters(const std::map<std::string, std::string>& parameter_map, bool retainLineFeed)
 {
-	std::wstringstream ss;
+	std::stringstream ss;
 
 
 	for (const auto& keyValToken : parameter_map)
@@ -254,13 +322,39 @@ std::wstring build_query_string_parameters(const std::map<std::wstring, std::wst
 	return ss.str();
 }
 
-std::wstring parse_base_directory(const std::wstring& s)
+std::map<std::string, std::string> utf8_to_mbcs(const std::map<std::string, std::string>& parameter_map)
+{
+	std::map<std::string, std::string> mbcs;
+
+
+	for (const auto& keyValToken : parameter_map)
+	{
+		mbcs[utf8_to_mbcs(keyValToken.first)] = utf8_to_mbcs(keyValToken.second);
+	}
+
+	return mbcs;
+}
+
+std::map<std::wstring, std::wstring> utf8_to_wcs(const std::map<std::string, std::string>& parameter_map)
+{
+	std::map<std::wstring, std::wstring> wcs;
+
+
+	for (const auto& keyValToken : parameter_map)
+	{
+		wcs[mbcs_to_wcs(keyValToken.first, CP_UTF8)] = mbcs_to_wcs(keyValToken.second, CP_UTF8);
+	}
+
+	return wcs;
+}
+
+std::string parse_base_directory(const std::string& s)
 {
 	std::string::size_type pos;
 
 
 	pos = s.find_last_of('/');
-	if (std::wstring::npos == pos)
+	if (std::string::npos == pos)
 	{
 		return {};
 	}
@@ -269,13 +363,13 @@ std::wstring parse_base_directory(const std::wstring& s)
 	return s.substr(0, pos + 1);
 }
 
-std::wstring parse_file(const std::wstring& s)
+std::string parse_file(const std::string& s)
 {
 	std::string::size_type pos;
 
 
 	pos = s.find_last_of('/');
-	if (std::wstring::npos == pos)
+	if (std::string::npos == pos)
 	{
 		return {};
 	}

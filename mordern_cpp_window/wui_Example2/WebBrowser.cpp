@@ -415,11 +415,18 @@ std::wstring WebBrowserWindow::getCurrentURL(void)
 }
 
 //===========================================================================
-void WebBrowserWindow::onHTMLDocumentEvent(std::wstring url)
+void WebBrowserWindow::onHTMLDocumentEvent(std::wstring wurl)
 {
 	//------------------------------------------------------------------------
-	std::wstring base;
-	std::wstring file;
+	std::string url;
+
+
+	url = uri::wcs_to_mbcs(wurl);
+
+
+	//------------------------------------------------------------------------
+	std::string base;
+	std::string file;
 
 
 	base = uri::erase_query_string(url);
@@ -427,12 +434,14 @@ void WebBrowserWindow::onHTMLDocumentEvent(std::wstring url)
 
 
 	//------------------------------------------------------------------------
-	std::wstring query_string;
-	std::map<std::wstring, std::wstring> param_map;
+	std::string query_string;
+	std::map<std::string, std::string> param_map;
+	std::map<std::wstring, std::wstring> wparam_map;
 
 
 	query_string = uri::parse_query_string(url);
-	param_map= uri::parse_query_string_parameters(query_string);
+	param_map = uri::parse_query_string_parameters(query_string); // utf8
+	wparam_map = uri::utf8_to_wcs(param_map);
 
 
 	//------------------------------------------------------------------------
@@ -443,7 +452,7 @@ void WebBrowserWindow::onHTMLDocumentEvent(std::wstring url)
 	//------------------------------------------------------------------------
 	oss << L"<div class=\"input\">";
 	oss << "<pre>";
-	oss << file;
+	oss << uri::mbcs_to_wcs(file); // uri::mbcs_to_wcs(file, CP_UTF8);
 	oss << L": C++에서 이벤트 처리합니다.";
 	oss << L"</pre>";
 	oss << L"</div>";

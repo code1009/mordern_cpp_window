@@ -10,8 +10,6 @@ function test0(str) {
 
 
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
 function coreEntry() {
@@ -29,7 +27,44 @@ function coreEntry() {
 
 	button2.addEventListener("click", 
 		function() {
-			window.location.href = "버튼2 클릭 이벤트?변수1=값1&변수2=값2";
+			var s;
+			
+			var eventName;
+
+			var paramName;
+			var paramValue;
+			var paramPair;
+
+			var queryString;
+
+
+			paramName = encodeURIComponent("변수1"); // utf8
+			paramValue = encodeURIComponent("값1");
+			paramPair = paramName + "=" + paramValue;
+
+
+			queryString = paramPair;
+
+
+			paramName = encodeURIComponent("변수2");
+			paramValue = encodeURIComponent("값2&");
+			paramPair = paramName + "=" + paramValue;
+
+
+			queryString += "&";
+			queryString += paramPair;
+
+
+			eventName = "버튼2 클릭 이벤트";
+
+
+			if (queryString)
+			{
+				s =  eventName + "?" + queryString;
+			}
+
+
+			window.location.href = s;
 		}
 	);
 

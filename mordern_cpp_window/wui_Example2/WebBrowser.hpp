@@ -90,7 +90,7 @@ public:
 
 public:
 	std::wstring getCurrentURL(void);
-	void onHTMLDocumentEvent(std::wstring url);
+	void onHTMLDocumentEvent(std::wstring wurl);
 
 public:
 	void createWebBrowser(void);
