@@ -22,55 +22,23 @@ function coreEntry() {
 
 
 	button1.addEventListener("click", 
-		function(){
+		function() {
 			alert("Hello world");
 		}
-	)
-	
-	
+	);
+
 	button2.addEventListener("click", 
-
-		function(){
-			window.location.href = "test";
-			
-/*
-			if(window.window == document.parentWindow)
-			{
-			alert("button2");
-			}
-			window.postMessage('Hello from the same window!', '*');
-*/
-/*
-basic.js:35 Uncaught TypeError: Cannot read properties of undefined (reading 'postMessage')
-    at HTMLInputElement.<anonymous> (basic.js:35:26)
-
-			document.parentWindow.postMessage('Hello from the same window!', '*');
-*/
+		function() {
+			window.location.href = "event1";
 		}
-	)
+	);
 
-/*
-basic.js:39 Uncaught TypeError: Cannot set properties of undefined (setting 'onmessage')
-    at coreEntry (basic.js:39:34)
-    at window.onload (basic.js:66:3)
 
-	document.parentWindow.onmessage = 
-		function(v){
-			alert("parentWindow.onmessage");
-		};
-*/
+	var rv;
 
-/*
-	window.onmessage = 
-		function(event) {
-			alert("onmessage(): " + event.data);
-		};
-*/
 
-	var x = test0("JS에서 부름");
-	alert(x);
-	
-	
+	rv = test0("JS에서 부름");
+	alert(rv);
 }
 
 

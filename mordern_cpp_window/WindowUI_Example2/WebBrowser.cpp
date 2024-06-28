@@ -564,6 +564,7 @@ void WebBrowserWindow::insertAdjacentHTML(std::wstring html)
 
 
 		pElementBody->insertAdjacentHTML(bstr_where, bstr_html);
+
 		pElementBody.Release();
 	}
 
