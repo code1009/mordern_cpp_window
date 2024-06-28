@@ -85,13 +85,13 @@ public:
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE ) = [this](wui::WindowMessage* windowMessage) { onCreate(windowMessage); };
-		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage* windowMessage) { onDestory(windowMessage); };
-		getWindowMessageHandler(WM_CLOSE  ) = [this](wui::WindowMessage* windowMessage) { onClose(windowMessage); };
-		getWindowMessageHandler(WM_PAINT  ) = [this](wui::WindowMessage* windowMessage) { onPaint(windowMessage); };
+		getWindowMessageHandler(WM_CREATE ) = [this](wui::WindowMessage& windowMessage) { onCreate(windowMessage); };
+		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
+		getWindowMessageHandler(WM_CLOSE  ) = [this](wui::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_PAINT  ) = [this](wui::WindowMessage& windowMessage) { onPaint(windowMessage); };
 	}
 
-	void onCreate(wui::WindowMessage* windowMessage)
+	void onCreate(wui::WindowMessage& windowMessage)
 	{
 		//-----------------------------------------------------------------------
 		wui::debugPrintln(L"View.onCreate() - begin");
@@ -107,12 +107,12 @@ public:
 		wui::debugPrintln(L"View.onCreate() - end");
 	}
 
-	void onDestory(wui::WindowMessage* windowMessage)
+	void onDestory(wui::WindowMessage& windowMessage)
 	{
 		wui::debugPrintln(L"View.onDestory()");
 	}
 
-	void onClose(wui::WindowMessage* windowMessage)
+	void onClose(wui::WindowMessage& windowMessage)
 	{
 		//-----------------------------------------------------------------------
 		wui::debugPrintln(L"View.onClose() - begin");
@@ -122,7 +122,7 @@ public:
 		wui::debugPrintln(L"View.onClose() - end");
 	}
 
-	void onPaint(wui::WindowMessage* windowMessage)
+	void onPaint(wui::WindowMessage& windowMessage)
 	{
 		//-----------------------------------------------------------------------
 		wui::debugPrintln(L"View.onPaint() - begin");

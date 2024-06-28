@@ -41,23 +41,23 @@ public:
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_INITDIALOG) = [this](wui::WindowMessage* windowMessage)
+		getWindowMessageHandler(WM_INITDIALOG) = [this](wui::WindowMessage& windowMessage)
 		{
 			onInitDialog();
 			defaultWindowMessageHandler(windowMessage);
 		};
 
 
-		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage* windowMessage) { onDestory(); };
+		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(); };
 		
-		getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage* windowMessage)
+		getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage& windowMessage)
 		{
 			onClose();
 		};
 
-		getWindowMessageHandler(WM_COMMAND) = [this](wui::WindowMessage* windowMessage)
+		getWindowMessageHandler(WM_COMMAND) = [this](wui::WindowMessage& windowMessage)
 		{
-			bool rv = onCommand((UINT)HIWORD(windowMessage->wParam), (int)LOWORD(windowMessage->wParam), (HWND)windowMessage->lParam);
+			bool rv = onCommand((UINT)HIWORD(windowMessage.wParam), (int)LOWORD(windowMessage.wParam), (HWND)windowMessage.lParam);
 			if (!rv)
 			{
 				defaultWindowMessageHandler(windowMessage);

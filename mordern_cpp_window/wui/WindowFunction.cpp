@@ -65,14 +65,14 @@ void moveWindow(const HWND hwnd, const RECT& rect, bool repaint)
 		repaint ? TRUE : FALSE);
 }
 
-void sendMessage(const Window* window, WindowMessage* windowMessage)
+void sendMessage(const Window* window, WindowMessage& windowMessage)
 {
-	windowMessage->lResult = 
+	windowMessage.lResult = 
 		::SendMessageW(
 			window->getHandle(), 
-			windowMessage->uMsg, 
-			windowMessage->wParam, 
-			windowMessage->lParam
+			windowMessage.uMsg, 
+			windowMessage.wParam, 
+			windowMessage.lParam
 		);
 }
 
