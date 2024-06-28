@@ -535,7 +535,7 @@ void WebBrowserWindow::createWebBrowser(void)
 		ambient = punkIE;
 		if (ambient)
 		{
-//			ambient->put_AllowContextMenu(VARIANT_FALSE);
+			ambient->put_AllowContextMenu(VARIANT_FALSE);
 		}
 	}
 
