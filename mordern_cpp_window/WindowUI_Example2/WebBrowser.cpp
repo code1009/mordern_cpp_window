@@ -7,6 +7,7 @@
 #include <atlhost.h>
 
 #include <winternl.h>
+#include <MsHtmdid.h>
 
 #include "../WindowUI/WindowFunction.hpp"
 #include "../WindowUI/Core.hpp"
@@ -176,9 +177,9 @@ STDMETHODIMP WebBrowserEventSink::GetTypeInfoCount(unsigned int*)
 }
 
 // Sends a window message to the frame when a browser event occurs.
-STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID, LCID, WORD, DISPPARAMS* pDispParams, VARIANT*, EXCEPINFO*, unsigned int*)
+STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexecinfo, UINT* puArgErr)
 {
-	if (!pDispParams)
+	if (!pdispparams)
 	{
 		return E_INVALIDARG;
 	}
@@ -186,17 +187,21 @@ STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID, LCID, WORD, DISP
 
 	switch (dispid)
 	{
-	case DISPID_BEFORENAVIGATE2   : _pHostWindow->onBeforeNavigate2   (pDispParams); break;
-	case DISPID_COMMANDSTATECHANGE: _pHostWindow->onCommandStateChange(pDispParams); break;
-	case DISPID_DOCUMENTCOMPLETE  : _pHostWindow->onDocumentComplete  (pDispParams); break;
-	case DISPID_DOWNLOADBEGIN     : _pHostWindow->onDownloadBegin     (pDispParams); break;
-	case DISPID_DOWNLOADCOMPLETE  : _pHostWindow->onDownloadComplete  (pDispParams); break;
-	case DISPID_NAVIGATECOMPLETE2 : _pHostWindow->onNavigateComplete2 (pDispParams); break;
-	case DISPID_PROGRESSCHANGE    : _pHostWindow->onProgressChange    (pDispParams); break;
-	case DISPID_PROPERTYCHANGE    : _pHostWindow->onPropertyChange    (pDispParams); break;
-	case DISPID_STATUSTEXTCHANGE  : _pHostWindow->onStatusTextChange  (pDispParams); break;
-	case DISPID_NEWWINDOW2        : _pHostWindow->onNewWindow2        (pDispParams); break;
-	case DISPID_TITLECHANGE       : _pHostWindow->onTitleChange       (pDispParams); break;
+	case DISPID_BEFORENAVIGATE2   : _pHostWindow->onBeforeNavigate2   (pdispparams, pvarResult); break;
+	case DISPID_COMMANDSTATECHANGE: _pHostWindow->onCommandStateChange(pdispparams, pvarResult); break;
+	case DISPID_DOCUMENTCOMPLETE  : _pHostWindow->onDocumentComplete  (pdispparams, pvarResult); break;
+	case DISPID_DOWNLOADBEGIN     : _pHostWindow->onDownloadBegin     (pdispparams, pvarResult); break;
+	case DISPID_DOWNLOADCOMPLETE  : _pHostWindow->onDownloadComplete  (pdispparams, pvarResult); break;
+	case DISPID_NAVIGATECOMPLETE2 : _pHostWindow->onNavigateComplete2 (pdispparams, pvarResult); break;
+	case DISPID_PROGRESSCHANGE    : _pHostWindow->onProgressChange    (pdispparams, pvarResult); break;
+	case DISPID_PROPERTYCHANGE    : _pHostWindow->onPropertyChange    (pdispparams, pvarResult); break;
+	case DISPID_STATUSTEXTCHANGE  : _pHostWindow->onStatusTextChange  (pdispparams, pvarResult); break;
+	case DISPID_NEWWINDOW2        : _pHostWindow->onNewWindow2        (pdispparams, pvarResult); break;
+	case DISPID_TITLECHANGE       : _pHostWindow->onTitleChange       (pdispparams, pvarResult); break;
+
+
+	case DISPID_ONMESSAGE:
+		break;
 	}
 	
 	return S_OK;
@@ -439,6 +444,7 @@ void WebBrowserWindow::createWebBrowser(void)
 			throw std::wstring(L"WebBrowser::createWebBrowser(): AtlAxGetControl() failed");
 		}
 
+
 		_pWebBrowser = punkIE;
 
 
@@ -460,7 +466,7 @@ void WebBrowserWindow::createWebBrowser(void)
 	//------------------------------------------------------------------------
 	{
 		CComPtr<IUnknown> punkIE;
-		ATL::CComPtr<IAxWinAmbientDispatch> ambient;
+		CComPtr<IAxWinAmbientDispatch> ambient;
 
 
 		AtlAxGetHost(_hWebBrowserWindowHandle, &punkIE);
@@ -547,7 +553,7 @@ void WebBrowserWindow::execCommand(std::wstring command)
 
 void WebBrowserWindow::insertAdjacentHTML(std::wstring html)
 {
-	CComQIPtr<IHTMLElement>pElementBody;
+	CComPtr<IHTMLElement> pElementBody;
 
 
 	_pHTMLDocument->get_body((IHTMLElement**)&pElementBody);
@@ -571,7 +577,7 @@ void WebBrowserWindow::insertAdjacentHTML(std::wstring html)
 void WebBrowserWindow::execJSfunction(std::wstring functionName)
 {
 	//-----------------------------------------------------------------------
-	CComQIPtr<IDispatch> pDispatch;
+	CComPtr<IDispatch> pDispatch;
 
 
 	_pHTMLDocument->get_Script((IDispatch**)&pDispatch);
@@ -676,21 +682,108 @@ void WebBrowserWindow::execJSfunction(std::wstring functionName)
 // https://github.com/DavidNash2024/Win32xx/blob/master/samples/Browser/src/Mainfrm.cpp
 //===========================================================================
 // Called before navigation occurs on either a window or frameset element.
-void WebBrowserWindow::onBeforeNavigate2(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onBeforeNavigate2(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
+	/*
+	[6] IDispatch * pDisp,
+	[5] VARIANT * Url,
+	[4] VARIANT * Flags,
+	[3] VARIANT * TargetFrameName,
+	[2] VARIANT * PostData,
+	[1] VARIANT * Headers,
+	[0] VARIANT_BOOL * Cancel
+	*/
 
+	if (pdispparams && pdispparams->cArgs == 7 && pdispparams->rgvarg) 
+	{
+		VARIANTARG& url = pdispparams->rgvarg[5];
+		std::wstring url_string;
+
+
+		/*
+		if (url.vt == VT_BSTR)
+		{
+			url_string = url.bstrVal;
+			WindowUI::debugPrintln(url_string);
+		}
+		if (url.vt == (VT_BSTR | VT_BYREF))
+		{
+			url_string = *url.pbstrVal;
+			WindowUI::debugPrintln(url_string);
+		}
+		*/
+		if (url.vt == (VT_VARIANT | VT_BYREF))
+		{
+			if (url.pvarVal->vt == VT_BSTR)
+			{
+				url_string = url.pvarVal->bstrVal;
+				WindowUI::debugPrintln(url_string);
+				// res://D:\test\mordern_cpp_window\Debug\mordern_cpp_window.exe/101
+			}
+		}
+
+
+		VARIANTARG& cancel = pdispparams->rgvarg[0];
+
+
+		if (cancel.vt == (VT_BOOL | VT_BYREF))
+		{
+			//------------------------------------------------------------------------
+			WCHAR szModuleFilePath[MAX_PATH] = { 0 };
+
+
+			GetModuleFileNameW(NULL, szModuleFilePath, MAX_PATH);
+
+
+			//------------------------------------------------------------------------
+			WCHAR szURL[MAX_PATH] = { 0 };
+
+
+			wsprintfW(szURL, L"res://%s/%d", szModuleFilePath, IDR_HTML1);
+
+
+			//------------------------------------------------------------------------
+			if (url_string == szURL)
+			{
+				*cancel.pboolVal = VARIANT_FALSE;
+			}
+			else
+			{
+				*cancel.pboolVal = VARIANT_TRUE;
+
+				// url로 html ui 이벤트 처리로 활용 가능
+				{
+					//------------------------------------------------------------------------
+					std::wstring html;
+					std::wostringstream oss;
+
+
+					//------------------------------------------------------------------------
+					oss << L"<div class=\"input\">";
+					oss << "<pre>";
+					oss << L"C++에서 이벤트 처리합니다.";
+					oss << L"</pre>";
+					oss << L"</div>";
+
+
+					html = oss.str();
+					insertAdjacentHTML(html);
+				}
+			}
+		}
+	}
 }
 
 // Called when the enabled state of a command changes.
-void WebBrowserWindow::onCommandStateChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onCommandStateChange(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 	/*
 	CToolBar& TB = GetToolBar();
 
-	if ((pDispParams) && (pDispParams->cArgs == 2))
+	if ((pdispparams) && (pdispparams->cArgs == 2))
 	{
-		BOOL isEnabled = pDispParams->rgvarg[0].boolVal;
-		LONG command = pDispParams->rgvarg[1].lVal;
+		BOOL isEnabled = pdispparams->rgvarg[0].boolVal;
+		LONG command = pdispparams->rgvarg[1].lVal;
 		{
 			// Update the Forward and Back buttons.
 			switch (command)
@@ -708,47 +801,33 @@ void WebBrowserWindow::onCommandStateChange(DISPPARAMS* pDispParams)
 }
 
 // Called when a document has been completely loaded and initialized.
-void WebBrowserWindow::onDocumentComplete(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onDocumentComplete(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
-	//------------------------------------------------------------------------
-	std::wstring html;
-	std::wostringstream oss;
 
 
-	//------------------------------------------------------------------------
-	oss << L"<div class=\"input\">";
-	oss << "<pre>";
-	oss << L"WebBrowserWindow::onDocumentComplete()";
-	oss << L"</pre>";
-	oss << L"</div>";
-
-
-	//------------------------------------------------------------------------
-	html = oss.str();
-	insertAdjacentHTML(html);
 }
 
 // Called when a navigation operation is beginning.
-void WebBrowserWindow::onDownloadBegin(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onDownloadBegin(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 
 }
 
 // Called when a navigation operation finishes, is halted, or fails.
-void WebBrowserWindow::onDownloadComplete(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onDownloadComplete(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 
 }
 
 // Called when navigation completes on either a window or frameset element.
-void WebBrowserWindow::onNavigateComplete2(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onNavigateComplete2(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 	/*
 	CString str = _T("Navigate Complete");
 
-	if (pDispParams->rgvarg[0].vt == (VT_BYREF | VT_VARIANT))
+	if (pdispparams->rgvarg[0].vt == (VT_BYREF | VT_VARIANT))
 	{
-		VARIANT url = *pDispParams->rgvarg[0].pvarVal;
+		VARIANT url = *pdispparams->rgvarg[0].pvarVal;
 		url.vt = VT_BSTR;
 
 		str += url.bstrVal;
@@ -765,28 +844,28 @@ void WebBrowserWindow::onNavigateComplete2(DISPPARAMS* pDispParams)
 }
 
 // Called when a new window is to be created.
-void WebBrowserWindow::onNewWindow2(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onNewWindow2(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 
 }
 
 // Called when the progress of a download operation is updated on the object.
-void WebBrowserWindow::onProgressChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onProgressChange(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 	/*
 	CString str;
 
-	if (pDispParams->cArgs != 0)
+	if (pdispparams->cArgs != 0)
 	{
-		if (pDispParams->cArgs > 1 && pDispParams->rgvarg[1].vt == VT_I4)
+		if (pdispparams->cArgs > 1 && pdispparams->rgvarg[1].vt == VT_I4)
 		{
-			int progress = pDispParams->rgvarg[1].lVal;
+			int progress = pdispparams->rgvarg[1].lVal;
 			str << _T("Progress = ") << progress;
 		}
 
-		if (pDispParams->rgvarg[0].vt == VT_I4)
+		if (pdispparams->rgvarg[0].vt == VT_I4)
 		{
-			int progressMax = pDispParams->rgvarg[0].lVal;
+			int progressMax = pdispparams->rgvarg[0].lVal;
 			str << _T(", ProgressMax = ") << progressMax;
 		}
 
@@ -798,14 +877,14 @@ void WebBrowserWindow::onProgressChange(DISPPARAMS* pDispParams)
 
 // Called when the IWebBrowser2::PutProperty method of the object changes the
 // value of a property.
-void WebBrowserWindow::onPropertyChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onPropertyChange(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 	/*
 	CString str;
-	if (pDispParams->cArgs > 0 && pDispParams->rgvarg[0].vt == VT_BSTR)
+	if (pdispparams->cArgs > 0 && pdispparams->rgvarg[0].vt == VT_BSTR)
 	{
 		str += _T("Property Change:");
-		str += pDispParams->rgvarg[0].bstrVal;
+		str += pdispparams->rgvarg[0].bstrVal;
 	}
 
 	str += _T("\n");
@@ -814,10 +893,10 @@ void WebBrowserWindow::onPropertyChange(DISPPARAMS* pDispParams)
 }
 
 // Called when the status bar text of the object has changed.
-void WebBrowserWindow::onStatusTextChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onStatusTextChange(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 	/*
-	CString statusText = pDispParams->rgvarg->bstrVal;
+	CString statusText = pdispparams->rgvarg->bstrVal;
 
 	if (statusText != _T(""))
 		SetStatusText(statusText);
@@ -828,15 +907,15 @@ void WebBrowserWindow::onStatusTextChange(DISPPARAMS* pDispParams)
 
 // Called when the title of a document in the object becomes available
 // or changes.
-void WebBrowserWindow::onTitleChange(DISPPARAMS* pDispParams)
+void WebBrowserWindow::onTitleChange(DISPPARAMS* pdispparams, VARIANT* pvarResult)
 {
 	/*
 	TRACE(_T("TitleChange: \n"));
 	CString str;
 
-	if ((pDispParams->cArgs > 0) && (pDispParams->rgvarg[0].vt == VT_BSTR))
+	if ((pdispparams->cArgs > 0) && (pdispparams->rgvarg[0].vt == VT_BSTR))
 	{
-		str = pDispParams->rgvarg[0].bstrVal;
+		str = pdispparams->rgvarg[0].bstrVal;
 		str += _T(" - Win32++ Browser");
 		TRACE(str + _T("\n"));
 	}

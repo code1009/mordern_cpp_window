@@ -48,7 +48,7 @@ public:
 	virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, unsigned int cNames, LCID lcid, DISPID* rgdispid);
 	virtual STDMETHODIMP GetTypeInfo(unsigned int itinfo, LCID lcid, ITypeInfo** pptinfo);
 	virtual STDMETHODIMP GetTypeInfoCount(unsigned int* pctinfo);
-	virtual STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexecinfo, unsigned int* puArgErr);
+	virtual STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexecinfo, UINT* puArgErr);
 };
 
 
@@ -101,17 +101,17 @@ public:
 	void execJSfunction(std::wstring function);
 
 public:
-	void onBeforeNavigate2   (DISPPARAMS* pDispParams);
-	void onCommandStateChange(DISPPARAMS* pDispParams);
-	void onDocumentComplete  (DISPPARAMS* pDispParams);
-	void onDownloadBegin     (DISPPARAMS* pDispParams);
-	void onDownloadComplete  (DISPPARAMS* pDispParams);
-	void onNavigateComplete2 (DISPPARAMS* pDispParams);
-	void onNewWindow2        (DISPPARAMS* pDispParams);
-	void onProgressChange    (DISPPARAMS* pDispParams);
-	void onPropertyChange    (DISPPARAMS* pDispParams);
-	void onStatusTextChange  (DISPPARAMS* pDispParams);
-	void onTitleChange       (DISPPARAMS* pDispParams);
+	void onBeforeNavigate2   (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onCommandStateChange(DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onDocumentComplete  (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onDownloadBegin     (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onDownloadComplete  (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onNavigateComplete2 (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onNewWindow2        (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onProgressChange    (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onPropertyChange    (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onStatusTextChange  (DISPPARAMS* pdispparams, VARIANT* pvarResult);
+	void onTitleChange       (DISPPARAMS* pdispparams, VARIANT* pvarResult);
 };
 
 
