@@ -39,7 +39,7 @@ public:
 
 	void onPaint(HDC hDC);
 
-	void onSize(wui::WindowMessage& windowMessage);
+	void onSize(wui::WindowMessage* windowMessage);
 
 	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl);
 	void onAbout(void);

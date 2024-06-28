@@ -102,7 +102,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-using WindowMessageHandler = std::function<void(WindowMessage& windowMessage)>;
+using WindowMessageHandler = std::function<void(WindowMessage* windowMessage)>;
 using WindowMessageHandlerMap = std::map<std::uint32_t, WindowMessageHandler>;
 
 
@@ -137,9 +137,9 @@ public:
 	virtual void registerWindowMessageHandler(void) = 0;
 
 public:
-	virtual void callDefWindowProc(WindowMessage& windowMessage);
-	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage);
-	virtual void onWindowMessage(WindowMessage& windowMessage);
+	virtual void callDefWindowProc(WindowMessage* windowMessage);
+	virtual void defaultWindowMessageHandler(WindowMessage* windowMessage);
+	virtual void onWindowMessage(WindowMessage* windowMessage);
 };
 
 
@@ -169,13 +169,13 @@ public:
 	virtual WNDPROC unsubclassWindow(WNDPROC windowProc = nullptr);
 
 public:
-	virtual void defaultWindowMessageHandler(WindowMessage& windowMessage) override;
+	virtual void defaultWindowMessageHandler(WindowMessage* windowMessage) override;
 
 public:
 	virtual WNDPROC getChainWindowProc(void);
 
 public:
-	virtual void callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc = nullptr);
+	virtual void callWindowProc(WindowMessage* windowMessage, WNDPROC windowProc = nullptr);
 };
 
 

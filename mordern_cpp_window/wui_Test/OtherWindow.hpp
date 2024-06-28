@@ -49,16 +49,16 @@ public:
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE) = [this](wui::WindowMessage& windowMessage)
+		getWindowMessageHandler(WM_CREATE) = [this](wui::WindowMessage* windowMessage)
 		{
 			// 생성자에서 이 영역을 호출 중이다.
-			SetWindowTextW(windowMessage.hWnd, L"OtherWindow");
+			SetWindowTextW(windowMessage->hWnd, L"OtherWindow");
 			defaultWindowMessageHandler(windowMessage);
 		}
 		;
 
-		getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage& windowMessage) { onClose(); };
-		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(); };
+		getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage* windowMessage) { onClose(); };
+		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage* windowMessage) { onDestory(); };
 	}
 
 	void onClose(void)

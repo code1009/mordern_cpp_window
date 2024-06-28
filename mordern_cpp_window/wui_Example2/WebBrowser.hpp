@@ -78,15 +78,15 @@ public:
 	virtual void registerWindowMessageHandler(void) override;
 
 public:
-	void onCreate(wui::WindowMessage& windowMessage);
-	void onDestory(wui::WindowMessage& windowMessage);
-	void onClose(wui::WindowMessage& windowMessage);
+	void onCreate(wui::WindowMessage* windowMessage);
+	void onDestory(wui::WindowMessage* windowMessage);
+	void onClose(wui::WindowMessage* windowMessage);
 
-	void onSize(wui::WindowMessage& windowMessage);
+	void onSize(wui::WindowMessage* windowMessage);
 
-	void onCommand(wui::WindowMessage& windowMessage);
-	void onTest1(wui::WindowMessage& windowMessage);
-	void onTest2(wui::WindowMessage& windowMessage);
+	void onCommand(wui::WindowMessage* windowMessage);
+	void onTest1(wui::WindowMessage* windowMessage);
+	void onTest2(wui::WindowMessage* windowMessage);
 
 public:
 	std::wstring getCurrentURL(void);

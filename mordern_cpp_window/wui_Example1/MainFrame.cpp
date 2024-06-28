@@ -89,14 +89,14 @@ MainFrame::~MainFrame()
 
 void MainFrame::registerWindowMessageHandler(void)
 {
-	getWindowMessageHandler(WM_NCCREATE ) = [this](wui::WindowMessage& windowMessage) { onNcCreate(windowMessage); };
-	getWindowMessageHandler(WM_NCDESTROY) = [this](wui::WindowMessage& windowMessage) { onNcDestory(windowMessage); };
-	getWindowMessageHandler(WM_CREATE   ) = [this](wui::WindowMessage& windowMessage) { onCreate(windowMessage); };
-	getWindowMessageHandler(WM_DESTROY  ) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
-	getWindowMessageHandler(WM_CLOSE    ) = [this](wui::WindowMessage& windowMessage) { onClose(windowMessage); };
-	getWindowMessageHandler(WM_SIZE     ) = [this](wui::WindowMessage& windowMessage) { onSize(windowMessage); };
-	getWindowMessageHandler(WM_PAINT    ) = [this](wui::WindowMessage& windowMessage) { onPaint(windowMessage); };
-	getWindowMessageHandler(WM_COMMAND  ) = [this](wui::WindowMessage& windowMessage) { onCommand(windowMessage); };
+	getWindowMessageHandler(WM_NCCREATE ) = [this](wui::WindowMessage* windowMessage) { onNcCreate(windowMessage); };
+	getWindowMessageHandler(WM_NCDESTROY) = [this](wui::WindowMessage* windowMessage) { onNcDestory(windowMessage); };
+	getWindowMessageHandler(WM_CREATE   ) = [this](wui::WindowMessage* windowMessage) { onCreate(windowMessage); };
+	getWindowMessageHandler(WM_DESTROY  ) = [this](wui::WindowMessage* windowMessage) { onDestory(windowMessage); };
+	getWindowMessageHandler(WM_CLOSE    ) = [this](wui::WindowMessage* windowMessage) { onClose(windowMessage); };
+	getWindowMessageHandler(WM_SIZE     ) = [this](wui::WindowMessage* windowMessage) { onSize(windowMessage); };
+	getWindowMessageHandler(WM_PAINT    ) = [this](wui::WindowMessage* windowMessage) { onPaint(windowMessage); };
+	getWindowMessageHandler(WM_COMMAND  ) = [this](wui::WindowMessage* windowMessage) { onCommand(windowMessage); };
 }
 
 void MainFrame::initializeWindowClass(void)
@@ -113,14 +113,14 @@ void MainFrame::initializeWindowClass(void)
 	getWindowClass().hIconSm       = wui::getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
-void MainFrame::onNcCreate(wui::WindowMessage& windowMessage)
+void MainFrame::onNcCreate(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
 	wui::debugPrintln(L"MainFrame.onNcCreate() - begin");
 
 
 	//-----------------------------------------------------------------------
-	wui::WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_NCCREATE_WindowMessageManipulator windowMessageManipulator(windowMessage);
 
 
 	windowMessageManipulator.Result(TRUE);
@@ -130,19 +130,19 @@ void MainFrame::onNcCreate(wui::WindowMessage& windowMessage)
 	wui::debugPrintln(L"MainFrame.onNcCreate() - end");
 }
 
-void MainFrame::onNcDestory(wui::WindowMessage& windowMessage)
+void MainFrame::onNcDestory(wui::WindowMessage* windowMessage)
 {
 	wui::debugPrintln(L"MainFrame.onNcDestory()");
 }
 
-void MainFrame::onCreate(wui::WindowMessage& windowMessage)
+void MainFrame::onCreate(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
 	wui::debugPrintln(L"MainFrame.onCreate() - begin");
 
 
 	//-----------------------------------------------------------------------
-	wui::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_CREATE_WindowMessageManipulator windowMessageManipulator(windowMessage);
 
 
 	//defaultWindowMessageHandler(windowMessage);
@@ -153,7 +153,7 @@ void MainFrame::onCreate(wui::WindowMessage& windowMessage)
 	wui::debugPrintln(L"MainFrame.onCreate() - end");
 }
 
-void MainFrame::onDestory(wui::WindowMessage& windowMessage)
+void MainFrame::onDestory(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
 	wui::debugPrintln(L"MainFrame.onDestory() - begin");
@@ -167,7 +167,7 @@ void MainFrame::onDestory(wui::WindowMessage& windowMessage)
 	wui::debugPrintln(L"MainFrame.onDestory() - end");
 }
 
-void MainFrame::onClose(wui::WindowMessage& windowMessage)
+void MainFrame::onClose(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
 	wui::debugPrintln(L"MainFrame.onClose() - begin");
@@ -181,15 +181,15 @@ void MainFrame::onClose(wui::WindowMessage& windowMessage)
 	wui::debugPrintln(L"MainFrame.onClose() - end");
 }
 
-void MainFrame::onSize(wui::WindowMessage& windowMessage)
+void MainFrame::onSize(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
-	wui::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_SIZE_WindowMessageManipulator windowMessageManipulator(windowMessage);
 
 	::MoveWindow(_View->getHandle(), 0, 0, windowMessageManipulator.size().cx, 100, FALSE);
 }
 
-void MainFrame::onPaint(wui::WindowMessage& windowMessage)
+void MainFrame::onPaint(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
 	wui::debugPrintln(L"MainFrame.onPaint() - begin");
@@ -231,9 +231,9 @@ void MainFrame::draw(HDC hdc, RECT& rect)
 	DrawText(hdc, L"MainFrame", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 }
 
-void MainFrame::onCommand(wui::WindowMessage& windowMessage)
+void MainFrame::onCommand(wui::WindowMessage* windowMessage)
 {
-	wui::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(windowMessage);
 
 
 	switch (windowMessageManipulator.nID())
@@ -256,7 +256,7 @@ void MainFrame::onCommand(wui::WindowMessage& windowMessage)
 	defaultWindowMessageHandler(windowMessage);
 }
 
-void MainFrame::onAbout(wui::WindowMessage& windowMessage)
+void MainFrame::onAbout(wui::WindowMessage* windowMessage)
 {
 	AboutDialog dlg;
 

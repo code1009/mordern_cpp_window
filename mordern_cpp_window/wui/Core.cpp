@@ -305,24 +305,24 @@ WindowMessageHandler& Window::getWindowMessageHandler(std::uint32_t umsg)
 	return _WindowMessageHandlerMap[umsg];
 }
 
-void Window::callDefWindowProc(WindowMessage& windowMessage)
+void Window::callDefWindowProc(WindowMessage* windowMessage)
 {
-	windowMessage.lResult =
+	windowMessage->lResult =
 		::DefWindowProcW(
-			windowMessage.hWnd,
-			windowMessage.uMsg,
-			windowMessage.wParam,
-			windowMessage.lParam);
+			windowMessage->hWnd,
+			windowMessage->uMsg,
+			windowMessage->wParam,
+			windowMessage->lParam);
 }
 
-void Window::defaultWindowMessageHandler(WindowMessage& windowMessage)
+void Window::defaultWindowMessageHandler(WindowMessage* windowMessage)
 {
 	callDefWindowProc(windowMessage);
 }
 
-void Window::onWindowMessage(WindowMessage& windowMessage)
+void Window::onWindowMessage(WindowMessage* windowMessage)
 {
-	auto found = _WindowMessageHandlerMap.find(windowMessage.uMsg);
+	auto found = _WindowMessageHandlerMap.find(windowMessage->uMsg);
 
 
 	if (found != _WindowMessageHandlerMap.end())
@@ -414,7 +414,7 @@ WNDPROC SubclassWindow::unsubclassWindow(WNDPROC windowProc)
 	return oldWindowProc;
 }
 
-void SubclassWindow::callWindowProc(WindowMessage& windowMessage, WNDPROC windowProc)
+void SubclassWindow::callWindowProc(WindowMessage* windowMessage, WNDPROC windowProc)
 {
 	//-----------------------------------------------------------------------
 	if (nullptr == windowProc)
@@ -424,13 +424,13 @@ void SubclassWindow::callWindowProc(WindowMessage& windowMessage, WNDPROC window
 
 
 	//-----------------------------------------------------------------------
-	windowMessage.lResult =
+	windowMessage->lResult =
 		::CallWindowProcW(
 			windowProc,
-			windowMessage.hWnd,
-			windowMessage.uMsg,
-			windowMessage.wParam,
-			windowMessage.lParam);
+			windowMessage->hWnd,
+			windowMessage->uMsg,
+			windowMessage->wParam,
+			windowMessage->lParam);
 }
 
 WNDPROC SubclassWindow::getChainWindowProc(void)
@@ -438,7 +438,7 @@ WNDPROC SubclassWindow::getChainWindowProc(void)
 	return _ChainWindowProc;
 }
 
-void SubclassWindow::defaultWindowMessageHandler(WindowMessage& windowMessage)
+void SubclassWindow::defaultWindowMessageHandler(WindowMessage* windowMessage)
 {
 	if (_ChainWindowProc)
 	{
@@ -710,7 +710,7 @@ LRESULT __stdcall WindowProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 		WindowMessage windowMessage{ hwnd, message, wParam, lParam };
 
 
-		windowPtr->onWindowMessage(windowMessage);
+		windowPtr->onWindowMessage(&windowMessage);
 
 
 		if (WM_NCDESTROY == message)
@@ -755,7 +755,7 @@ INT_PTR __stdcall DialogProc(HWND hwnd, uint32_t message, WPARAM wParam, LPARAM 
 		WindowMessage windowMessage{ hwnd, message, wParam, lParam };
 
 
-		dialogPtr->onWindowMessage(windowMessage);
+		dialogPtr->onWindowMessage(&windowMessage);
 
 
 		if (WM_NCDESTROY == message)

@@ -274,14 +274,14 @@ WebBrowserWindow::~WebBrowserWindow()
 
 void WebBrowserWindow::registerWindowMessageHandler(void)
 {
-	getWindowMessageHandler(WM_CREATE) = [this](wui::WindowMessage& windowMessage) { onCreate(windowMessage); };
-	getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
-	getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage& windowMessage) { onClose(windowMessage); };
-	getWindowMessageHandler(WM_SIZE) = [this](wui::WindowMessage& windowMessage) { onSize(windowMessage); };
-	getWindowMessageHandler(WM_COMMAND) = [this](wui::WindowMessage& windowMessage) { onCommand(windowMessage); };
+	getWindowMessageHandler(WM_CREATE) = [this](wui::WindowMessage* windowMessage) { onCreate(windowMessage); };
+	getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage* windowMessage) { onDestory(windowMessage); };
+	getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage* windowMessage) { onClose(windowMessage); };
+	getWindowMessageHandler(WM_SIZE) = [this](wui::WindowMessage* windowMessage) { onSize(windowMessage); };
+	getWindowMessageHandler(WM_COMMAND) = [this](wui::WindowMessage* windowMessage) { onCommand(windowMessage); };
 }
 
-void WebBrowserWindow::onCreate(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onCreate(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
 	//SetWindowTextW(windowMessage.hWnd, L"WebBrowserWindow");
@@ -291,19 +291,19 @@ void WebBrowserWindow::onCreate(wui::WindowMessage& windowMessage)
 	defaultWindowMessageHandler(windowMessage);
 }
 
-void WebBrowserWindow::onDestory(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onDestory(wui::WindowMessage* windowMessage)
 {
 	destroyWebBrowser();
 }
 
-void WebBrowserWindow::onClose(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onClose(wui::WindowMessage* windowMessage)
 {
 }
 
-void WebBrowserWindow::onSize(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onSize(wui::WindowMessage* windowMessage)
 {
 	//-----------------------------------------------------------------------
-	wui::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_SIZE_WindowMessageManipulator windowMessageManipulator(windowMessage);
 
 
 	//-----------------------------------------------------------------------
@@ -317,9 +317,9 @@ void WebBrowserWindow::onSize(wui::WindowMessage& windowMessage)
 	}
 }
 
-void WebBrowserWindow::onCommand(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onCommand(wui::WindowMessage* windowMessage)
 {
-	wui::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(windowMessage);
 
 
 	switch (windowMessageManipulator.nID())
@@ -342,7 +342,7 @@ void WebBrowserWindow::onCommand(wui::WindowMessage& windowMessage)
 	defaultWindowMessageHandler(windowMessage);
 }
 
-void WebBrowserWindow::onTest1(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onTest1(wui::WindowMessage* windowMessage)
 {
 	//------------------------------------------------------------------------
 	std::wstring html;
@@ -388,7 +388,7 @@ void WebBrowserWindow::onTest1(wui::WindowMessage& windowMessage)
 	insertAdjacentHTML(html);
 }
 
-void WebBrowserWindow::onTest2(wui::WindowMessage& windowMessage)
+void WebBrowserWindow::onTest2(wui::WindowMessage* windowMessage)
 {
 	execJSfunction(L"test0");
 }
