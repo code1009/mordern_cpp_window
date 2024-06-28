@@ -34,7 +34,7 @@ uri: Uniform Resource Identifier
 url: Uniform Resource Locator
 urn: Uniform Resource Name
 
-uri > url 큰 개념
+url < uri 큰 개념
 
 https://www.example.co.kr/dir/file?id=1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ uri/url
