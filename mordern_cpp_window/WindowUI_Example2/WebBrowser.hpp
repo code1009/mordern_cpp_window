@@ -69,9 +69,7 @@ public:
 public:
 	explicit WebBrowserWindow(
 		HWND hParent,
-		const RECT& rect,
-		std::uint32_t style = WS_CHILD | WS_VISIBLE | WS_BORDER,
-		std::uint32_t styleEx = WS_EX_CLIENTEDGE
+		const RECT& rect
 	);
 
 	virtual ~WebBrowserWindow();

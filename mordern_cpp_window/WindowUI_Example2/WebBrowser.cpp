@@ -217,9 +217,7 @@ STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID riid, LCID lcid, 
 //===========================================================================
 WebBrowserWindow::WebBrowserWindow(
 	HWND hParent,
-	const RECT& rect,
-	std::uint32_t style,
-	std::uint32_t styleEx
+	const RECT& rect
 )
 {
 	//-----------------------------------------------------------------------
@@ -232,10 +230,13 @@ WebBrowserWindow::WebBrowserWindow(
 
 
 	//-----------------------------------------------------------------------
+	std::uint32_t style = WS_CHILD | WS_VISIBLE; // | WS_BORDER;
+	std::uint32_t styleEx = WS_EX_CLIENTEDGE;
 	std::wstring windowText;
 	HWND hwnd;
 
 
+	styleEx = 0;
 	style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	windowText = L"WebBrowserWindow";
 	hwnd = createWindow(
