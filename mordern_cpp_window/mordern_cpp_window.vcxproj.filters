@@ -107,6 +107,9 @@
     <ClCompile Include="WindowUI_Example2\WebBrowser.cpp">
       <Filter>WindowUI_Example2</Filter>
     </ClCompile>
+    <ClCompile Include="WindowUI_Example2\uri.cpp">
+      <Filter>WindowUI_Example2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\small.ico">

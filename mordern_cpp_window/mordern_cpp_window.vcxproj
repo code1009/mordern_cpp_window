@@ -173,6 +173,7 @@
     <ClCompile Include="WindowUI\WindowMessageManipulator.cpp" />
     <ClCompile Include="WindowUI_Example1\MainFrame.cpp" />
     <ClCompile Include="WindowUI_Example2\MainFrame.cpp" />
+    <ClCompile Include="WindowUI_Example2\uri.cpp" />
     <ClCompile Include="WindowUI_Example2\WebBrowser.cpp" />
     <ClCompile Include="WindowUI_Test\MainFrame.cpp" />
   </ItemGroup>

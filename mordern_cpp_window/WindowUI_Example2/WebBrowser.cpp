@@ -431,7 +431,7 @@ void WebBrowserWindow::onHTMLDocumentEvent(std::wstring url)
 
 
 	query_string = uri::parse_query_string(url);
-	uri::parse_query_string_parameters(query_string, param_map);
+	param_map= uri::parse_query_string_parameters(query_string);
 
 
 	//------------------------------------------------------------------------
