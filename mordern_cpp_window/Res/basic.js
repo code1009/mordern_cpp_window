@@ -29,7 +29,7 @@ function coreEntry() {
 
 	button2.addEventListener("click", 
 		function() {
-			window.location.href = "event1";
+			window.location.href = "버튼2 클릭 이벤트?변수1=값1&변수2=값2";
 		}
 	);
 

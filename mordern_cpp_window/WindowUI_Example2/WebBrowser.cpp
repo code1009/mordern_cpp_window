@@ -15,6 +15,8 @@
 
 #include "WebBrowser.hpp"
 
+#include "uri.hpp"
+
 
 
 
@@ -57,7 +59,7 @@ IConnectionPoint* WebBrowserEventSink::getConnectionPoint(REFIID riid)
 	IUnknown* pUnk = nullptr;
 
 
-	_pHostWindow->_pWebBrowser->QueryInterface(IID_IUnknown, (void**)&pUnk);
+	_pWindow->_pWebBrowser->QueryInterface(IID_IUnknown, (void**)&pUnk);
 	if (pUnk)
 	{
 		IConnectionPointContainer* pcpc = nullptr;
@@ -187,17 +189,17 @@ STDMETHODIMP WebBrowserEventSink::Invoke(DISPID dispid, REFIID riid, LCID lcid, 
 
 	switch (dispid)
 	{
-	case DISPID_BEFORENAVIGATE2   : _pHostWindow->onBeforeNavigate2   (pdispparams, pvarResult); break;
-	case DISPID_COMMANDSTATECHANGE: _pHostWindow->onCommandStateChange(pdispparams, pvarResult); break;
-	case DISPID_DOCUMENTCOMPLETE  : _pHostWindow->onDocumentComplete  (pdispparams, pvarResult); break;
-	case DISPID_DOWNLOADBEGIN     : _pHostWindow->onDownloadBegin     (pdispparams, pvarResult); break;
-	case DISPID_DOWNLOADCOMPLETE  : _pHostWindow->onDownloadComplete  (pdispparams, pvarResult); break;
-	case DISPID_NAVIGATECOMPLETE2 : _pHostWindow->onNavigateComplete2 (pdispparams, pvarResult); break;
-	case DISPID_PROGRESSCHANGE    : _pHostWindow->onProgressChange    (pdispparams, pvarResult); break;
-	case DISPID_PROPERTYCHANGE    : _pHostWindow->onPropertyChange    (pdispparams, pvarResult); break;
-	case DISPID_STATUSTEXTCHANGE  : _pHostWindow->onStatusTextChange  (pdispparams, pvarResult); break;
-	case DISPID_NEWWINDOW2        : _pHostWindow->onNewWindow2        (pdispparams, pvarResult); break;
-	case DISPID_TITLECHANGE       : _pHostWindow->onTitleChange       (pdispparams, pvarResult); break;
+	case DISPID_BEFORENAVIGATE2   : _pWindow->onBeforeNavigate2   (pdispparams, pvarResult); break;
+	case DISPID_COMMANDSTATECHANGE: _pWindow->onCommandStateChange(pdispparams, pvarResult); break;
+	case DISPID_DOCUMENTCOMPLETE  : _pWindow->onDocumentComplete  (pdispparams, pvarResult); break;
+	case DISPID_DOWNLOADBEGIN     : _pWindow->onDownloadBegin     (pdispparams, pvarResult); break;
+	case DISPID_DOWNLOADCOMPLETE  : _pWindow->onDownloadComplete  (pdispparams, pvarResult); break;
+	case DISPID_NAVIGATECOMPLETE2 : _pWindow->onNavigateComplete2 (pdispparams, pvarResult); break;
+	case DISPID_PROGRESSCHANGE    : _pWindow->onProgressChange    (pdispparams, pvarResult); break;
+	case DISPID_PROPERTYCHANGE    : _pWindow->onPropertyChange    (pdispparams, pvarResult); break;
+	case DISPID_STATUSTEXTCHANGE  : _pWindow->onStatusTextChange  (pdispparams, pvarResult); break;
+	case DISPID_NEWWINDOW2        : _pWindow->onNewWindow2        (pdispparams, pvarResult); break;
+	case DISPID_TITLECHANGE       : _pWindow->onTitleChange       (pdispparams, pvarResult); break;
 
 
 	case DISPID_ONMESSAGE:
@@ -390,6 +392,66 @@ void WebBrowserWindow::onTest2(WindowUI::WindowMessage& windowMessage)
 	execJSfunction(L"test0");
 }
 
+std::wstring WebBrowserWindow::getCurrentURL(void)
+{
+	//------------------------------------------------------------------------
+	WCHAR szModuleFilePath[MAX_PATH] = { 0 };
+
+
+	GetModuleFileNameW(NULL, szModuleFilePath, MAX_PATH);
+
+
+	//------------------------------------------------------------------------
+	WCHAR szURL[MAX_PATH] = { 0 };
+
+
+	wsprintfW(szURL, L"res://%s/%d", szModuleFilePath, IDR_HTML1);
+
+
+	//------------------------------------------------------------------------
+
+	return std::wstring (szURL);
+}
+
+//===========================================================================
+void WebBrowserWindow::onHTMLDocumentEvent(std::wstring url)
+{
+	//------------------------------------------------------------------------
+	std::wstring base;
+	std::wstring file;
+
+
+	base = uri::erase_query_string(url);
+	file = uri::decode(uri::parse_file(base));
+
+
+	//------------------------------------------------------------------------
+	std::wstring query_string;
+	std::map<std::wstring, std::wstring> param_map;
+
+
+	query_string = uri::parse_query_string(url);
+	uri::parse_query_string_parameters(query_string, param_map);
+
+
+	//------------------------------------------------------------------------
+	std::wstring html;
+	std::wostringstream oss;
+
+
+	//------------------------------------------------------------------------
+	oss << L"<div class=\"input\">";
+	oss << "<pre>";
+	oss << file;
+	oss << L": C++에서 이벤트 처리합니다.";
+	oss << L"</pre>";
+	oss << L"</div>";
+
+
+	html = oss.str();
+	insertAdjacentHTML(html);
+}
+
 //===========================================================================
 // https://github.com/kenjinote/cmdchat/blob/main/Source.cpp
 //===========================================================================
@@ -486,29 +548,14 @@ void WebBrowserWindow::createWebBrowser(void)
 
 
 	//------------------------------------------------------------------------
-	WCHAR szModuleFilePath[MAX_PATH] = { 0 };
-
-
-	GetModuleFileNameW(NULL, szModuleFilePath, MAX_PATH);
-
-
-	//------------------------------------------------------------------------
-	WCHAR szURL[MAX_PATH] = { 0 };
-
-
-	wsprintfW(szURL, L"res://%s/%d", szModuleFilePath, IDR_HTML1);
-
-
-
-	//------------------------------------------------------------------------
-	CComBSTR bstr_url(szURL);
+	CComBSTR bstr_url(getCurrentURL().c_str());
 
 
 	_pWebBrowser->Navigate(bstr_url, NULL, NULL, NULL, NULL);
 
 
 	//------------------------------------------------------------------------
-	_EventSink._pHostWindow = this;
+	_EventSink._pWindow = this;
 	_EventSink.connect();
 
 
@@ -730,21 +777,7 @@ void WebBrowserWindow::onBeforeNavigate2(DISPPARAMS* pdispparams, VARIANT* pvarR
 		if (cancel.vt == (VT_BOOL | VT_BYREF))
 		{
 			//------------------------------------------------------------------------
-			WCHAR szModuleFilePath[MAX_PATH] = { 0 };
-
-
-			GetModuleFileNameW(NULL, szModuleFilePath, MAX_PATH);
-
-
-			//------------------------------------------------------------------------
-			WCHAR szURL[MAX_PATH] = { 0 };
-
-
-			wsprintfW(szURL, L"res://%s/%d", szModuleFilePath, IDR_HTML1);
-
-
-			//------------------------------------------------------------------------
-			if (url_string == szURL)
+			if (url_string == getCurrentURL())
 			{
 				*cancel.pboolVal = VARIANT_FALSE;
 			}
@@ -753,23 +786,7 @@ void WebBrowserWindow::onBeforeNavigate2(DISPPARAMS* pdispparams, VARIANT* pvarR
 				*cancel.pboolVal = VARIANT_TRUE;
 
 				// url로 html ui 이벤트 처리로 활용 가능
-				{
-					//------------------------------------------------------------------------
-					std::wstring html;
-					std::wostringstream oss;
-
-
-					//------------------------------------------------------------------------
-					oss << L"<div class=\"input\">";
-					oss << "<pre>";
-					oss << L"C++에서 이벤트 처리합니다.";
-					oss << L"</pre>";
-					oss << L"</div>";
-
-
-					html = oss.str();
-					insertAdjacentHTML(html);
-				}
+				onHTMLDocumentEvent(url_string);
 			}
 		}
 	}

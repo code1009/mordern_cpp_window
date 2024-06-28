@@ -78,6 +78,9 @@
     <ClInclude Include="WindowUI_Example2\AboutDialog.hpp">
       <Filter>WindowUI_Example2</Filter>
     </ClInclude>
+    <ClInclude Include="WindowUI_Example2\uri.hpp">
+      <Filter>WindowUI_Example2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -117,5 +120,16 @@
     <ResourceCompile Include="Res\mordern_cpp_window.rc">
       <Filter>res</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\basic.css">
+      <Filter>res</Filter>
+    </None>
+    <None Include="Res\basic.js">
+      <Filter>res</Filter>
+    </None>
+    <None Include="Res\index.html">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
 </Project>

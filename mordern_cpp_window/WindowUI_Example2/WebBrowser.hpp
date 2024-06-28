@@ -26,7 +26,7 @@ class WebBrowserWindow;
 class WebBrowserEventSink : public IDispatch
 {
 public:
-	WebBrowserWindow* _pHostWindow{ nullptr };
+	WebBrowserWindow* _pWindow{ nullptr };
 	DWORD _Cookie{ 0 };
 
 public:
@@ -89,6 +89,10 @@ public:
 	void onCommand(WindowUI::WindowMessage& windowMessage);
 	void onTest1(WindowUI::WindowMessage& windowMessage);
 	void onTest2(WindowUI::WindowMessage& windowMessage);
+
+public:
+	std::wstring getCurrentURL(void);
+	void onHTMLDocumentEvent(std::wstring url);
 
 public:
 	void createWebBrowser(void);
