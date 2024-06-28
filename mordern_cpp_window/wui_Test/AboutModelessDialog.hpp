@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Test
+namespace wui_Test
 {
 
 
@@ -15,13 +15,13 @@ namespace WindowUI_Test
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class AboutModelessDialog : public WindowUI::BasicModelessDialog
+class AboutModelessDialog : public wui::BasicModelessDialog
 {
 public:
 	explicit AboutModelessDialog(HWND hParent):
-		WindowUI::BasicModelessDialog{ IDD_ABOUTBOX }
+		wui::BasicModelessDialog{ IDD_ABOUTBOX }
 	{
-		WindowUI::debugPrintln(L"AboutModelessDialog.ctor() - begin");
+		wui::debugPrintln(L"AboutModelessDialog.ctor() - begin");
 
 
 		registerWindowMessageHandler();
@@ -29,33 +29,33 @@ public:
 		createDialog(hParent);
 		::ShowWindow(getHandle(), SW_SHOW);
 
-		WindowUI::debugPrintln(L"AboutModelessDialog.ctor() - end");
+		wui::debugPrintln(L"AboutModelessDialog.ctor() - end");
 	}
 
 	~AboutModelessDialog()
 	{
-		WindowUI::debugPrintln(L"AboutModelessDialog.dtor() - begin");
+		wui::debugPrintln(L"AboutModelessDialog.dtor() - begin");
 
-		WindowUI::debugPrintln(L"AboutModelessDialog.dtor() - end");
+		wui::debugPrintln(L"AboutModelessDialog.dtor() - end");
 	}
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_INITDIALOG) = [this](WindowUI::WindowMessage& windowMessage)
+		getWindowMessageHandler(WM_INITDIALOG) = [this](wui::WindowMessage& windowMessage)
 		{
 			onInitDialog();
 			defaultWindowMessageHandler(windowMessage);
 		};
 
 
-		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(); };
+		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(); };
 		
-		getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage)
+		getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage& windowMessage)
 		{
 			onClose();
 		};
 
-		getWindowMessageHandler(WM_COMMAND) = [this](WindowUI::WindowMessage& windowMessage)
+		getWindowMessageHandler(WM_COMMAND) = [this](wui::WindowMessage& windowMessage)
 		{
 			bool rv = onCommand((UINT)HIWORD(windowMessage.wParam), (int)LOWORD(windowMessage.wParam), (HWND)windowMessage.lParam);
 			if (!rv)
@@ -67,21 +67,21 @@ public:
 
 	void onInitDialog(void)
 	{
-		WindowUI::debugPrintln(L"AboutModelessDialog.onInitDialog()");
+		wui::debugPrintln(L"AboutModelessDialog.onInitDialog()");
 	}
 
 	void onDestory(void)
 	{
-		WindowUI::debugPrintln(L"AboutModelessDialog.onDestory()");
+		wui::debugPrintln(L"AboutModelessDialog.onDestory()");
 	}
 
 	void onClose(void)
 	{
-		WindowUI::debugPrintln(L"AboutModelessDialog.onClose() - begin");
+		wui::debugPrintln(L"AboutModelessDialog.onClose() - begin");
 
 		destroyWindow();
 
-		WindowUI::debugPrintln(L"AboutModelessDialog.onClose() - end");
+		wui::debugPrintln(L"AboutModelessDialog.onClose() - end");
 	}
 
 	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl)

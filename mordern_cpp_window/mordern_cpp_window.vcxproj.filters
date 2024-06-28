@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="WindowUI">
-      <UniqueIdentifier>{b41185ab-e9a1-4e0b-920e-21fa79a33081}</UniqueIdentifier>
-    </Filter>
     <Filter Include="main">
       <UniqueIdentifier>{f3dc3302-749f-4bc3-a61a-d2be60f9d964}</UniqueIdentifier>
     </Filter>
@@ -13,14 +10,17 @@
     <Filter Include="framework">
       <UniqueIdentifier>{cb4cea81-342a-413d-8e5d-cc219485466a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WindowUI_Example1">
+    <Filter Include="wui">
+      <UniqueIdentifier>{b41185ab-e9a1-4e0b-920e-21fa79a33081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wui_Example1">
       <UniqueIdentifier>{d121c96f-41d1-440b-89cf-4f18efd50ff7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WindowUI_Test">
-      <UniqueIdentifier>{bcc445d5-39c8-4e0a-aec0-da0069c2155d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="WindowUI_Example2">
+    <Filter Include="wui_Example2">
       <UniqueIdentifier>{7ff755dc-e00d-4ca7-b269-3e2dea33d259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wui_Test">
+      <UniqueIdentifier>{bcc445d5-39c8-4e0a-aec0-da0069c2155d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,82 +33,82 @@
     <ClInclude Include="targetver.h">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI\WindowMessageManipulator.hpp">
-      <Filter>WindowUI</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowUI\Core.hpp">
-      <Filter>WindowUI</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowUI_Example1\MainFrame.hpp">
-      <Filter>WindowUI_Example1</Filter>
-    </ClInclude>
     <ClInclude Include="Res\Resource.h">
       <Filter>res</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example1\AboutDialog.hpp">
-      <Filter>WindowUI_Example1</Filter>
+    <ClInclude Include="wui\WindowMessageManipulator.hpp">
+      <Filter>wui</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example1\View.hpp">
-      <Filter>WindowUI_Example1</Filter>
+    <ClInclude Include="wui\Core.hpp">
+      <Filter>wui</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Test\OtherWindow.hpp">
-      <Filter>WindowUI_Test</Filter>
+    <ClInclude Include="wui\WindowFunction.hpp">
+      <Filter>wui</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Test\View.hpp">
-      <Filter>WindowUI_Test</Filter>
+    <ClInclude Include="wui_Example1\MainFrame.hpp">
+      <Filter>wui_Example1</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Test\AboutDialog.hpp">
-      <Filter>WindowUI_Test</Filter>
+    <ClInclude Include="wui_Example1\View.hpp">
+      <Filter>wui_Example1</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Test\AboutModelessDialog.hpp">
-      <Filter>WindowUI_Test</Filter>
+    <ClInclude Include="wui_Example1\AboutDialog.hpp">
+      <Filter>wui_Example1</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Test\MainFrame.hpp">
-      <Filter>WindowUI_Test</Filter>
+    <ClInclude Include="wui_Example2\WebBrowser.hpp">
+      <Filter>wui_Example2</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI\WindowFunction.hpp">
-      <Filter>WindowUI</Filter>
+    <ClInclude Include="wui_Example2\AboutDialog.hpp">
+      <Filter>wui_Example2</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example2\MainFrame.hpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClInclude Include="wui_Example2\MainFrame.hpp">
+      <Filter>wui_Example2</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example2\WebBrowser.hpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClInclude Include="wui_Example2\uri.hpp">
+      <Filter>wui_Example2</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example2\AboutDialog.hpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClInclude Include="wui_Test\View.hpp">
+      <Filter>wui_Test</Filter>
     </ClInclude>
-    <ClInclude Include="WindowUI_Example2\uri.hpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClInclude Include="wui_Test\AboutDialog.hpp">
+      <Filter>wui_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="wui_Test\AboutModelessDialog.hpp">
+      <Filter>wui_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="wui_Test\MainFrame.hpp">
+      <Filter>wui_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="wui_Test\OtherWindow.hpp">
+      <Filter>wui_Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI\Core.cpp">
-      <Filter>WindowUI</Filter>
+    <ClCompile Include="wui\Core.cpp">
+      <Filter>wui</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI\WindowMessageManipulator.cpp">
-      <Filter>WindowUI</Filter>
+    <ClCompile Include="wui\WindowFunction.cpp">
+      <Filter>wui</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI_Example1\MainFrame.cpp">
-      <Filter>WindowUI_Example1</Filter>
+    <ClCompile Include="wui\WindowMessageManipulator.cpp">
+      <Filter>wui</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI_Test\MainFrame.cpp">
-      <Filter>WindowUI_Test</Filter>
+    <ClCompile Include="wui_Example1\MainFrame.cpp">
+      <Filter>wui_Example1</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI\WindowFunction.cpp">
-      <Filter>WindowUI</Filter>
+    <ClCompile Include="wui_Example2\MainFrame.cpp">
+      <Filter>wui_Example2</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI_Example2\MainFrame.cpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClCompile Include="wui_Example2\uri.cpp">
+      <Filter>wui_Example2</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI_Example2\WebBrowser.cpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClCompile Include="wui_Example2\WebBrowser.cpp">
+      <Filter>wui_Example2</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUI_Example2\uri.cpp">
-      <Filter>WindowUI_Example2</Filter>
+    <ClCompile Include="wui_Test\MainFrame.cpp">
+      <Filter>wui_Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

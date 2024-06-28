@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Test
+namespace wui_Test
 {
 
 
@@ -15,7 +15,7 @@ namespace WindowUI_Test
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class MainFrame : public WindowUI::BasicWindow
+class MainFrame : public wui::BasicWindow
 {
 public:
 	std::shared_ptr<AboutModelessDialog> _AboutModelessDialog;
@@ -39,7 +39,7 @@ public:
 
 	void onPaint(HDC hDC);
 
-	void onSize(WindowUI::WindowMessage& windowMessage);
+	void onSize(wui::WindowMessage& windowMessage);
 
 	bool onCommand(UINT uNotifyCode, int nID, HWND wndCtl);
 	void onAbout(void);

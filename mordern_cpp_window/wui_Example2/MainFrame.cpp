@@ -8,9 +8,9 @@
 
 #include <winternl.h>
 
-#include "../WindowUI/WindowFunction.hpp"
-#include "../WindowUI/Core.hpp"
-#include "../WindowUI/WindowMessageManipulator.hpp"
+#include "../wui/WindowFunction.hpp"
+#include "../wui/Core.hpp"
+#include "../wui/WindowMessageManipulator.hpp"
 
 #include "AboutDialog.hpp"
 #include "WebBrowser.hpp"
@@ -22,7 +22,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example2
+namespace wui_Example2
 {
 
 
@@ -47,7 +47,7 @@ MainFrame::MainFrame()
 	HWND hwnd;
 
 
-	windowText = WindowUI::getWindowInstance()->loadString(IDS_APP_TITLE);
+	windowText = wui::getWindowInstance()->loadString(IDS_APP_TITLE);
 	hwnd = createWindow(nullptr, windowText.c_str(), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 	if (!hwnd)
 	{
@@ -81,11 +81,11 @@ MainFrame::~MainFrame()
 
 void MainFrame::registerWindowMessageHandler(void)
 {
-	getWindowMessageHandler(WM_CREATE   ) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
-	getWindowMessageHandler(WM_DESTROY  ) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
-	getWindowMessageHandler(WM_CLOSE    ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-	getWindowMessageHandler(WM_SIZE     ) = [this](WindowUI::WindowMessage& windowMessage) { onSize(windowMessage); };
-	getWindowMessageHandler(WM_COMMAND  ) = [this](WindowUI::WindowMessage& windowMessage) { onCommand(windowMessage); };
+	getWindowMessageHandler(WM_CREATE   ) = [this](wui::WindowMessage& windowMessage) { onCreate(windowMessage); };
+	getWindowMessageHandler(WM_DESTROY  ) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
+	getWindowMessageHandler(WM_CLOSE    ) = [this](wui::WindowMessage& windowMessage) { onClose(windowMessage); };
+	getWindowMessageHandler(WM_SIZE     ) = [this](wui::WindowMessage& windowMessage) { onSize(windowMessage); };
+	getWindowMessageHandler(WM_COMMAND  ) = [this](wui::WindowMessage& windowMessage) { onCommand(windowMessage); };
 }
 
 void MainFrame::initializeWindowClass(void)
@@ -93,40 +93,40 @@ void MainFrame::initializeWindowClass(void)
 	BasicWindow::initializeWindowClass();
 
 
-	static std::wstring windowClassName = WindowUI::getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);
+	static std::wstring windowClassName = wui::getWindowInstance()->loadString(IDC_MORDERNCPPWINDOW);
 
 
 	getWindowClass().lpszClassName = windowClassName.c_str();
-	getWindowClass().lpszMenuName  = WindowUI::getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
-	getWindowClass().hIcon         = WindowUI::getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
-	getWindowClass().hIconSm       = WindowUI::getWindowInstance()->loadIcon(IDI_SMALL);
+	getWindowClass().lpszMenuName  = wui::getWindowInstance()->makeIntResource(IDC_MORDERNCPPWINDOW);
+	getWindowClass().hIcon         = wui::getWindowInstance()->loadIcon(IDI_MORDERNCPPWINDOW);
+	getWindowClass().hIconSm       = wui::getWindowInstance()->loadIcon(IDI_SMALL);
 }
 
-void MainFrame::onCreate(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onCreate(wui::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	WindowUI::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_CREATE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
 	windowMessageManipulator.Result(0);
 }
 
-void MainFrame::onDestory(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onDestory(wui::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
 	::PostQuitMessage(0);
 }
 
-void MainFrame::onClose(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onClose(wui::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
 	destroyWindow();
 }
 
-void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onSize(wui::WindowMessage& windowMessage)
 {
 	//-----------------------------------------------------------------------
-	WindowUI::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_SIZE_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
 	//-----------------------------------------------------------------------
@@ -134,12 +134,12 @@ void MainFrame::onSize(WindowUI::WindowMessage& windowMessage)
 
 
 	GetClientRect(getHandle(), &rect);
-	WindowUI::moveWindow(_View.get(), rect);
+	wui::moveWindow(_View.get(), rect);
 }
 
-void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onCommand(wui::WindowMessage& windowMessage)
 {
-	WindowUI::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+	wui::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
 	switch (windowMessageManipulator.nID())
@@ -170,7 +170,7 @@ void MainFrame::onCommand(WindowUI::WindowMessage& windowMessage)
 	defaultWindowMessageHandler(windowMessage);
 }
 
-void MainFrame::onAbout(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onAbout(wui::WindowMessage& windowMessage)
 {
 	AboutDialog dlg;
 
@@ -178,17 +178,17 @@ void MainFrame::onAbout(WindowUI::WindowMessage& windowMessage)
 	dlg.doModal(getHandle());
 }
 
-void MainFrame::onExit(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onExit(wui::WindowMessage& windowMessage)
 {
 	destroyWindow();
 }
 
-void MainFrame::onTest1(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onTest1(wui::WindowMessage& windowMessage)
 {
 	sendMessage(_View.get(), windowMessage);
 }
 
-void MainFrame::onTest2(WindowUI::WindowMessage& windowMessage)
+void MainFrame::onTest2(wui::WindowMessage& windowMessage)
 {
 	sendMessage(_View.get(), windowMessage);
 }

@@ -150,32 +150,32 @@
     <ClInclude Include="main.hpp" />
     <ClInclude Include="Res\Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WindowUI\Core.hpp" />
-    <ClInclude Include="WindowUI\WindowFunction.hpp" />
-    <ClInclude Include="WindowUI\WindowMessageManipulator.hpp" />
-    <ClInclude Include="WindowUI_Example1\AboutDialog.hpp" />
-    <ClInclude Include="WindowUI_Example1\MainFrame.hpp" />
-    <ClInclude Include="WindowUI_Example1\View.hpp" />
-    <ClInclude Include="WindowUI_Example2\AboutDialog.hpp" />
-    <ClInclude Include="WindowUI_Example2\MainFrame.hpp" />
-    <ClInclude Include="WindowUI_Example2\uri.hpp" />
-    <ClInclude Include="WindowUI_Example2\WebBrowser.hpp" />
-    <ClInclude Include="WindowUI_Test\AboutDialog.hpp" />
-    <ClInclude Include="WindowUI_Test\AboutModelessDialog.hpp" />
-    <ClInclude Include="WindowUI_Test\MainFrame.hpp" />
-    <ClInclude Include="WindowUI_Test\OtherWindow.hpp" />
-    <ClInclude Include="WindowUI_Test\View.hpp" />
+    <ClInclude Include="wui\Core.hpp" />
+    <ClInclude Include="wui\WindowFunction.hpp" />
+    <ClInclude Include="wui\WindowMessageManipulator.hpp" />
+    <ClInclude Include="wui_Example1\AboutDialog.hpp" />
+    <ClInclude Include="wui_Example1\MainFrame.hpp" />
+    <ClInclude Include="wui_Example1\View.hpp" />
+    <ClInclude Include="wui_Example2\AboutDialog.hpp" />
+    <ClInclude Include="wui_Example2\MainFrame.hpp" />
+    <ClInclude Include="wui_Example2\uri.hpp" />
+    <ClInclude Include="wui_Example2\WebBrowser.hpp" />
+    <ClInclude Include="wui_Test\AboutDialog.hpp" />
+    <ClInclude Include="wui_Test\AboutModelessDialog.hpp" />
+    <ClInclude Include="wui_Test\MainFrame.hpp" />
+    <ClInclude Include="wui_Test\OtherWindow.hpp" />
+    <ClInclude Include="wui_Test\View.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="WindowUI\Core.cpp" />
-    <ClCompile Include="WindowUI\WindowFunction.cpp" />
-    <ClCompile Include="WindowUI\WindowMessageManipulator.cpp" />
-    <ClCompile Include="WindowUI_Example1\MainFrame.cpp" />
-    <ClCompile Include="WindowUI_Example2\MainFrame.cpp" />
-    <ClCompile Include="WindowUI_Example2\uri.cpp" />
-    <ClCompile Include="WindowUI_Example2\WebBrowser.cpp" />
-    <ClCompile Include="WindowUI_Test\MainFrame.cpp" />
+    <ClCompile Include="wui\Core.cpp" />
+    <ClCompile Include="wui\WindowFunction.cpp" />
+    <ClCompile Include="wui\WindowMessageManipulator.cpp" />
+    <ClCompile Include="wui_Example1\MainFrame.cpp" />
+    <ClCompile Include="wui_Example2\MainFrame.cpp" />
+    <ClCompile Include="wui_Example2\uri.cpp" />
+    <ClCompile Include="wui_Example2\WebBrowser.cpp" />
+    <ClCompile Include="wui_Test\MainFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\mordern_cpp_window.ico" />

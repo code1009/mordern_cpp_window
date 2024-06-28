@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
+#include "../framework.h"
+
+#include "Core.hpp"
+#include "WindowMessageManipulator.hpp"
 
 
 
@@ -6,7 +11,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI
+namespace wui
 {
 
 
@@ -15,22 +20,19 @@ namespace WindowUI
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class Window;
-class WindowMessage;
+WindowMessageManipulator::WindowMessageManipulator(WindowMessage* windowMessage) :
+	_windowMessage{ windowMessage }
+{
+}
 
+WindowMessageManipulator::~WindowMessageManipulator()
+{
+}
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//===========================================================================
-std::wstring getWindowText(const Window* window);
-void         setWindowText(const Window* window, const std::wstring& s);
-
-void moveWindow(const Window* window, const RECT& rect, bool repaint = false);
-void moveWindow(const HWND hwnd, const RECT& rect, bool repaint = false);
-
-void sendMessage(const Window* window, WindowMessage& windowMessage);
+WindowMessage* WindowMessageManipulator::getWindowMessage(void)
+{
+	return _windowMessage;
+}
 
 
 

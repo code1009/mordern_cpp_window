@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example2
+namespace wui_Example2
 {
 
 
@@ -58,7 +58,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class WebBrowserWindow : public WindowUI::BasicWindow
+class WebBrowserWindow : public wui::BasicWindow
 {
 public:
 	CComQIPtr<IWebBrowser2> _pWebBrowser;
@@ -78,15 +78,15 @@ public:
 	virtual void registerWindowMessageHandler(void) override;
 
 public:
-	void onCreate(WindowUI::WindowMessage& windowMessage);
-	void onDestory(WindowUI::WindowMessage& windowMessage);
-	void onClose(WindowUI::WindowMessage& windowMessage);
+	void onCreate(wui::WindowMessage& windowMessage);
+	void onDestory(wui::WindowMessage& windowMessage);
+	void onClose(wui::WindowMessage& windowMessage);
 
-	void onSize(WindowUI::WindowMessage& windowMessage);
+	void onSize(wui::WindowMessage& windowMessage);
 
-	void onCommand(WindowUI::WindowMessage& windowMessage);
-	void onTest1(WindowUI::WindowMessage& windowMessage);
-	void onTest2(WindowUI::WindowMessage& windowMessage);
+	void onCommand(wui::WindowMessage& windowMessage);
+	void onTest1(wui::WindowMessage& windowMessage);
+	void onTest2(wui::WindowMessage& windowMessage);
 
 public:
 	std::wstring getCurrentURL(void);

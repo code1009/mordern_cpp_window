@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Test
+namespace wui_Test
 {
 
 
@@ -15,12 +15,12 @@ namespace WindowUI_Test
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class View : public WindowUI::BasicWindow
+class View : public wui::BasicWindow
 {
 public:
 	explicit View(HWND hParent)
 	{
-		WindowUI::debugPrintln(L"View.ctor() - begin");
+		wui::debugPrintln(L"View.ctor() - begin");
 
 
 		registerWindowMessageHandler();
@@ -36,46 +36,46 @@ public:
 
 
 		std::wstring text = getWindowText(this);
-		WindowUI::debugPrintln(text);
+		wui::debugPrintln(text);
 
 
-		WindowUI::debugPrintln(L"View.ctor() - end");
+		wui::debugPrintln(L"View.ctor() - end");
 	}
 
 	~View()
 	{
-		WindowUI::debugPrintln(L"View.dtor() - begin");
+		wui::debugPrintln(L"View.dtor() - begin");
 
-		WindowUI::debugPrintln(L"View.dtor() - end");
+		wui::debugPrintln(L"View.dtor() - end");
 	}
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE) = [this](WindowUI::WindowMessage& windowMessage)
+		getWindowMessageHandler(WM_CREATE) = [this](wui::WindowMessage& windowMessage)
 		{
 			SetWindowTextW(windowMessage.hWnd, L"View");
 			defaultWindowMessageHandler(windowMessage);
 		}
 		;
 
-		getWindowMessageHandler(WM_CLOSE) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
+		getWindowMessageHandler(WM_CLOSE) = [this](wui::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
 
-		getWindowMessageHandler(WM_PAINT) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
+		getWindowMessageHandler(WM_PAINT) = [this](wui::WindowMessage& windowMessage) { onPaint(windowMessage); };
 	}
 
-	void onClose(WindowUI::WindowMessage& windowMessage)
+	void onClose(wui::WindowMessage& windowMessage)
 	{
-		WindowUI::debugPrintln(L"View.onClose() - begin");
-		WindowUI::debugPrintln(L"View.onClose() - end");
+		wui::debugPrintln(L"View.onClose() - begin");
+		wui::debugPrintln(L"View.onClose() - end");
 	}
 
-	void onDestory(WindowUI::WindowMessage& windowMessage)
+	void onDestory(wui::WindowMessage& windowMessage)
 	{
-		WindowUI::debugPrintln(L"View.onDestory()");
+		wui::debugPrintln(L"View.onDestory()");
 	}
 
-	void onPaint(WindowUI::WindowMessage& windowMessage)
+	void onPaint(wui::WindowMessage& windowMessage)
 	{
 		PAINTSTRUCT ps;
 

@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace wui_Example1
 {
 
 
@@ -15,7 +15,7 @@ namespace WindowUI_Example1
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class MainFrame : public WindowUI::BasicWindow
+class MainFrame : public wui::BasicWindow
 {
 public:
 	std::shared_ptr<View> _View;
@@ -29,19 +29,19 @@ public:
 	virtual void initializeWindowClass(void) override;
 
 public:
-	void onNcCreate(WindowUI::WindowMessage& windowMessage);
-	void onNcDestory(WindowUI::WindowMessage& windowMessage);
+	void onNcCreate(wui::WindowMessage& windowMessage);
+	void onNcDestory(wui::WindowMessage& windowMessage);
 
-	void onCreate(WindowUI::WindowMessage& windowMessage);
-	void onDestory(WindowUI::WindowMessage& windowMessage);
-	void onClose(WindowUI::WindowMessage& windowMessage);
+	void onCreate(wui::WindowMessage& windowMessage);
+	void onDestory(wui::WindowMessage& windowMessage);
+	void onClose(wui::WindowMessage& windowMessage);
 
-	void onSize(WindowUI::WindowMessage& windowMessage);
+	void onSize(wui::WindowMessage& windowMessage);
 
-	void onPaint(WindowUI::WindowMessage& windowMessage);
+	void onPaint(wui::WindowMessage& windowMessage);
 
-	void onCommand(WindowUI::WindowMessage& windowMessage);
-	void onAbout(WindowUI::WindowMessage& windowMessage);
+	void onCommand(wui::WindowMessage& windowMessage);
+	void onAbout(wui::WindowMessage& windowMessage);
 
 public:
 	void draw(HDC hdc, RECT& rect);

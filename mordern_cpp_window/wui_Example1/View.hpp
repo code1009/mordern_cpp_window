@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example1
+namespace wui_Example1
 {
 
 
@@ -15,7 +15,7 @@ namespace WindowUI_Example1
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class View : public WindowUI::BasicWindow
+class View : public wui::BasicWindow
 {
 public:
 	explicit View(
@@ -26,7 +26,7 @@ public:
 	)
 	{
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.ctor() - begin");
+		wui::debugPrintln(L"View.ctor() - begin");
 
 
 		//-----------------------------------------------------------------------
@@ -70,31 +70,31 @@ public:
 		text = L"View Window";
 		setWindowText(this, text);
 		text = getWindowText(this);
-		WindowUI::debugPrintln(text);
+		wui::debugPrintln(text);
 
 
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.ctor() - end");
+		wui::debugPrintln(L"View.ctor() - end");
 	}
 
 	~View()
 	{
-		WindowUI::debugPrintln(L"View.dtor() - begin");
-		WindowUI::debugPrintln(L"View.dtor() - end");
+		wui::debugPrintln(L"View.dtor() - begin");
+		wui::debugPrintln(L"View.dtor() - end");
 	}
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_CREATE ) = [this](WindowUI::WindowMessage& windowMessage) { onCreate(windowMessage); };
-		getWindowMessageHandler(WM_DESTROY) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
-		getWindowMessageHandler(WM_CLOSE  ) = [this](WindowUI::WindowMessage& windowMessage) { onClose(windowMessage); };
-		getWindowMessageHandler(WM_PAINT  ) = [this](WindowUI::WindowMessage& windowMessage) { onPaint(windowMessage); };
+		getWindowMessageHandler(WM_CREATE ) = [this](wui::WindowMessage& windowMessage) { onCreate(windowMessage); };
+		getWindowMessageHandler(WM_DESTROY) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
+		getWindowMessageHandler(WM_CLOSE  ) = [this](wui::WindowMessage& windowMessage) { onClose(windowMessage); };
+		getWindowMessageHandler(WM_PAINT  ) = [this](wui::WindowMessage& windowMessage) { onPaint(windowMessage); };
 	}
 
-	void onCreate(WindowUI::WindowMessage& windowMessage)
+	void onCreate(wui::WindowMessage& windowMessage)
 	{
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.onCreate() - begin");
+		wui::debugPrintln(L"View.onCreate() - begin");
 
 
 		//-----------------------------------------------------------------------
@@ -104,28 +104,28 @@ public:
 
 
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.onCreate() - end");
+		wui::debugPrintln(L"View.onCreate() - end");
 	}
 
-	void onDestory(WindowUI::WindowMessage& windowMessage)
+	void onDestory(wui::WindowMessage& windowMessage)
 	{
-		WindowUI::debugPrintln(L"View.onDestory()");
+		wui::debugPrintln(L"View.onDestory()");
 	}
 
-	void onClose(WindowUI::WindowMessage& windowMessage)
+	void onClose(wui::WindowMessage& windowMessage)
 	{
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.onClose() - begin");
+		wui::debugPrintln(L"View.onClose() - begin");
 
 
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.onClose() - end");
+		wui::debugPrintln(L"View.onClose() - end");
 	}
 
-	void onPaint(WindowUI::WindowMessage& windowMessage)
+	void onPaint(wui::WindowMessage& windowMessage)
 	{
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.onPaint() - begin");
+		wui::debugPrintln(L"View.onPaint() - begin");
 
 
 		//-----------------------------------------------------------------------
@@ -148,7 +148,7 @@ public:
 
 
 		//-----------------------------------------------------------------------
-		WindowUI::debugPrintln(L"View.onPaint() - end");
+		wui::debugPrintln(L"View.onPaint() - end");
 	}
 
 	void draw(HDC hdc, RECT& rect)

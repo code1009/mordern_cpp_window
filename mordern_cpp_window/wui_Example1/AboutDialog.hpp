@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-namespace WindowUI_Example2
+namespace wui_Example1
 {
 
 
@@ -15,14 +15,14 @@ namespace WindowUI_Example2
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
-class AboutDialog : public WindowUI::BasicModalDialog
+class AboutDialog : public wui::BasicModalDialog
 {
 public:
 	AboutDialog():
-		WindowUI::BasicModalDialog{ IDD_ABOUTBOX }
+		wui::BasicModalDialog{ IDD_ABOUTBOX }
 	{
 		//-------------------------------------------------------------------
-		WindowUI::debugPrintln(L"AboutDialog.ctor() - begin");
+		wui::debugPrintln(L"AboutDialog.ctor() - begin");
 
 
 		//-------------------------------------------------------------------
@@ -30,48 +30,48 @@ public:
 
 
 		//-------------------------------------------------------------------
-		WindowUI::debugPrintln(L"AboutDialog.ctor() - end");
+		wui::debugPrintln(L"AboutDialog.ctor() - end");
 	}
 
 	~AboutDialog()
 	{
 		//-------------------------------------------------------------------
-		WindowUI::debugPrintln(L"AboutDialog.dtor() - begin");
+		wui::debugPrintln(L"AboutDialog.dtor() - begin");
 
 
 		//-------------------------------------------------------------------
 
 
 		//-------------------------------------------------------------------
-		WindowUI::debugPrintln(L"AboutDialog.dtor() - end");
+		wui::debugPrintln(L"AboutDialog.dtor() - end");
 	}
 
 	virtual void registerWindowMessageHandler(void) override
 	{
-		getWindowMessageHandler(WM_INITDIALOG) = [this](WindowUI::WindowMessage& windowMessage) { onInitDialog(windowMessage); };
-		getWindowMessageHandler(WM_DESTROY   ) = [this](WindowUI::WindowMessage& windowMessage) { onDestory(windowMessage); };
-		getWindowMessageHandler(WM_COMMAND   ) = [this](WindowUI::WindowMessage& windowMessage) { onCommand(windowMessage); };
+		getWindowMessageHandler(WM_INITDIALOG) = [this](wui::WindowMessage& windowMessage) { onInitDialog(windowMessage); };
+		getWindowMessageHandler(WM_DESTROY   ) = [this](wui::WindowMessage& windowMessage) { onDestory(windowMessage); };
+		getWindowMessageHandler(WM_COMMAND   ) = [this](wui::WindowMessage& windowMessage) { onCommand(windowMessage); };
 	}
 
-	void onInitDialog(WindowUI::WindowMessage& windowMessage)
+	void onInitDialog(wui::WindowMessage& windowMessage)
 	{
 		//-------------------------------------------------------------------
-		WindowUI::debugPrintln(L"AboutDialog.onInitDialog()");
+		wui::debugPrintln(L"AboutDialog.onInitDialog()");
 
 
 		//-------------------------------------------------------------------
 		defaultWindowMessageHandler(windowMessage);
 	}
 
-	void onDestory(WindowUI::WindowMessage& windowMessage)
+	void onDestory(wui::WindowMessage& windowMessage)
 	{
 		//-------------------------------------------------------------------
-		WindowUI::debugPrintln(L"AboutDialog.onDestory()");
+		wui::debugPrintln(L"AboutDialog.onDestory()");
 	}
 
-	void onCommand(WindowUI::WindowMessage& windowMessage)
+	void onCommand(wui::WindowMessage& windowMessage)
 	{
-		WindowUI::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
+		wui::WM_COMMAND_WindowMessageManipulator windowMessageManipulator(&windowMessage);
 
 
 		switch (windowMessageManipulator.nID())
@@ -94,12 +94,12 @@ public:
 		defaultWindowMessageHandler(windowMessage);
 	}
 
-	void onOK(WindowUI::WindowMessage& windowMessage)
+	void onOK(wui::WindowMessage& windowMessage)
 	{
 		endDialog(IDOK);
 	}
 
-	void onCancel(WindowUI::WindowMessage& windowMessage)
+	void onCancel(wui::WindowMessage& windowMessage)
 	{
 		endDialog(IDCANCEL);
 	}
