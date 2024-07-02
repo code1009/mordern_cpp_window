@@ -161,6 +161,9 @@
     <ClInclude Include="wui_Example2\MainFrame.hpp" />
     <ClInclude Include="wui_Example2\uri.hpp" />
     <ClInclude Include="wui_Example2\WebBrowser.hpp" />
+    <ClInclude Include="wui_Example3\AboutDialog.hpp" />
+    <ClInclude Include="wui_Example3\MainFrame.hpp" />
+    <ClInclude Include="wui_Example3\WebView.hpp" />
     <ClInclude Include="wui_Test\AboutDialog.hpp" />
     <ClInclude Include="wui_Test\AboutModelessDialog.hpp" />
     <ClInclude Include="wui_Test\MainFrame.hpp" />
@@ -176,6 +179,8 @@
     <ClCompile Include="wui_Example2\MainFrame.cpp" />
     <ClCompile Include="wui_Example2\uri.cpp" />
     <ClCompile Include="wui_Example2\WebBrowser.cpp" />
+    <ClCompile Include="wui_Example3\MainFrame.cpp" />
+    <ClCompile Include="wui_Example3\WebView.cpp" />
     <ClCompile Include="wui_Test\MainFrame.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -193,4 +198,15 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.191107.2\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.191107.2\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="..\packages\Microsoft.Web.WebView2.1.0.902.49\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.902.49\build\native\Microsoft.Web.WebView2.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.191107.2\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.191107.2\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.902.49\build\native\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.902.49\build\native\Microsoft.Web.WebView2.targets'))" />
+  </Target>
 </Project>

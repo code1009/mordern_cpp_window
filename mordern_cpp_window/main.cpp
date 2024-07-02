@@ -40,6 +40,9 @@
 #include "wui_Example2/AboutDialog.hpp"
 #include "wui_Example2/MainFrame.hpp"
 
+//===========================================================================
+#include "wui_Example3/AboutDialog.hpp"
+#include "wui_Example3/MainFrame.hpp"
 
 
 
@@ -137,11 +140,28 @@ void wui_Example2_Main(void)
 
 /////////////////////////////////////////////////////////////////////////////
 //===========================================================================
+void wui_Example3_Main(void)
+{
+	wui::WindowMessageLoop windowMessageLoop;
+
+
+	wui_Example3::MainFrame mainFrame;
+
+
+	windowMessageLoop.runLoop();
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//===========================================================================
 void Run(void)
 {
 	//wui_Test_Main();
 	//wui_Example1_Main();
-	wui_Example2_Main();
+	//wui_Example2_Main();
+	wui_Example3_Main();
 }
 
 

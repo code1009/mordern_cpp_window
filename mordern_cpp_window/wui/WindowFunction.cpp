@@ -65,6 +65,16 @@ void moveWindow(const HWND hwnd, const RECT& rect, bool repaint)
 		repaint ? TRUE : FALSE);
 }
 
+void setWindowPos(const Window* window, const HWND insertAfter, const RECT& rect, UINT flags)
+{
+	::SetWindowPos(window->getHandle(),
+		insertAfter,
+		rect.left, rect.top,
+		rect.right - rect.left,
+		rect.bottom - rect.top,
+		flags);
+}
+
 void sendMessage(const Window* window, WindowMessage& windowMessage)
 {
 	windowMessage.lResult = 

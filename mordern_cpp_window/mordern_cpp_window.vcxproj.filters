@@ -22,6 +22,9 @@
     <Filter Include="wui_Test">
       <UniqueIdentifier>{bcc445d5-39c8-4e0a-aec0-da0069c2155d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="wui_Example3">
+      <UniqueIdentifier>{09de0e8b-b208-49d6-b077-acad4067fdf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.hpp">
@@ -81,6 +84,15 @@
     <ClInclude Include="wui_Test\OtherWindow.hpp">
       <Filter>wui_Test</Filter>
     </ClInclude>
+    <ClInclude Include="wui_Example3\WebView.hpp">
+      <Filter>wui_Example3</Filter>
+    </ClInclude>
+    <ClInclude Include="wui_Example3\AboutDialog.hpp">
+      <Filter>wui_Example3</Filter>
+    </ClInclude>
+    <ClInclude Include="wui_Example3\MainFrame.hpp">
+      <Filter>wui_Example3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -109,6 +121,12 @@
     </ClCompile>
     <ClCompile Include="wui_Test\MainFrame.cpp">
       <Filter>wui_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="wui_Example3\MainFrame.cpp">
+      <Filter>wui_Example3</Filter>
+    </ClCompile>
+    <ClCompile Include="wui_Example3\WebView.cpp">
+      <Filter>wui_Example3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
